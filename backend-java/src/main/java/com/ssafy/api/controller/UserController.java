@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,7 +34,7 @@ import springfox.documentation.annotations.ApiIgnore;
  */
 @Api(value = "유저 API", tags = {"User"})
 @RestController
-@RequestMapping("/api/v1/users")
+@RequestMapping("/users")
 public class UserController {
 	
 	@Autowired
@@ -74,5 +75,17 @@ public class UserController {
 		User user = userService.getUserByUserId(userId);
 		
 		return ResponseEntity.status(200).body(UserRes.of(user));
+	}
+	
+	@GetMapping("/{userId}/exists")
+	@ApiOperation(value = "아이디 중복 검사", notes = "중복검사 버튼 클릭 시 DB정보와 입력 정보를 비교한다.") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "성공"),
+        @ApiResponse(code = 401, message = "인증 실패"),
+        @ApiResponse(code = 404, message = "사용자 없음"),
+        @ApiResponse(code = 500, message = "서버 오류")
+    })
+	public ResponseEntity<Boolean> checkIdDuplicate(@PathVariable String userId){
+		return ResponseEntity.ok(userService.checkIdDuplicate(userId));
 	}
 }
