@@ -86,6 +86,6 @@ public class UserController {
         @ApiResponse(code = 500, message = "서버 오류")
     })
 	public ResponseEntity<Boolean> checkIdDuplicate(@PathVariable String userId){
-		return ResponseEntity.ok(userService.checkIdDuplicate(userId));
+		return ResponseEntity.ok(!userService.checkIdDuplicate(userId));
 	}
 }
