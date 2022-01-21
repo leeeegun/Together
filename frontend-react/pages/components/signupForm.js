@@ -3,7 +3,7 @@ import { useRef, useState, useEffect } from "react";
 
 const ID_REGEX = /^[a-zA-z][a-zA-Z0-9]{3,20}$/;
 const PW_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$*]).{8,24}$/;
-
+const EMAIL_REGEX = /^(?=.*[@])(?=.*[.com]).{8,40}$/;
 
 const SignupForm = () => {
   
@@ -26,6 +26,7 @@ const SignupForm = () => {
   const [userName, setUserName] = useState('');
   const [userNickName, setUserNickName] = useState('');
   const [userEmail, setUserEmail] = useState('');
+  const [validUserEmail, setValidUserEmail] = useState(false);
   const [userStatus, setUserStatus] = useState('');
 
   const [errorMessage, setErrorMessage] = useState('');
@@ -88,7 +89,7 @@ const SignupForm = () => {
 
   // 회원가입 버튼 활성화 조건
   useEffect(() => {
-    if (confirmedUserId && validMatchPassword && userName && userNickName && userEmail && userStatus) {
+    if (confirmedUserId && validMatchPassword && userName && userNickName && userEmail && userStatus && validUserEmail) {
       setFormReady(true);   
     }
   }, [confirmedUserId, validMatchPassword, userName, userNickName, userEmail, userStatus])
@@ -115,134 +116,176 @@ const SignupForm = () => {
     }
   }, [userPassword])
 
-  return (
-    
-    <section>
-      <h1>Signup</h1>
-      <form onSubmit={handleIdCheck}>
-        <label htmlFor="userId">
-          아이디
-          <span className={validUserId ? "valid" : "hide"}>
-            &#9745;
-          </span>
-          <span className={validUserId || !userId ? "hide" : "invalid"}>
-            &#9746; 대소문자와 숫자를 혼합하여 3~20내로 작명해주세요!
-          </span>
-        </label>
-        <br></br>
-        <input
-          type="text"
-          id="userId"
-          ref={userIdRef}
-          onChange={(e) => setUserId(e.target.value)}
-          autoComplete="off"
-          value={userId}
-          required 
-        />
-        <button disabled={!validUserId}>중복 검사</button>
-        <span className={confirmedUserId ? "valid" : "hide"}>사용 가능한 아이디입니다!</span>
-        <span className={confirmedUserId && validUserId ? "valid" : "hide"}>이미 사용중인 아이디입니다.</span>
-      </form>
-      <br></br>
-      <form onSubmit={handleSubmit}>
-        <label htmlFor="userPassword">
-          비밀번호
-          <span className={validUserPassword ? "valid" : "hide"}>
-            &#9745;
-          </span>
-          <span className={validUserPassword || !userPassword ? "hide" : "invalid"}>
-            &#9746; 대소문자, 숫자, 특수문자(!@#$*)를 혼합하여 8~24내로 작성해주세요!
-          </span>
-        </label>
-        <br></br>
-        <input
-          type="password"
-          id="userPassword"
-          onChange={(e) => setUserPassword(e.target.value)}
-          value={userPassword}
-          required
-        />
-        <br></br>
-        <label htmlFor="userMatchPassword">
-          비밀번호 확인
-          <span className={validMatchPassword && matchPassword? "valid" : "hide"}>
-            &#9745;
-          </span>
-          <span className={validMatchPassword || !matchPassword ? "hide" : "invalid"}>
-            &#9746; 비밀번호가 일치하지 않습니다!
-          </span>
-        </label>
-        <br></br>
-        <input
-          type="password"
-          id="matchPassword"
-          onChange={(e) => setMatchPassword(e.target.value)}
-          value={matchPassword}
-          disabled={!validUserPassword}
-          required
-        />
-        <br></br>
-        <label htmlFor="userName">
-          이름
-        </label>
-        <br></br>
-        <input
-          type="text"
-          id="userName"
-          ref={userNameRef}
-          onChange={(e) => setUserName(e.target.value)}
-          autoComplete="off"
-          value={userName}
-          required 
-        />
-        <br></br>
-        <label htmlFor="userNickName">
-          닉네임
-        </label>
-        <br></br>
-        <input
-          type="text"
-          id="userNickName"
-          ref={userNickNameRef}
-          onChange={(e) => setUserNickName(e.target.value)}
-          autoComplete="off"
-          value={userNickName}
-          required 
-        />
-        <br></br>
-        <label htmlFor="userEmail">
-          이메일
-        </label>
-        <br></br>
-        <input
-          type="text"
-          id="userEmail"
-          ref={userEmailRef}
-          onChange={(e) => setUserEmail(e.target.value)}
-          autoComplete="off"
-          value={userEmail}
-          required 
-        />
-        <br></br>
-        <label htmlFor="userStatus">
-          신체 조건 : 
-        </label>
-        <select 
-          id="userStatus" 
-          onChange={(e) => setUserStatus(e.target.value)}
-          value={userStatus}
-          ref={userStatusRef}
-          required>
-          <option value="비 장애">비 장애</option>
-          <option value="시각 장애">시각 장애</option>
-          <option value="청각 장애">청각 장애</option>
-        </select>
-        <br></br>
-        <hr></hr>
-        <button disabled={!formReady}>회원 가입</button>
-      </form>
-    </section>
+  // 이메일 유효성 확인
+  useEffect(() => {
+    const result = EMAIL_REGEX.test(userEmail);
+    setValidUserEmail(result);
+  }, [userEmail])
 
+  return (
+    <div className="container w-full max-w-md mx-auto mt-8">
+      <section className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10">
+        <h1 className="text-center">Signup</h1>
+
+        <form className="mb-0 " onSubmit={handleIdCheck}>
+          <label htmlFor="userId" className="relative block mt-10 text-sm font-medium 10">
+            아이디
+            <span className={validUserId ? "valid" : "hide"}>
+              &#9745;
+            </span>
+            <span className={validUserId || !userId ? "hide" : "invalid"}>
+              &#9746; 대소문자와 숫자를 혼합하여 3~20내로 작명해주세요!
+            </span>
+          </label>
+          <div className="container flex">
+            <div>
+              <input
+                type="text"
+                id="userId"
+                ref={userIdRef}
+                onChange={(e) => setUserId(e.target.value)}
+                autoComplete="off"
+                value={userId}
+                required
+                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
+              />
+            </div>
+            <div className="mx-auto">
+              <button disabled={!validUserId} className="border border-[#BEBBB1] bg-[#BEBBB1] px-3 py-1 rounded-lg shadow-sm">중복 검사</button>
+              <span className={confirmedUserId ? "valid" : "hide"}>사용 가능한 아이디입니다!</span>
+              <span className={confirmedUserId && validUserId ? "valid" : "hide"}>이미 사용중인 아이디입니다.</span>
+            </div>
+          </div>
+        </form>
+
+        <form className="container flex flex-col mt-8 space-y-8" onSubmit={handleSubmit}>
+          
+          <div>
+            <label htmlFor="userPassword" className="block text-sm font-medium">
+              비밀번호
+              <span className={validUserPassword ? "valid" : "hide"}>
+                &#9745;
+              </span>
+              <span className={validUserPassword || !userPassword ? "hide" : "invalid"}>
+                &#9746; 대소문자, 숫자, 특수문자(!@#$*)를 혼합하여<br />8~24내로 작성해주세요!
+              </span>
+            </label>
+            <div className="mt-1">
+              <input
+                type="password"
+                id="userPassword"
+                onChange={(e) => setUserPassword(e.target.value)}
+                value={userPassword}
+                required
+                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="userMatchPassword" className="block text-sm font-medium">
+              비밀번호 확인
+              <span className={validMatchPassword && matchPassword? "valid" : "hide"}>
+                &#9745;
+              </span>
+              <span className={validMatchPassword || !matchPassword ? "hide" : "invalid"}>
+                &#9746; 비밀번호가 일치하지 않습니다!
+              </span>
+            </label>
+            <div style={{marginTop:0}}>
+              <input
+                type="password"
+                id="matchPassword"
+                onChange={(e) => setMatchPassword(e.target.value)}
+                value={matchPassword}
+                disabled={!validUserPassword}
+                required
+                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="userName" className="block text-sm font-medium">
+              이름
+            </label>
+            <div className="mt-1">
+              <input
+                type="text"
+                id="userName"
+                ref={userNameRef}
+                onChange={(e) => setUserName(e.target.value)}
+                autoComplete="off"
+                value={userName}
+                required 
+                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
+              />
+            </div>
+          </div>
+
+          <div>
+            <label htmlFor="userNickName" className="block text-sm font-medium">
+              닉네임
+            </label>
+            <div className="mt-1">
+              <input
+                type="text"
+                id="userNickName"
+                ref={userNickNameRef}
+                onChange={(e) => setUserNickName(e.target.value)}
+                autoComplete="off"
+                value={userNickName}
+                required 
+                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
+              />
+            </div>
+          </div>
+          
+          <div>
+            <label htmlFor="userEmail" className="block text-sm font-medium">
+              이메일
+              <span className={!validUserEmail && userEmail ? "valid" : "hide"}>
+                이메일 형식으로 작성 해주세요! (예: xxx@xxx.com)
+              </span>
+            </label>
+            <div className="mt-1">
+              <input
+                type="text"
+                id="userEmail"
+                ref={userEmailRef}
+                onChange={(e) => setUserEmail(e.target.value)}
+                autoComplete="off"
+                value={userEmail}
+                required 
+                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
+              />
+            </div>
+          </div>
+
+          <div className="container flex justify-evenly">
+            <label htmlFor="userStatus" className="my-auto text-sm font-medium">
+              신체 조건 : 
+            </label>
+            <select 
+              id="userStatus" 
+              onChange={(e) => setUserStatus(e.target.value)}
+              value={userStatus}
+              ref={userStatusRef}
+              required
+              className="border border-[#F1EDE3] rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
+              >
+              <option value="비 장애">비 장애</option>
+              <option value="시각 장애">시각 장애</option>
+              <option value="청각 장애">청각 장애</option>
+            </select>
+          </div>
+
+          <div className="mt-1 text-center">
+            <button className="border border-[#BEBBB1] bg-[#BEBBB1] px-3 py-1 rounded-lg shadow-sm w-2/5" disabled={!formReady}>회원 가입</button>
+          </div>
+        </form>
+      </section>
+    </div>
   )
 }
 
