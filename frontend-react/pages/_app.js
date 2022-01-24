@@ -1,15 +1,12 @@
 import '../styles/globals.css'
 import LoginForm from './components/loginForm'
 import SignupForm from './components/signupForm'
+import Home from '.'
 
-function MyApp({ Component, pageProps }) {
+function MyApp() {
   return (
     <main>
-      <Component {...pageProps} />
-      <hr />
       <LoginForm />
-      <hr />
-      <SignupForm />
     </main>
   
   )
