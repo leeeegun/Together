@@ -29,6 +29,7 @@ const SignupForm = () => {
   const [validUserEmail, setValidUserEmail] = useState(false);
   const [userStatus, setUserStatus] = useState('해당 없음');
 
+
   const [errorMessage, setErrorMessage] = useState('');
   const [formReady, setFormReady] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
