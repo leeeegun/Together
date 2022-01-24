@@ -7,6 +7,7 @@ function MyApp() {
   return (
     <main>
       <LoginForm />
+      <SignupForm />
     </main>
   
   )

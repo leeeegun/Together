@@ -53,7 +53,6 @@ const SignupForm = () => {
 
   // 회원가입 POST 요청
   const submitRegistration = async() => {
-    console.log(userId, userPassword, userName, userNickName, userEmail, userStatus);
     fetch("http://localhost:8443/users", {
       method: "POST",
       body: JSON.stringify({
@@ -70,13 +69,14 @@ const SignupForm = () => {
       },
     })
     .then((response) => {
-      const data = response.json()
+      if (!response.ok) throw new Error(response.status);
+      else return response.json();
+    })
+    .then((data) => {
       setSuccessMessage(data);
-      console.log(successMessage)
     })
     .catch((error) => {
       setErrorMessage(error)
-      console.log(errorMessage)
     })
   }
 
@@ -139,6 +139,18 @@ const SignupForm = () => {
     const result = EMAIL_REGEX.test(userEmail);
     setValidUserEmail(result);
   }, [userEmail])
+
+  // 회원가입 성공 메세지 반환
+  useEffect(() => {
+    console.log(successMessage);
+    setSuccessMessage('');
+  }, [successMessage])
+
+  // 회원가입 실패 메세지 반환
+  useEffect(() => {
+    console.log(errorMessage);
+    setErrorMessage('');
+  }, [errorMessage])
 
   return (
     <div className="container w-full max-w-md mx-auto mt-8">
