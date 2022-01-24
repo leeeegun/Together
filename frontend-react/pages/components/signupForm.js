@@ -36,7 +36,8 @@ const SignupForm = () => {
   // 아이디 중복확인
   const handleIdCheck = async (e) => {
     e.preventDefault();
-    fetch('/users/{userId}/exists')
+    console.log(userId)
+    fetch(`/users/${userId}/exists`)
       .then((response) => response.json())
       .then((data) => {setConfirmedUserId(data)})
   }
