@@ -1,16 +1,8 @@
-import '../styles/globals.css'
-import LoginForm from './components/loginForm'
-import SignupForm from './components/signupForm'
-import Home from '.'
+import "../styles/globals.css";
+import "../styles/index.css";
 
-function MyApp() {
-  return (
-    <main>
-      <LoginForm />
-      <SignupForm />
-    </main>
-  
-  )
+function MyApp({ Component, pageProps }) {
+  return <Component {...pageProps} />;
 }
 
-export default MyApp
+export default MyApp;
