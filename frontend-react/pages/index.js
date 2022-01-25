@@ -3,11 +3,15 @@ import Link from "next/link";
 
 import LandingImage01 from "../images/LandingImage01.jpg";
 import LandingParagraph from "./components/LandingParagraph";
-import LoginComponent from "./components/LoginComponent";
+import LoginForm from "./components/LoginForm";
+import SignUpForm from "./components/signupForm";
 import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 export default function Home() {
+  const [showSignUpForm, setShowSignUpForm] = useState(false);
+  const [showLoginForm, setShowLoginForm] = useState(false);
+
   //scroll Event
   const scrollEvent = (e, option) => {
     const snapScroll = document.querySelector(".overflow-scroll");
@@ -18,9 +22,12 @@ export default function Home() {
     }
   };
 
-  const [showSignUp, setShowSignUp] = useState(false);
   const signUpClick = () => {
-    setShowSignUp(!showSignUp);
+    setShowSignUpForm(!showSignUpForm);
+  };
+
+  const loginClick = () => {
+    setShowLoginForm(!showLoginForm);
   };
 
   useEffect(() => {
@@ -37,7 +44,7 @@ export default function Home() {
     } else {
       return;
     }
-  }, [showSignUp]);
+  }, [showSignUpForm, showLoginForm]);
 
   return (
     <div className="">
@@ -59,10 +66,12 @@ export default function Home() {
         </p>
         <p className="md:text-sm text-xs mb-3">
           이미 가입된 회원이세요?
-          <span className="text-red-500">
-            <Link href="/test">
-              <a className="hover:text-red-600 hover:font-bold"> 로그인</a>
-            </Link>
+          <span
+            className="text-red-500"
+            onClick={loginClick}
+            style={{ cursor: "pointer" }}
+          >
+            <a className="hover:text-red-600 hover:font-bold"> 로그인</a>
           </span>
         </p>
         <p className="lg:text-sm text-xs mb-40">
@@ -104,7 +113,8 @@ export default function Home() {
           src={LandingImage01}
           text="국회의원과 정부는 법률안을 제출할 수 있다. 헌법재판소 재판관은 정당에 가입하거나 정치에 관여할 수 없다. 모든 국민은 소급입법에 의하여 참정권의 제한을 받거나 재산권을 박탈당하지 아니한다. 국무회의는 정부의."
         />
-        {showSignUp ? <LoginComponent /> : null}
+        {showSignUpForm ? <SignUpForm /> : null}
+        {showLoginForm ? <LoginForm /> : null}
       </div>
     </div>
   );
