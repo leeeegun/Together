@@ -31,7 +31,7 @@ export default function Faq() {
         </div>
       </details>
       <br></br>
-      <hr style={{width: '100%', size:'2px', backgroundColor: 'black'}} />
+      <hr style={{width: '100%', size:'2px', backgroundColor: 'black', color: 'black'}} />
     </section>
 
   </>

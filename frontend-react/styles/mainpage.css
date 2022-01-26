@@ -78,7 +78,7 @@
   filter: sepia(0.7);
   height: auto;
   z-index: 0;
-  top: 200px;
+  top: 100%;
   left: 44%;
   z-index: 0;
 }
