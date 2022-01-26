@@ -38,7 +38,7 @@ public class User {
 
     @ManyToOne
     @JoinColumn(name = "oid")
-    private Conference Conference;
+    private Conference Conferences;
     
     @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)

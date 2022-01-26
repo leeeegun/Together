@@ -27,7 +27,7 @@ public class Conference {
     String description;
     boolean is_active = false;
 
-    @OneToMany(mappedBy = "Conference")
+    @OneToMany(mappedBy = "conferences")
     private List<User> users = new ArrayList<>();
 
 	public Conference(Long oid, String title, String description, boolean is_active) {
