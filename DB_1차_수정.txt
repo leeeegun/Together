@@ -24,7 +24,7 @@ create table conference (
  description varchar(255),
  is_active Boolean,
  primary key(id),
- foreign key(owner_id) references user (id),
+ foreign key(owner_id) references user (id)
  );
  
  create table user_conference (
@@ -39,5 +39,3 @@ create table conference (
  desc user;
  desc conference;
  desc user_conference;
- desc conference_history;
- desc conference_category;
