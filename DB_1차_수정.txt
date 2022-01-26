@@ -1,0 +1,43 @@
+#conference_history, conference_category 삭제
+#conference start/end_time, thumbnail_url 삭제
+#경량화에 중점을 둠
+
+create database together default character set utf8 collate utf8_general_ci;
+
+use together;
+
+create table user (
+ id bigint auto_increment,
+ user_id varchar(255),
+ disability varchar(255),
+ name varchar(255),
+ nickname varchar(255),
+ password varchar(255),
+ email varchar(255),
+ primary key(id)
+ );
+
+create table conference (
+ id bigint auto_increment,
+ owner_id bigint,
+ title varchar(255),
+ description varchar(255),
+ is_active Boolean,
+ primary key(id),
+ foreign key(owner_id) references user (id),
+ );
+ 
+ create table user_conference (
+  id bigint auto_increment,
+  conference_id bigint,
+  user_id bigint,
+  primary key(id),
+  foreign key(conference_id) references conference (id),
+  foreign key(user_id) references user (id)
+ );
+ 
+ desc user;
+ desc conference;
+ desc user_conference;
+ desc conference_history;
+ desc conference_category;
