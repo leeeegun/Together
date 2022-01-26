@@ -14,11 +14,11 @@ export default function Faq() {
         <div className="answer">
           <p>• Exact date will be announced through our official Discord channel.</p>
         </div>
-        <hr style={{width: '100%', size:'2px'}} />
+        <hr style={{width: "100%", size:"2px"}} />
       </div>
     </section> */}
 
-    <section style={{marginTop: '15vmin'}} className="text-lg w-1/2 mx-auto">
+    <section style={{marginTop: "15vmin"}} className="text-lg w-1/2 mx-auto">
       <details>
         <summary>
           <span className="cursor-pointer">Q. 회의를 생성하려면 어떻게 해야 하나요?</span>
@@ -31,7 +31,7 @@ export default function Faq() {
         </div>
       </details>
       <br></br>
-      <hr style={{width: '100%', size:'2px', backgroundColor: 'black', color: 'black'}} />
+      <hr style={{width: "100%", size:"2px", backgroundColor: "black", color: "black"}} />
     </section>
 
   </>

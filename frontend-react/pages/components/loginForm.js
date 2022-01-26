@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import Router from "next/router"
 
 const LoginForm = () => {
   const [userId, setUserId] = useState("");
@@ -59,6 +60,7 @@ const LoginForm = () => {
       .then((data) => {
         localStorage.setItem("token", data.accessToken);
         setSuccessMessage("로그인 성공!");
+        Router.push("/main")
       })
       .catch((error) => {
         setErrorMessage(`로그인 실패 사유 : ${error}`);
