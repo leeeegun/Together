@@ -19,3 +19,15 @@ a {
 * {
   box-sizing: border-box;
 }
+
+.hide {
+  display: none;
+}
+
+.valid {
+  display:block;
+}
+
+.invalid {
+  display:block;
+}

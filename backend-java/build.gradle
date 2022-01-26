@@ -54,7 +54,7 @@ node {
     download = true
     version = '14.17.0'
     // Set the work directory where node_modules should be located
-    nodeModulesDir = file("${project.projectDir}/../frontend")
+    nodeModulesDir = file("${project.projectDir}/../frontend-react")
 }
 
 configurations {
@@ -130,6 +130,7 @@ dependencies {
     implementation("org.springframework.boot:spring-boot-starter-data-jpa")
     implementation("org.springframework.boot:spring-boot-starter-actuator")
     implementation("org.springframework.plugin:spring-plugin-core:2.0.0.RELEASE")
+    implementation("org.springframework.boot:spring-boot-starter-validation")
     testImplementation("org.springframework.security:spring-security-test")
     annotationProcessor("org.springframework.boot:spring-boot-starter-data-jpa")
     runtimeOnly("mysql:mysql-connector-java")
