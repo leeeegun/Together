@@ -19,21 +19,15 @@ import lombok.Setter;
 public class Conference {
 	
 	@Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "OID")
     Long oid;
 
     String title;
     String description;
-    boolean is_active = false;
 
-    @OneToMany(mappedBy = "conferences")
-    private List<User> users = new ArrayList<>();
-
-	public Conference(Long oid, String title, String description, boolean is_active) {
+	public Conference(Long oid, String title, String description) {
 		this.oid = oid;
 		this.title = title;
 		this.description = description;
-		this.is_active = is_active;
 	}
 }

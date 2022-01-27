@@ -15,7 +15,7 @@ public class ConferenceServiceImpl implements ConferenceService {
 	
 	@Override
 	public Conference createCon(ConferenceRegPostReq conInfo) {
-		Conference conf = new Conference(conInfo.getOwner(), conInfo.getTitle(), conInfo.getDescription(), true);
+		Conference conf = new Conference(conInfo.getOwner(), conInfo.getTitle(), conInfo.getDescription());
 		
 		conferenceRepository.save(conf);
 		

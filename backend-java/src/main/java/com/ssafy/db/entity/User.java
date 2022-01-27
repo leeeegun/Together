@@ -35,10 +35,6 @@ public class User {
     String name;
     String nickname;
     String email;
-
-    @ManyToOne
-    @JoinColumn(name = "oid")
-    private Conference Conferences;
     
     @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
