@@ -40,6 +40,10 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     String password;
     
+    @ManyToOne
+    @JoinColumn(name = "oid")
+    private Conference conferences;
+    
     protected User() {
     }
 

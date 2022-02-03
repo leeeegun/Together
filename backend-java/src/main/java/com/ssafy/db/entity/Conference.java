@@ -24,7 +24,10 @@ public class Conference {
 
     String title;
     String description;
-
+    
+    @OneToMany(mappedBy = "conferences")
+    private List<User> users = new ArrayList<>();
+    
 	public Conference(Long oid, String title, String description) {
 		this.oid = oid;
 		this.title = title;
