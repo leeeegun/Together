@@ -1,5 +1,10 @@
 package com.ssafy.api.request;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import com.ssafy.db.entity.User;
+
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
 import lombok.Getter;
@@ -11,10 +16,10 @@ import lombok.Setter;
 @Getter
 @Setter
 @ApiModel("ConferenceRegisterPostRequest")
-public class ConferenceRegPostReq {
+public class ConferencePostReq {
 	
 	@ApiModelProperty(name="방장", example="1")
-	Long owner;
+	Long oid;
 	
 	@ApiModelProperty(name="방 제목", example="홍길동의 화상회의")
 	String title;
@@ -23,5 +28,6 @@ public class ConferenceRegPostReq {
 	String description;
 	
 	@ApiModelProperty(name="방 유뮤", example="owner가 방에 있으면 true, 없으면 false")
-	boolean active = false;
+	boolean active;
+	
 }
