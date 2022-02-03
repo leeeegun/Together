@@ -13,6 +13,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.ssafy.api.request.UserRegisterPostReq;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -21,11 +22,12 @@ import lombok.Setter;
 @Entity(name = "user")
 @Getter
 @Setter
+@NoArgsConstructor
 public class User {
 
 	@Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "UID")
+    @Column(name = "uid")
     Long uid;
 
     @Column(name = "user_id")
@@ -43,9 +45,6 @@ public class User {
     @ManyToOne
     @JoinColumn(name = "oid")
     private Conference conferences;
-    
-    protected User() {
-    }
 
 	public User(UserRegisterPostReq u) {
 		this.disability = u.getDisability();
