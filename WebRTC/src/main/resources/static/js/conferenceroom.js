@@ -40,6 +40,9 @@ ws.onmessage = function(message) {
 	case 'receiveVideoAnswer':
 		receiveVideoResponse(parsedMessage);
 		break;
+	case 'receiveTextMsg':
+		receiveMsg(parsedMessage);
+		break;
 	case 'iceCandidate':
 		participants[parsedMessage.name].rtcPeer.addIceCandidate(parsedMessage.candidate, function (error) {
 	        if (error) {
@@ -60,13 +63,30 @@ function register() {
 	document.getElementById('room-header').innerText = 'ROOM ' + room;
 	document.getElementById('join').style.display = 'none';
 	document.getElementById('room').style.display = 'block';
-
+	
 	var message = {
 		id : 'joinRoom',
 		name : name,
 		room : room,
 	}
 	sendMessage(message);
+}
+
+function sendMsg() {
+	const myMsg = document.getElementById('sendM').value;
+	const name = document.getElementById('name').value;
+	const room = document.getElementById('roomName').value;
+	var message = {
+			id : 'chatMsg',
+			name : name,
+			room : room,
+			content : myMsg,
+		}
+	sendMessage(message);
+}
+
+function receiveMsg(msg) {
+	document.getElementById("msgArea").append(msg.owner + " : " + msg.content);
 }
 
 function onNewParticipant(request) {

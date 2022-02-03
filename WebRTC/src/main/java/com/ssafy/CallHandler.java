@@ -18,6 +18,7 @@
 package com.ssafy;
 
 import java.io.IOException;
+import java.util.Collection;
 
 import org.kurento.client.IceCandidate;
 import org.slf4j.Logger;
@@ -74,6 +75,9 @@ public class CallHandler extends TextWebSocketHandler {
       case "leaveRoom":
         leaveRoom(user);
         break;
+      case "chatMsg":
+	    sendTextMsg(jsonMessage);
+	    break;
       case "onIceCandidate":
         JsonObject candidate = jsonMessage.get("candidate").getAsJsonObject();
 
@@ -92,6 +96,22 @@ public class CallHandler extends TextWebSocketHandler {
   public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
     UserSession user = registry.removeBySession(session);
     roomManager.getRoom(user.getRoomName()).leave(user);
+  }
+  
+  private void sendTextMsg(JsonObject params) {
+	  Room room = roomManager.getRoom(params.get("room").getAsString());
+	  Collection<UserSession> participants = room.getParticipants();
+	  final JsonObject textMsg = new JsonObject();
+	  textMsg.addProperty("id", "receiveTextMsg");
+	  textMsg.addProperty("content", params.get("content").getAsString());
+	  
+	  for (final UserSession participant : participants) {
+	      try {
+	    	textMsg.addProperty("owner", params.get("name").getAsString());
+	    	participant.sendMessage(textMsg);
+	      } catch (final IOException e) {
+	      }
+	  }
   }
 
   private void joinRoom(JsonObject params, WebSocketSession session) throws IOException {
