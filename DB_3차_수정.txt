@@ -5,33 +5,35 @@
 
 #2차수정
 #conference_user 삭제
-#user, conference 수정
+#user, conference 테이블 수정
+
+#3차 수정
+#conference, user 테이블 수정
 
 create database together default character set utf8 collate utf8_general_ci;
 
 use together;
 
-create table user (
- id bigint auto_increment,
+create table conference (
+ oid bigint auto_increment,
+ title varchar(255),
+ description varchar(255),
+ is_active Boolean,
+ primary key(oid)
+ );
+ 
+create table user(
+ uid bigint auto_increment,
+ name varchar(255),
  user_id varchar(255),
  disability varchar(255),
- name varchar(255),
  nickname varchar(255),
  password varchar(255),
  email varchar(255),
  oid bigint,
- primary key(id)
- );
-
-create table conference (
- id bigint auto_increment,
- title varchar(255),
- description varchar(255),
- is_active Boolean,
- primary key(id),
- foreign key(owner_id) references user (id)
+ primary key(uid),
+ foreign key(oid) references conference (oid)
  );
  
+desc user;
  
- desc user;
- desc conference;
