@@ -2,6 +2,11 @@ package com.ssafy.db.entity;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -16,18 +21,28 @@ import lombok.Setter;
 @Entity(name = "user")
 @Getter
 @Setter
-public class User extends BaseEntity{
+public class User {
+
+	@Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "UID")
+    Long uid;
+
+    @Column(name = "user_id")
+    String userId;
+
     String disability;
     String name;
     String nickname;
     String email;
     
-    @Column(name = "user_id")
-    String userId;
-
     @JsonIgnore
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     String password;
+    
+    @ManyToOne
+    @JoinColumn(name = "oid")
+    private Conference conferences;
     
     protected User() {
     }
