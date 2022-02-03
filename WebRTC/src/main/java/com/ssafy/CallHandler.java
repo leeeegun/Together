@@ -107,13 +107,8 @@ public class CallHandler extends TextWebSocketHandler {
 	  
 	  for (final UserSession participant : participants) {
 	      try {
-	    	if (!(participant.getName().equals(params.get("name").getAsString()))) {
-	    		textMsg.addProperty("owner", params.get("name").getAsString());
-	    		participant.sendMessage(textMsg);
-	    	} else {
-	    		textMsg.addProperty("owner", params.get("name").getAsString());
-	    		participant.sendMessage(textMsg);
-	    	}
+	    	textMsg.addProperty("owner", params.get("name").getAsString());
+	    	participant.sendMessage(textMsg);
 	      } catch (final IOException e) {
 	      }
 	  }
