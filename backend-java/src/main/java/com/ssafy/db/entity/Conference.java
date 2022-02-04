@@ -37,6 +37,19 @@ public class Conference {
     	user.setConferences(this);
     }
     
+    public void removeUser(User user) {
+    	users.remove(user);
+    	user.setConferences(null);
+    }
+    
+    public void removUserAll() {
+    	for(User u : users) {
+    		u.setConferences(null);
+    	}
+    	
+    	users.clear();
+    }
+    
 	public Conference(Long oid, String title, String description, boolean active) {
 		this.oid = oid;
 		this.title = title;
