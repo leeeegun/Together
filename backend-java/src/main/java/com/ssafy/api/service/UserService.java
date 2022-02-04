@@ -10,5 +10,5 @@ public interface UserService {
 	User createUser(UserRegisterPostReq userRegisterInfo);
 	User getUserByUserId(String userId);
 	boolean checkIdDuplicate(String userId);
-	User getUserByUid(Long id);
+	User getUserByUid(Long uid);
 }

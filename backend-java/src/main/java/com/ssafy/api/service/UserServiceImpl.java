@@ -37,9 +37,9 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public User getUserByUid(Long id) {
+	public User getUserByUid(Long uid) {
 		// 디비에 유저 정보 조회 (oid 를 통한 조회).
-		User user = userRepository.findByUid(id).get();
+		User user = userRepository.findByUid(uid).get();
 		return user;
 	}
 

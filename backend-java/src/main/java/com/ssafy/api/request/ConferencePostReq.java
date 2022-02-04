@@ -25,9 +25,5 @@ public class ConferencePostReq {
 	String title;
 	
 	@ApiModelProperty(name="방 설명", example="설명 내용")
-	String description;
-	
-	@ApiModelProperty(name="방 유뮤", example="owner가 방에 있으면 true, 없으면 false")
-	boolean active;
-	
+	String description;	
 }
