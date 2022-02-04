@@ -8,6 +8,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.transaction.Transactional;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,7 +16,6 @@ import lombok.Setter;
 
 @Entity(name = "conference")
 @Getter
-@Setter
 @NoArgsConstructor
 public class Conference {
 	
@@ -31,18 +31,21 @@ public class Conference {
     
     @OneToMany(mappedBy = "conferences", cascade = CascadeType.ALL)
     private List<User> users = new ArrayList<>();
-    
+
     public void addUser(User user) {
     	users.add(user);
     	user.setConferences(this);
     }
     
-	public Conference(Long oid, String title, String description, boolean active, User user) {
+	public Conference(Long oid, String title, String description, boolean active) {
 		this.oid = oid;
 		this.title = title;
 		this.description = description;
 		this.active = active;
-		this.addUser(user);
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 	
 }

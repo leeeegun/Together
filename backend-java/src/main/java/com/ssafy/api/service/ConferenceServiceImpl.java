@@ -18,9 +18,7 @@ public class ConferenceServiceImpl implements ConferenceService {
 
 	@Override
 	public Conference create(ConferencePostReq c) {
-		c.setActive(true);
-		
-		Conference conference = new Conference(c.getOid(), c.getTitle(), c.getDescription(), c.isActive(), userService.getUserByUid(c.getOid()));
+		Conference conference = new Conference(c.getOid(), c.getTitle(), c.getDescription(), false);
 		
 		return conferenceRepository.save(conference);
 	}
@@ -28,5 +26,10 @@ public class ConferenceServiceImpl implements ConferenceService {
 	@Override
 	public boolean checkConferenceDuplicate(Long oid) {
 		return conferenceRepository.existsByOid(oid);
+	}
+
+	@Override
+	public Conference getConferenceByOid(Long oid) {
+		return conferenceRepository.findByOid(oid).get();
 	}
 }
