@@ -1,7 +1,7 @@
 package com.ssafy.api.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Iterator;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -108,5 +108,49 @@ public class ConferenceController {
 				return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Conference disabled"));				
 			}
 		}
+	}
+	
+	@GetMapping("/leave/{oid}/{uid}")
+	@ApiOperation(value = "방 종료", notes = "<strong>해당 uid</strong>를 방에서 퇴장시킨다.") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "게스트 퇴장", response = UserLoginPostRes.class),
+        @ApiResponse(code = 201, message = "호스트 퇴장", response = UserLoginPostRes.class),
+        @ApiResponse(code = 401, message = "퇴장 실패", response = BaseResponseBody.class),
+        @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
+        @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+    })
+	public ResponseEntity<? extends BaseResponseBody> leave(@PathVariable Long oid, @PathVariable Long uid){
+		
+		Conference conference = conferenceService.getConferenceByOid(oid);
+		User user = userService.getUserByUid(uid);
+		
+		if(oid == uid) {
+			
+			conference.removUserAll();
+			
+			System.out.println("#1");
+			for(User u : conference.getUsers()) {
+				System.out.println(u.getUserId());
+			}
+			
+			conference.setActive(false);
+			
+			conferenceRepository.save(conference);
+			
+			return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Host leave"));		
+			
+		}else {
+			conference.removeUser(user);
+			
+			System.out.println("#2");
+			for(User u : conference.getUsers()) {
+				System.out.println(u.getUserId());
+			}
+			
+			conferenceRepository.save(conference);
+			
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Guest leave"));	
+		}
+		
 	}
 }
