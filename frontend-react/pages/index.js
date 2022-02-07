@@ -1,12 +1,13 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
-
+import { motion } from "framer-motion";
 import LandingImage01 from "../images/LandingImage01.jpg";
-import LandingParagraph from "./components/LandingParagraph";
-import LoginForm from "./components/LoginForm";
-import SignUpForm from "./components/signupForm";
+import LandingParagraph from "../components/LandingParagraph";
+import LoginForm from "../components/LoginForm";
+import SignUpForm from "../components/signupForm";
 import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import Router from "next/Router";
 
 export default function Home() {
   const [showSignUpForm, setShowSignUpForm] = useState(false);
@@ -22,17 +23,35 @@ export default function Home() {
     }
   };
 
+  //signup click
   const signUpClick = () => {
     setShowSignUpForm(!showSignUpForm);
+    const signupButton = document.querySelector("#signup-button");
+    signupButton.classList.toggle("signup-clicked");
+    if (showLoginForm) {
+      const loginButton = document.querySelector("#login-button");
+      loginButton.classList.toggle("login-clicked");
+      setShowLoginForm(!showLoginForm);
+    }
   };
 
   const loginClick = () => {
     setShowLoginForm(!showLoginForm);
+    const loginButton = document.querySelector("#login-button");
+    loginButton.classList.toggle("login-clicked");
+    if (showSignUpForm) {
+      const signupButton = document.querySelector("#signup-button");
+      signupButton.classList.toggle("signup-clicked");
+      setShowSignUpForm(!showSignUpForm);
+    }
   };
 
   useEffect(() => {
     const snapScroll = document.querySelector(".overflow-scroll");
     snapScroll.scrollTo(0, 0);
+    if (localStorage.getItem("token")) {
+      Router.push("/main");
+    }
   }, []);
 
   useEffect(() => {
@@ -47,7 +66,24 @@ export default function Home() {
   }, [showSignUpForm, showLoginForm]);
 
   return (
-    <div className="">
+    <motion.div
+      className=""
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: {
+          scale: 0.3,
+          opacity: 0,
+        },
+        visible: {
+          scale: 1,
+          opacity: 1,
+          transition: {
+            delay: 0.5,
+          },
+        },
+      }}
+    >
       <button className="prev fixed" onClick={(e) => scrollEvent(e, "up")}>
         <FontAwesomeIcon icon={faChevronUp} size="2x" />
       </button>
@@ -58,20 +94,23 @@ export default function Home() {
         <p className="md:text-7xl text-5xl mb-10 font-extralight">Together</p>
         <p>
           <button
-            className="button text-black font-bold py-2 px-7 rounded-full mb-10"
+            className="button text-black font-bold py-2 px-7 rounded-full mb-10 hover:bg-[#BEBBB1]"
             onClick={signUpClick}
+            id="signup-button"
           >
             <a className="text-xs">회원가입</a>
           </button>
         </p>
         <p className="md:text-sm text-xs mb-3">
           이미 가입된 회원이세요?
-          <span
-            className="text-red-500"
-            onClick={loginClick}
-            style={{ cursor: "pointer" }}
-          >
-            <a className="hover:text-red-600 hover:font-bold"> 로그인</a>
+          <span className="text-red-500 cursor-pointer" onClick={loginClick}>
+            <a
+              className="hover:text-red-600 hover:font-bold rounded-full"
+              id="login-button"
+            >
+              {" "}
+              로그인{"    "}
+            </a>
           </span>
         </p>
         <p className="lg:text-sm text-xs mb-40">
@@ -116,6 +155,6 @@ export default function Home() {
         {showSignUpForm ? <SignUpForm /> : null}
         {showLoginForm ? <LoginForm /> : null}
       </div>
-    </div>
+    </motion.div>
   );
 }

@@ -1,0 +1,36 @@
+.guide-container {
+  overflow: hidden;
+  margin-left: 20%;
+  margin-right: 20%;
+}
+
+#guide {
+  animation-duration: 1.5s;
+  animation-name: slidein;
+}
+
+@keyframes slidein {
+  from {
+    margin-left: 50%;
+    width: 300%;
+  }
+
+  to {
+    width: 100%;
+  }
+}
+
+/* details > summary::marker {
+  display: none;
+  content: "";
+} */
+
+details > *::marker {
+  display: none;
+  content: "";
+}
+
+/* details > * > *::marker {
+  display: none;
+  content: "";
+} */

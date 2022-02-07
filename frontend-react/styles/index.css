@@ -16,7 +16,7 @@
   width: 60%;
 }
 .right:nth-child(1) {
-  background-color: #f1ede3;
+  background-color: #ece6cc;
 }
 
 .right:nth-child(2) {
@@ -32,7 +32,12 @@
   display: block;
 }
 
-.button:hover {
+.signup-clicked {
+  background-color: #bebbb1;
+}
+
+.login-clicked {
+  font-weight: bold;
   background-color: #bebbb1;
 }
 
