@@ -1,0 +1,43 @@
+#1차수정
+#conference_history, conference_category 삭제
+#conference start/end_time, thumbnail_url 삭제
+#경량화에 중점을 둠
+
+#2차수정
+#conference_user 삭제
+#user, conference 테이블 수정
+
+#3차 수정
+#conference, user 테이블 수정
+
+#4차 수정
+#user 테이블 user_id unique 키 수정
+
+create database together default character set utf8 collate utf8_general_ci;
+
+use together;
+
+create table conference (
+ oid bigint,
+ title varchar(255),
+ description varchar(255),
+ is_active Boolean,
+ primary key(oid)
+ );
+ 
+create table user(
+ uid bigint auto_increment,
+ name varchar(255),
+ user_id varchar(255),
+ disability varchar(255),
+ nickname varchar(255),
+ password varchar(255),
+ email varchar(255),
+ oid bigint,
+ primary key(uid),
+ unique key(user_id),
+ foreign key(oid) references conference (oid)
+ );
+
+desc user;
+ 

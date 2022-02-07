@@ -9,4 +9,6 @@ import com.ssafy.db.entity.User;
 public interface UserService {
 	User createUser(UserRegisterPostReq userRegisterInfo);
 	User getUserByUserId(String userId);
+	boolean checkIdDuplicate(String userId);
+	User getUserByUid(Long uid);
 }
