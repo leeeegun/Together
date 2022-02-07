@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import Router from "next/router"
+import Router from "next/router";
 
 const LoginForm = () => {
   const [userId, setUserId] = useState("");
@@ -7,12 +7,12 @@ const LoginForm = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  const userIdRef = useRef();
+  // const userIdRef = useRef();
 
   // 페이지 렌서시 아이디 입력창에 포커스
-  useEffect(() => {
-    userIdRef.current.focus();
-  }, []);
+  // useEffect(() => {
+  //   userIdRef.current.focus();
+  // }, []);
 
   // 성공 메세지 출력
   useEffect(() => {
@@ -54,13 +54,13 @@ const LoginForm = () => {
     })
       .then((response) => {
         // 참고: https://stackoverflow.com/questions/49725012/handling-response-status-using-fetch-in-react-js/49725163
-        if (!response.ok) throw new Error(response.status);
-        else return response.json();
+        // if (!response.ok) throw new Error(response.status);
+        return response.json();
       })
       .then((data) => {
         localStorage.setItem("token", data.accessToken);
         setSuccessMessage("로그인 성공!");
-        Router.push("/main")
+        Router.push("/main");
       })
       .catch((error) => {
         setErrorMessage(`로그인 실패 사유 : ${error}`);
@@ -83,9 +83,9 @@ const LoginForm = () => {
               <input
                 type="text"
                 id="userid"
-                ref={userIdRef} // 페이지 렌더 되면 이곳 포커스
+                // ref={userIdRef} // 페이지 렌더 되면 이곳 포커스
                 onChange={(e) => setUserId(e.target.value)}
-                autoComplete="off"
+                // autoComplete="off"
                 value={userId} // 이게 무슨 역할을 하는거지
                 required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"

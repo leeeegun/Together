@@ -1,13 +1,14 @@
 import { useRef, useState, useEffect } from "react";
+import Swal from "sweetalert2";
 
 const ID_REGEX = /^[a-zA-z][a-zA-Z0-9]{3,20}$/;
 const PW_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$*]).{8,24}$/;
 const EMAIL_REGEX = /^(?=.*[@])(?=.*[.com]).{8,40}$/;
 
 const SignupForm = () => {
-  const userIdRef = useRef();
-  const userNameRef = useRef();
-  const userNickNameRef = useRef();
+  // const userIdRef = useRef();
+  // const userNameRef = useRef();
+  // const userNickNameRef = useRef();
   const userEmailRef = useRef();
   const userStatusRef = useRef();
 
@@ -68,8 +69,9 @@ const SignupForm = () => {
       },
     })
       .then((response) => {
-        if (!response.ok) throw new Error(response.status);
-        else return response.json();
+        // if (!response.ok) throw new Error(response.status);
+        // else return response.json();
+        return response.json();
       })
       .then((data) => {
         setSuccessMessage(data);
@@ -91,9 +93,19 @@ const SignupForm = () => {
   };
 
   // 페이지 렌더링 시 아이디 입력창에 포커스
+  // useEffect(() => {
+  //   userIdRef.current.focus();
+  // }, []);
+
   useEffect(() => {
-    userIdRef.current.focus();
-  }, []);
+    if (validUserId && userId) {
+      fetch(`http://localhost:8443/users/${userId}/exists`)
+        .then((response) => response.json())
+        .then((data) => {
+          setConfirmedUserId(data);
+        });
+    }
+  }, [validUserId, userId]);
 
   // 회원가입 버튼 활성화 조건
   useEffect(() => {
@@ -131,6 +143,9 @@ const SignupForm = () => {
       setValidUserId(false);
       setConfirmedUserId(false);
     }
+    if (validUserId === false) {
+      setConfirmedUserId(false);
+    }
   }, [userId]);
 
   // 비밀번호와 비밀번호학인 일치 여부 판단
@@ -155,8 +170,24 @@ const SignupForm = () => {
   }, [userEmail]);
 
   // 회원가입 성공 메세지 반환
+
+  //나중에 코드 201로 바꿔야함
   useEffect(() => {
     console.log(successMessage);
+    if (successMessage.statusCode === 200) {
+      Swal.fire({
+        title: "<strong>회원가입 완료!</strong>",
+        html: "이제부터 모든 기능을 사용할 수 있어요!",
+        icon: "success",
+      });
+    }
+    if (successMessage.statusCode === 400) {
+      Swal.fire({
+        title: "<strong>회원가입 실패!</strong>",
+        html: "오류가 발생했어요 😅",
+        icon: "error",
+      });
+    }
     setSuccessMessage("");
   }, [successMessage]);
 
@@ -187,7 +218,7 @@ const SignupForm = () => {
               <input
                 type="text"
                 id="userId"
-                ref={userIdRef}
+                // ref={userIdRef}
                 onChange={(e) => setUserId(e.target.value)}
                 autoComplete="off"
                 value={userId}
@@ -198,7 +229,7 @@ const SignupForm = () => {
             <div className="mx-auto">
               <button
                 disabled={!validUserId}
-                className="border border-[#BEBBB1] bg-[#BEBBB1] px-3 py-1 rounded-lg shadow-sm"
+                className="border border-[#BEBBB1] bg-[#BEBBB1] px-3 py-1 rounded-lg shadow-sm ml-3"
               >
                 중복 검사
               </button>
@@ -288,12 +319,14 @@ const SignupForm = () => {
               <input
                 type="text"
                 id="userName"
-                ref={userNameRef}
+                // ref={userNameRef}
                 onChange={(e) => setUserName(e.target.value)}
                 autoComplete="off"
                 value={userName}
                 required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
+                placeholder="홍길동(3~5글자)"
+                maxlength="5"
               />
             </div>
           </div>
@@ -306,7 +339,7 @@ const SignupForm = () => {
               <input
                 type="text"
                 id="userNickName"
-                ref={userNickNameRef}
+                // ref={userNickNameRef}
                 onChange={(e) => setUserNickName(e.target.value)}
                 autoComplete="off"
                 value={userNickName}
