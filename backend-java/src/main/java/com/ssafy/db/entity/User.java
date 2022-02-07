@@ -54,6 +54,4 @@ public class User {
 		this.userId = u.getUserId();
 		this.password = u.getPassword();
 	}
-    
-    
 }
