@@ -5,7 +5,6 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -14,14 +13,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.ssafy.api.request.UserLoginPostReq;
+import com.ssafy.api.request.UserModifyPostReq;
 import com.ssafy.api.request.UserRegisterPostReq;
-import com.ssafy.api.response.UserLoginPostRes;
 import com.ssafy.api.response.UserRes;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.auth.SsafyUserDetails;
 import com.ssafy.common.model.response.BaseResponseBody;
-import com.ssafy.common.util.JwtTokenUtil;
 import com.ssafy.db.entity.User;
 
 import io.swagger.annotations.Api;
@@ -83,6 +80,31 @@ public class UserController {
 		User user = userService.getUserByUserId(userId);
 		
 		return ResponseEntity.status(200).body(UserRes.of(user));
+	}
+	
+	@PostMapping("/modify")
+	@ApiOperation(value = "회원 본인 정보 수정", notes = "로그인된 회원 정보를 수정한다.") 
+    @ApiResponses({
+        @ApiResponse(code = 200, message = "성공"),
+        @ApiResponse(code = 400, message = "유효성 검증 실패"),
+        @ApiResponse(code = 401, message = "수정 과정에서 오류 발생"),
+        @ApiResponse(code = 500, message = "서버 오류")
+    })
+	public ResponseEntity<BaseResponseBody> modifyUserInfo(@ApiIgnore Authentication authentication, Errors errors,
+			@Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserModifyPostReq modifyData) {
+		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
+		String userId = userDetails.getUsername();
+		userService.getUserByUserId(userId);
+		
+		if(errors.hasErrors()) {
+			return ResponseEntity.status(400).body(BaseResponseBody.of(400, errors.getFieldError().getDefaultMessage()));
+		} else {
+			try {
+				return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
+			} catch (Exception e) {
+				return ResponseEntity.status(401).body(BaseResponseBody.of(401, "fail"));
+			}
+		}
 	}
 	
 	@GetMapping("/{userId}/exists")
