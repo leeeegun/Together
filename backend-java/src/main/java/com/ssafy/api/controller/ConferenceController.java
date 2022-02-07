@@ -74,39 +74,14 @@ public class ConferenceController {
     })
 	public ResponseEntity<? extends BaseResponseBody> join(@PathVariable Long oid, @PathVariable Long uid){
 		
-		Conference conference = conferenceService.getConferenceByOid(oid);
-		User user = userService.getUserByUid(uid);
-		
+		Conference conference = conferenceService.conferenceAddUser(oid, uid);
 		
 		if(oid == uid) {
-			conference.addUser(user);
-			conference.setActive(true);
-			
-			conferenceRepository.save(conference);
-			
-			System.out.println("#1");
-			for(User u : conference.getUsers()) {
-				System.out.println(u.getUserId());
-			}
-				
 			return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Host participation"));			
-		
+		}else if(conference.isActive()){
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Guest participation"));						
 		}else {
-			if(conference.isActive()) {
-				conference.addUser(user);
-				
-				conferenceRepository.save(conference);
-				
-				System.out.println("#2");
-				for(User u : conference.getUsers()) {
-					System.out.println(u.getUserId());
-				}
-				
-				return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Guest participation"));						
-			
-			}else {
-				return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Conference disabled"));				
-			}
+			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Conference disabled"));				
 		}
 	}
 	
@@ -125,32 +100,30 @@ public class ConferenceController {
 		User user = userService.getUserByUid(uid);
 		
 		if(oid == uid) {
-			
-			conference.removUserAll();
-			
-			System.out.println("#1");
-			for(User u : conference.getUsers()) {
-				System.out.println(u.getUserId());
-			}
-			
-			conference.setActive(false);
-			
-			conferenceRepository.save(conference);
-			
-			return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Host leave"));		
-			
+			conference = conferenceService.conferenceLeaveAll(conference);
+			return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Host leave"));
+		}else if(conference.getUsers().contains(user)){
+			conference = conferenceService.conferenceLeave(conference, user);
+			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Guest leave"));
 		}else {
-			conference.removeUser(user);
-			
-			System.out.println("#2");
-			for(User u : conference.getUsers()) {
-				System.out.println(u.getUserId());
-			}
-			
-			conferenceRepository.save(conference);
-			
-			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Guest leave"));	
+			return ResponseEntity.status(401).body(BaseResponseBody.of(401, "Conference disabled"));
 		}
-		
+	}
+	
+	@PostMapping("/update")
+	@ApiOperation(value = "방 수정", notes = "<strong>해당 oid</strong>방 제목, 설명을 수정한다.") 
+    @ApiResponses({
+    	@ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
+        @ApiResponse(code = 401, message = "인증 실패", response = BaseResponseBody.class),
+        @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
+        @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+    })
+	public ResponseEntity<? extends BaseResponseBody> update(@RequestBody @ApiParam(value="방 정보", required = true) ConferencePostReq conferenceInfo){
+	
+		if(conferenceService.conferenceModify(conferenceInfo)) {
+			return ResponseEntity.status(200).body(BaseResponseBody.of(201, "Success"));
+		}else {
+			return ResponseEntity.status(200).body(BaseResponseBody.of(401, "Fail"));
+		}
 	}
 }

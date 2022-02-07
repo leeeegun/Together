@@ -60,5 +60,12 @@ public class Conference {
 	public void setActive(boolean active) {
 		this.active = active;
 	}
-	
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
 }
