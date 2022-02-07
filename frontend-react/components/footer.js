@@ -1,8 +1,8 @@
 import React from "react";
 import Image from "next/image";
-import FacebookLogo from "../../images/svg/facebook-brands.svg";
-import InstaLogo from "../../images/svg/instagram-brands.svg";
-import TwitterLogo from "../../images/svg/twitter-brands.svg";
+import FacebookLogo from "../images/svg/facebook-brands.svg";
+import InstaLogo from "../images/svg/instagram-brands.svg";
+import TwitterLogo from "../images/svg/twitter-brands.svg";
 
 export default function footer() {
   return (
