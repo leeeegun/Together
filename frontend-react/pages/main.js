@@ -6,123 +6,97 @@ import Image from "next/image";
 import Link from "next/link";
 import Navbar from "../components/mainpage/Navbar";
 import Router from "next/router";
+import Swal from "sweetalert2";
+import Footer from "../components/footer";
+import { motion } from "framer-motion";
+import RandomSvg from "../public/images/svg/background.svg";
+import RandomSvg2 from "../public/images/svg/facebook-brands.svg";
+import LinkCard from "../components/mainpage/linkCard";
+import MyConferenceCard from "../components/mainpage/myConferenceCard";
+import ParticipateConferenceCard from "../components/mainpage/participateConferenceCard";
+
+const participateConference = () => {
+  console.log(1);
+};
 
 export default function Main() {
-  const [username, setUsername] = useState("임시");
+  const [username, setUsername] = useState("");
   const [isFirst, setIsFirst] = useState(true);
+  const [userId, setUserId] = useState("");
 
   // 로그인한 사용자만 mainpage에 접근할 수 있도록 함
-  // 현재는 시크릿키도 없고, JWT에 정보도 담겨져있지 않아서 제한적
   useEffect(() => {
     const token = localStorage.getItem("token");
     setIsFirst(false);
     if (token) {
-      // setUsername(token.sub)
+      const base64Payload = token.split(".")[1];
+      const payload = Buffer.from(base64Payload, "base64");
+      const result = JSON.parse(payload.toString());
+      setUsername(result.sub);
+      setUserId(result.nickname);
     } else {
-      alert("로그인해 주세요");
+      Swal.fire({
+        icon: "error",
+        title: "로그인 실패..",
+        text: "로그인을 다시 해주세요!",
+      });
       Router.push("/");
     }
   }, []);
 
-  const copying = () => {
-    const copyText = document.getElementById("mainpage-meeting-url").innerText;
-    navigator.clipboard.writeText(copyText);
-    alert("클립보드에 복사되었습니다!");
-  };
-
   return (
-    <>
-      <Navbar username={username} />
-      {isFirst && <div id="mainpage-tempside"></div>}
-      <section id="mainpage">
-        <div id="mainpage-menu">
-          <div id="mainpage-card">
-            <h1 className="m-3 text-3xl font-bold">내 회의실</h1>
-            <p>
-              내 주소:{" "}
-              <a style={{ wordBreak: "break-word" }} id="mainpage-meeting-url">
-                https://www.instagram.com/zuck/
-              </a>
-              <button
-                onClick={copying}
-                className="bg-[#009e747a] text-white ml-2 p-1 rounded"
-              >
-                복사
-              </button>
-            </p>
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: {
+          scale: 1,
+          opacity: 0,
+        },
+        visible: {
+          scale: 1,
+          opacity: 1,
+          transition: {
+            delay: 0.5,
+          },
+        },
+      }}
+    >
+      <div className="h-screen w-screen maindiv">
+        <Navbar username={username} />
+        {isFirst && <div id="mainpage-tempside"></div>}
+        <section
+          id="mainpage"
+          className="flex flex-col justify-center justify-items-center items-center"
+        >
+          <div id="mainpage-menu">
+            <MyConferenceCard
+              src={RandomSvg}
+              text="내 회의실"
+              link="myconference"
+              username={username}
+              description="도움말을 보며 궁금증을 해결해봐요!"
+            />
+            <ParticipateConferenceCard
+              src={RandomSvg2}
+              text="회의 참가"
+              link="participate"
+              description="도움말을 보며 궁금증을 해결해봐요!"
+            ></ParticipateConferenceCard>
+            <LinkCard
+              text="도움말"
+              link="faq"
+              description="도움말을 보며 궁금증을 해결해봐요!"
+            ></LinkCard>
+            <LinkCard
+              text="마이 페이지"
+              link="mypage"
+              description="내 프로필로 들어가봐요!"
+            ></LinkCard>
           </div>
-
-          <div>
-            <label htmlFor="mainpage-input-area">
-              <h1
-                className="m-3 text-3xl font-bold"
-                style={{ cursor: "pointer" }}
-              >
-                회의 참가
-              </h1>
-            </label>
-            <input
-              type="checkbox"
-              id="mainpage-input-area"
-              style={{ display: "none" }}
-            ></input>
-            <div>
-              <form>
-                <input
-                  className="h-10"
-                  style={{ border: "1px solid black", width: "55%" }}
-                  type="text"
-                  name="roomnumber"
-                  placeholder="회의 주소를 입력해 주세요."
-                />
-                <button className="h-10 bg-[#009e747a] text-white ml-2 p-1 rounded">
-                  제출
-                </button>
-              </form>
-            </div>
-          </div>
-
-          <div>
-            <h1 className="m-3 text-3xl font-bold mainpage-title">회의 생성</h1>
-            <img
-              id="mainpage-image-3"
-              className="mainpage-effectimg"
-              src="./mainpage/conference.jpg"
-              alt="conference"
-            ></img>
-          </div>
-
-          <div>
-            <Link href="/faq">
-              <h1 className="m-3 text-3xl font-bold mainpage-title">FAQ</h1>
-            </Link>
-          </div>
-
-          <div>
-            <h1 className="m-3 text-3xl font-bold mainpage-title">My Page</h1>
-            <img
-              id="mainpage-image-5"
-              className="mainpage-effectimg"
-              src="./mainpage/Descartes.png"
-              alt="my page"
-            ></img>
-          </div>
-
-          <div>
-            <h1
-              className="m-3 text-3xl font-bold mainpage-title"
-              onClick={() => {
-                localStorage.clear("token");
-                Router.push("/");
-              }}
-            >
-              로그아웃
-            </h1>
-            {/* <Image className={styles.effectimg} width={400} height={400} src="/conference.jpg" alt="conference"></Image> */}
-            {/* <Image className="mainpage-effectimg" width={400} height={400} src="/conference.jpg" alt="conference"></Image> */}
-          </div>
-        </div>
-      </section>
-    </>
+          <Footer />
+        </section>
+      </div>
+    </motion.div>
   );
 }

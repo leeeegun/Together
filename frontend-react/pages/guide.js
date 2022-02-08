@@ -1,7 +1,7 @@
 import React from "react";
 import Footer from "../components/footer.js";
 import Image from "next/image";
-import RandomImage from "../images/RandomImage.jpg";
+import RandomImage from "../public/images/RandomImage.jpg";
 import Link from "next/link";
 import { motion } from "framer-motion";
 

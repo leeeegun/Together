@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import LandingImage01 from "../images/LandingImage01.jpg";
+import LandingImage01 from "../public/images/LandingImage01.jpg";
 import LandingParagraph from "../components/LandingParagraph";
 import LoginForm from "../components/LoginForm";
 import SignUpForm from "../components/signupForm";
