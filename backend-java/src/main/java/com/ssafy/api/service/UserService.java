@@ -1,5 +1,6 @@
 package com.ssafy.api.service;
 
+import com.ssafy.api.request.UserModifyPostReq;
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.db.entity.User;
 
@@ -11,4 +12,5 @@ public interface UserService {
 	User getUserByUserId(String userId);
 	boolean checkIdDuplicate(String userId);
 	User getUserByUid(Long uid);
+	void setUserInfoByUserId(User user, UserModifyPostReq userInfo);
 }

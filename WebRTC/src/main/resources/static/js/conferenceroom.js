@@ -181,6 +181,10 @@ function onParticipantLeft(request) {
 	var participant = participants[request.name];
 	participant.dispose();
 	delete participants[request.name];
+	if (request.host == request.name){
+		console.log("host가 나감.")
+		leaveRoom();
+	}
 }
 
 function sendMessage(message) {

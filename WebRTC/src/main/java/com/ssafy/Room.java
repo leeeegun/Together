@@ -48,14 +48,20 @@ public class Room implements Closeable {
   private final ConcurrentMap<String, UserSession> participants = new ConcurrentHashMap<>();
   private final MediaPipeline pipeline;
   private final String name;
+  private final String host;
 
   public String getName() {
     return name;
   }
+  
+  public String getHost() {
+		return host;
+}
 
-  public Room(String roomName, MediaPipeline pipeline) {
+  public Room(String roomName, String host, MediaPipeline pipeline) {
     this.name = roomName;
     this.pipeline = pipeline;
+    this.host = host;
     log.info("ROOM {} has been created", roomName);
   }
 
@@ -109,6 +115,7 @@ public class Room implements Closeable {
     final JsonObject participantLeftJson = new JsonObject();
     participantLeftJson.addProperty("id", "participantLeft");
     participantLeftJson.addProperty("name", name);
+    participantLeftJson.addProperty("host", this.host);
     for (final UserSession participant : participants.values()) {
       try {
         participant.cancelVideoFrom(name);
