@@ -19,7 +19,7 @@ import lombok.Setter;
 public class ConferencePostReq {
 	
 	@ApiModelProperty(name="방장", example="1")
-	Long oid;
+	String userId;
 	
 	@ApiModelProperty(name="방 제목", example="홍길동의 화상회의")
 	String title;

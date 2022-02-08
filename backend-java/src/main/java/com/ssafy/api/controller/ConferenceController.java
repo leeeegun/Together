@@ -44,7 +44,7 @@ public class ConferenceController {
 	@Autowired
 	PasswordEncoder passwordEncoder;
 	
-	@PostMapping("/create")
+	@GetMapping("/create/{userId}")
 	@ApiOperation(value = "방 생성", notes = "<strong>유저 ID</strong>를 주소로 방을 생성한다.") 
     @ApiResponses({
         @ApiResponse(code = 200, message = "성공", response = UserLoginPostRes.class),
@@ -52,10 +52,12 @@ public class ConferenceController {
         @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
         @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-	public ResponseEntity<? extends BaseResponseBody> create(@RequestBody @ApiParam(value="방 정보", required = true) ConferencePostReq conferenceInfo) {
+	public ResponseEntity<? extends BaseResponseBody> create(@PathVariable String userId) {
 
-		if(!conferenceService.checkConferenceDuplicate(conferenceInfo.getOid())){
-			Conference conference = conferenceService.create(conferenceInfo);
+		User user = userService.getUserByUserId(userId);
+		
+		if(!conferenceService.checkConferenceDuplicate(user.getUid())){
+			Conference conference = conferenceService.create(user);
 			
 			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Success"));
 		}else {
@@ -63,7 +65,7 @@ public class ConferenceController {
 		}
 	}
 	
-	@GetMapping("/join/{oid}/{uid}")
+	@GetMapping("/join/{userId}/{uid}")
 	@ApiOperation(value = "방 입장", notes = "<strong>해당 oid 방에</strong>참가한다.") 
     @ApiResponses({
         @ApiResponse(code = 200, message = "게스트 참가", response = UserLoginPostRes.class),
@@ -72,11 +74,12 @@ public class ConferenceController {
         @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
         @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-	public ResponseEntity<? extends BaseResponseBody> join(@PathVariable Long oid, @PathVariable Long uid){
+	public ResponseEntity<? extends BaseResponseBody> join(@PathVariable String userId, @PathVariable Long uid){
 		
-		Conference conference = conferenceService.conferenceAddUser(oid, uid);
+		User user = userService.getUserByUserId(userId);
+		Conference conference = conferenceService.conferenceAddUser(user.getUid(), uid);
 		
-		if(oid == uid) {
+		if(user.getUid() == uid) {
 			return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Host participation"));			
 		}else if(conference.isActive()){
 			return ResponseEntity.status(200).body(BaseResponseBody.of(200, "Guest participation"));						
@@ -85,7 +88,7 @@ public class ConferenceController {
 		}
 	}
 	
-	@GetMapping("/leave/{oid}/{uid}")
+	@GetMapping("/leave/{userId}/{uid}")
 	@ApiOperation(value = "방 종료", notes = "<strong>해당 uid</strong>를 방에서 퇴장시킨다.") 
     @ApiResponses({
         @ApiResponse(code = 200, message = "게스트 퇴장", response = UserLoginPostRes.class),
@@ -94,12 +97,14 @@ public class ConferenceController {
         @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
         @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
     })
-	public ResponseEntity<? extends BaseResponseBody> leave(@PathVariable Long oid, @PathVariable Long uid){
+	public ResponseEntity<? extends BaseResponseBody> leave(@PathVariable String userId, @PathVariable Long uid){
 		
-		Conference conference = conferenceService.getConferenceByOid(oid);
+		User u = userService.getUserByUserId(userId);
+		
+		Conference conference = conferenceService.getConferenceByOid(u.getUid());
 		User user = userService.getUserByUid(uid);
 		
-		if(oid == uid) {
+		if(u.getUid() == uid) {
 			conference = conferenceService.conferenceLeaveAll(conference);
 			return ResponseEntity.status(201).body(BaseResponseBody.of(201, "Host leave"));
 		}else if(conference.getUsers().contains(user)){
