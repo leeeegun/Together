@@ -10,10 +10,10 @@ const URL = "3.38.253.61:8443";
 
 export default function Conference({ myName, myRoom, ws }) {
   // const ws = new WebSocket("wss://" + URL + "/groupcall");
-  const [participants, setParticipants] = useState({});
-  const [isMicEnabled, setIsMicEnabled] = useState(true);
-  const [isVideoEnabled, setIsVideoEnabled] = useState(true);
-  const [isSharingEnabled, setIsSharingEnabled] = useState(false);
+  const [participants, setParticipants] = useState({}); // 참가자들 목록 저장
+  const [isMicEnabled, setIsMicEnabled] = useState(true); // 마이크 켜고 끄기 토글
+  const [isVideoEnabled, setIsVideoEnabled] = useState(true); // 비디오 켜고 끄기 토글
+  const [isSharingEnabled, setIsSharingEnabled] = useState(false); // 화면 공유 켜고 끄기 토글
 
 
   useEffect(() => {
@@ -24,6 +24,10 @@ export default function Conference({ myName, myRoom, ws }) {
     };
     sendMessage(message);
   }, []);
+
+  useEffect(() => {
+    console.log('참가자아아아', participants)
+  }, [participants]);
 
   ws.onmessage = function (message) {
     const parsedMessage = JSON.parse(message.data);
@@ -45,8 +49,7 @@ export default function Conference({ myName, myRoom, ws }) {
       // ICE candidate peer 한테 보내기 혹은 받아오기 (아 정확히는 몰라)
       case "iceCandidate":
         participants[parsedMessage.name].rtcPeer.addIceCandidate(
-          parsedMessage.candidate,
-          function (error) {
+          parsedMessage.candidate, function (error) {
             if (error) {
               console.error("Error adding candidate: " + error);
               return;
@@ -66,10 +69,13 @@ export default function Conference({ myName, myRoom, ws }) {
   // 2. SDP offer 생성 및 백엔드 서버로 전달
   // 새로 들어온 유저의 경우
   function receiveVideo(sender) {
-    const participant = new Participant(sender);
     const newParticipants = {...participants}
+    const participant = new Participant(sender);
     newParticipants[sender] = participant;
-    setParticipants(newParticipants)
+    
+    setParticipants(newParticipants), () => {
+      console.log('receivevideo 부분',participants)
+    }
     const video = participant.getVideoElement();
 
     const options = {
@@ -129,6 +135,8 @@ export default function Conference({ myName, myRoom, ws }) {
   // 3. SDP answer 받아오기 및 P2P 연결!
   function receiveVideoResponse(result) {
     console.log('리시브', participants)
+    console.log(result)
+    console.log(result.name)
     participants[result.name].rtcPeer.processAnswer(
       result.sdpAnswer,
       function (error) {
@@ -136,6 +144,19 @@ export default function Conference({ myName, myRoom, ws }) {
       },
     );
   }
+
+
+  function callResponse(message) {
+    if (message.response != 'accepted') {
+      console.info('Call not accepted by peer. Closing call');
+      stop();
+    } else {
+      webRtcPeer.processAnswer(message.sdpAnswer, function (error) {
+        if (error) return console.error (error);
+      });
+    }
+  }
+
 
   function Participant(name) {
     this.name = name;
@@ -295,7 +316,6 @@ export default function Conference({ myName, myRoom, ws }) {
         onMouseUp={leaveRoom}
         value="Leave room"
       /> */}
-      {/* <button onClick={test}>화면, 멈춰!</button> */}
       <div id="meetingroom-toolbar">
         {/* {isMicEnabled?
         <button className="meetingroom-red"><img src="/meetingroom/mic_muted.svg" alt="마이크를 켜둘지 정하실 수 있습니다."/></button>:
@@ -303,21 +323,21 @@ export default function Conference({ myName, myRoom, ws }) {
         } */}
 
         {isMicEnabled?
-        <button aria-label="본인 마이크 끄기" onClick={toggleAudio} className="meetingroom-red"><FontAwesomeIcon icon={faMicrophoneSlash} size="1.8x" /></button>:
-        <button aria-label="본인 마이크 켜기" onClick={toggleAudio} className="meetingroom-grey"><FontAwesomeIcon icon={faMicrophone} size="1.8x" /></button>
+        <button aria-label="본인 마이크 끄기" onClick={toggleAudio} className="meetingroom-red"><FontAwesomeIcon icon={faMicrophoneSlash} size="1x" /></button>:
+        <button aria-label="본인 마이크 켜기" onClick={toggleAudio} className="meetingroom-grey"><FontAwesomeIcon icon={faMicrophone} size="1x" /></button>
         }
 
         {isVideoEnabled?
-        <button aria-label="본인 비디오 끄기" onClick={toggleVideo} className="meetingroom-red"><FontAwesomeIcon icon={faVideoSlash} size="1.3x" /></button>:
-        <button aria-label="본인 비디오 켜기" onClick={toggleVideo} className="meetingroom-grey"><FontAwesomeIcon icon={faVideo} size="1.3x" /></button>
+        <button aria-label="본인 비디오 끄기" onClick={toggleVideo} className="meetingroom-red"><FontAwesomeIcon icon={faVideoSlash} size="1x" /></button>:
+        <button aria-label="본인 비디오 켜기" onClick={toggleVideo} className="meetingroom-grey"><FontAwesomeIcon icon={faVideo} size="1x" /></button>
         }
 
         {isSharingEnabled?
-        <button aria-label="화면 공유 끄기" onClick={toggleSharing} className="meetingroom-red"><FontAwesomeIcon icon={faDesktop} size="1.3x" /></button>:
-        <button aria-label="화면 공유하기" onClick={toggleSharing} className="meetingroom-grey"><FontAwesomeIcon icon={faDesktop} size="1.3x" /></button>
+        <button aria-label="화면 공유 끄기" onClick={toggleSharing} className="meetingroom-red"><FontAwesomeIcon icon={faDesktop} size="1x" /></button>:
+        <button aria-label="화면 공유하기" onClick={toggleSharing} className="meetingroom-grey"><FontAwesomeIcon icon={faDesktop} size="1x" /></button>
         }
         
-        <button aria-label="연결 종료하고 회의실 나가기" onMouseUp={leaveRoom} className="meetingroom-red"><FontAwesomeIcon icon={faPhoneSlash} size="1.3x" /></button>
+        <button aria-label="연결 종료하고 회의실 나가기" onMouseUp={leaveRoom} className="meetingroom-red"><FontAwesomeIcon icon={faPhoneSlash} size="1x" /></button>
       </div>
     </>
   );
