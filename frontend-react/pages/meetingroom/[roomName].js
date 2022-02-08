@@ -3,19 +3,22 @@ import Conference from "../../components/meetingroom/Conference";
 import Swal from "sweetalert2";
 import Router from "next/router";
 
-export const isBrowser = typeof window !== "undefined";
+// export const isBrowser = typeof window !== "undefined";
 const URL = "3.38.253.61:8443";
-export const ws = isBrowser
-  ? new WebSocket("wss://" + URL + "/groupcall")
-  : null;
+// export const ws = isBrowser
+//   ? new WebSocket("wss://" + URL + "/groupcall")
+//   : null;
 
 export default function Meeting({ roomName }) {
   const conferenceName = new Buffer(roomName, "base64").toString();
 
   const [isJoin, setIsJoin] = useState(true);
   const [myName, setMyName] = useState("");
+  const [ws, setWs] = useState(null);
+  const [userId, setUserId] = useState("")
 
   useEffect(() => {
+    setWs(new WebSocket("wss://" + URL + "/groupcall"));
     window.onbeforeunload = function () {
       return false;
     };
@@ -26,6 +29,12 @@ export default function Meeting({ roomName }) {
         text: "로그인을 다시 해주세요!",
       });
       Router.push("/");
+    } else {
+      const token = localStorage.getItem("token");
+      const base64Payload = token.split(".")[1];
+      const payload = Buffer.from(base64Payload, "base64");
+      const result = JSON.parse(payload.toString());
+      setUserId(result.sub);
     }
   }, []);
 
@@ -65,12 +74,15 @@ export default function Meeting({ roomName }) {
           myName={myName}
           myRoom={conferenceName}
           ws={ws}
+          userId={userId}
         ></Conference>
       )}
     </>
   );
 }
 
+// 아래 링크를 참조하십시오. roomName이라는 URL 링크를 변수로 사용하기 위한 과정입니다!
+// https://stackoverflow.com/questions/67803855/how-to-generate-dynamic-pages-without-knowing-the-static-paths-on-nextjs
 export async function getStaticProps({ params: { roomName } }) {
   return {
     props: { roomName },
