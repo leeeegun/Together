@@ -95,11 +95,11 @@ public class CallHandler extends TextWebSocketHandler {
   @Override
   public void afterConnectionClosed(WebSocketSession session, CloseStatus status) throws Exception {
     UserSession user = registry.removeBySession(session);
-    roomManager.getRoom(user.getRoomName()).leave(user);
+    roomManager.getRoom(user.getRoomName(), "").leave(user);
   }
   
   private void sendTextMsg(JsonObject params) {
-	  Room room = roomManager.getRoom(params.get("room").getAsString());
+	  Room room = roomManager.getRoom(params.get("room").getAsString(), "");
 	  Collection<UserSession> participants = room.getParticipants();
 	  final JsonObject textMsg = new JsonObject();
 	  textMsg.addProperty("id", "receiveTextMsg");
@@ -125,7 +125,7 @@ public class CallHandler extends TextWebSocketHandler {
   }
 
   private void leaveRoom(UserSession user) throws IOException {
-    final Room room = roomManager.getRoom(user.getRoomName());
+    final Room room = roomManager.getRoom(user.getRoomName(), "");
     room.leave(user);
     if (room.getParticipants().isEmpty()) {
       roomManager.removeRoom(room);

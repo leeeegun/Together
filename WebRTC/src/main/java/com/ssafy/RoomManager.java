@@ -60,13 +60,6 @@ public class RoomManager {
     return room;
   }
   
-  public Room getRoom(String roomName) {
-	    log.debug("Searching for room {}", roomName);
-	    Room room = rooms.get(roomName);
-
-	    return room;
-	  }
-  
   public boolean isRoomExist(String roomName){
 	  if(rooms.containsKey(roomName)) {
 		  return true;

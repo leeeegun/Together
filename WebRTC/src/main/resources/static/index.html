@@ -3,41 +3,22 @@
 <meta charset="utf-8">
 <link rel="styleSheet" href="style.css" type="text/css" media="screen">
 
-<script src="/webjars/webrtc-adapter/release/adapter.js"></script>
-<script src="./js/conferenceroom.js"></script>
-<script src="./js/participant.js"></script>
-<script src="./js/kurento-utils.js"></script>
 </head>
 <body>
 	<div id="container">
 		<div id="wrapper">
 			<div id="join" class="animate join">
-				<h1>Join a Room</h1>
+				<h1>Kurento Back 서버</h1>
 				<form onsubmit="register(); return false;" accept-charset="UTF-8">
 					<p>
-						<input type="text" name="name" value="" id="name"
-							placeholder="Username" required>
-					</p>
-					<p>
-						<input type="text" name="room" value="" id="roomName"
-							placeholder="Room" required>
-					</p>
-					<p class="submit">
-						<input type="submit" name="commit" value="Join!">
+						##Websocket 메세지 목록##
+						<br>
+						<br>
+						https://www.notion.so/WebSocket-84c135e39d4746d7938b6e6f59d8185c
+						<br>
+						
 					</p>
 				</form>
-			</div>
-			<div id="room" style="display: none;">
-				<h2 id="room-header"></h2>
-				<div id="participants"></div>
-				<input type="text" placeholder="보낼 메세지" id="sendM" class="content">
-    			<button type="button" value="전송" class="sendBtn" id="sendMBtn" onclick="sendMsg()">전송</button>
-	    		<div id="msgArea">
-				    <ul>
-				    </ul>
-				</div>
-				<input type="button" id="button-leave" onmouseup="leaveRoom();"
-					value="Leave room">
 			</div>
 		</div>
 	</div>
