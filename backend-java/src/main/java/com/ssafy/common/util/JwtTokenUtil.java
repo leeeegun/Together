@@ -47,26 +47,24 @@ public class JwtTokenUtil {
                 .build();
     }
     
-    public static String getToken(String userId, String nickname) {
-		Date expires = JwtTokenUtil.getTokenExpiration(expirationTime);
-    return JWT.create()
-            .withSubject(userId)
-            .withClaim("nickname", nickname)
-            .withExpiresAt(expires)
-            .withIssuer(ISSUER)
-            .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
-            .sign(Algorithm.HMAC512(secretKey.getBytes()));
-}
+    public static String getToken(String userId) {
+    		Date expires = JwtTokenUtil.getTokenExpiration(expirationTime);
+        return JWT.create()
+                .withSubject(userId)
+                .withExpiresAt(expires)
+                .withIssuer(ISSUER)
+                .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
+                .sign(Algorithm.HMAC512(secretKey.getBytes()));
+    }
 
-public static String getToken(Instant expires, String userId, String nickname) {
-    return JWT.create()
-            .withSubject(userId)
-            .withClaim("nickname", nickname)
-            .withExpiresAt(Date.from(expires))
-            .withIssuer(ISSUER)
-            .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
-            .sign(Algorithm.HMAC512(secretKey.getBytes()));
-}
+    public static String getToken(Instant expires, String userId) {
+        return JWT.create()
+                .withSubject(userId)
+                .withExpiresAt(Date.from(expires))
+                .withIssuer(ISSUER)
+                .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
+                .sign(Algorithm.HMAC512(secretKey.getBytes()));
+    }
     
     public static Date getTokenExpiration(int expirationTime) {
     		Date now = new Date();
