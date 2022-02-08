@@ -20,8 +20,8 @@ public class ConferenceServiceImpl implements ConferenceService {
 	UserService userService;
 
 	@Override
-	public Conference create(ConferencePostReq c) {
-		Conference conference = new Conference(c.getOid(), c.getTitle(), c.getDescription(), false);
+	public Conference create(User user) {
+		Conference conference = new Conference(user.getUid(), user.getUserId() + "의 Conference", null, false);
 		
 		return conferenceRepository.save(conference);
 	}
@@ -75,7 +75,8 @@ public class ConferenceServiceImpl implements ConferenceService {
 	public boolean conferenceModify(ConferencePostReq conferenceInfo) {
 
 		try {
-			Conference conference = this.getConferenceByOid(conferenceInfo.getOid());
+			User user = userService.getUserByUserId(conferenceInfo.getUserId());
+			Conference conference = this.getConferenceByOid(user.getUid());
 			
 			//수정
 			conference.setTitle(conferenceInfo.getTitle());

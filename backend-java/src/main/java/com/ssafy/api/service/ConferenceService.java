@@ -5,7 +5,7 @@ import com.ssafy.db.entity.Conference;
 import com.ssafy.db.entity.User;
 
 public interface ConferenceService {
-	Conference create(ConferencePostReq conferenceInfo);
+	Conference create(User user);
 	Conference getConferenceByOid(Long oid);
 	boolean checkConferenceDuplicate(Long oid);
 	Conference conferenceAddUser(Long oid, Long uid);
