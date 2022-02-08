@@ -75,6 +75,13 @@ const SignupForm = () => {
       })
       .then((data) => {
         setSuccessMessage(data);
+        return fetch(`http://localhost:8443/conference/create/${userId}`)
+          .then((response) => {
+            if (!response.ok) throw new Error(response.statusText);
+          })
+          .catch((err) => {
+            console.log(err);
+          });
       })
       .catch((error) => {
         setErrorMessage(error);

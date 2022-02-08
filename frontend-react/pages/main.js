@@ -15,14 +15,11 @@ import LinkCard from "../components/mainpage/linkCard";
 import MyConferenceCard from "../components/mainpage/myConferenceCard";
 import ParticipateConferenceCard from "../components/mainpage/participateConferenceCard";
 
-const participateConference = () => {
-  console.log(1);
-};
-
 export default function Main() {
   const [username, setUsername] = useState("");
   const [isFirst, setIsFirst] = useState(true);
   const [userId, setUserId] = useState("");
+  const [uid, setUid] = useState("");
 
   // 로그인한 사용자만 mainpage에 접근할 수 있도록 함
   useEffect(() => {
@@ -34,6 +31,7 @@ export default function Main() {
       const result = JSON.parse(payload.toString());
       setUsername(result.sub);
       setUserId(result.nickname);
+      setUid(result.uid);
     } else {
       Swal.fire({
         icon: "error",
@@ -75,6 +73,7 @@ export default function Main() {
               text="내 회의실"
               link="myconference"
               username={username}
+              uid={uid}
               description="도움말을 보며 궁금증을 해결해봐요!"
             />
             <ParticipateConferenceCard

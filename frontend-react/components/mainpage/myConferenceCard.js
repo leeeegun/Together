@@ -14,11 +14,13 @@ export default function myConferenceCard({ text, src, link, username }) {
 
   const handleClickMyConference = (e) => {
     e.preventDefault();
-    const link = `http://localhost:3000/meetingroom/${username}`;
-    navigator.clipboard.writeText(link);
+    const encoded = new Buffer(username).toString("base64");
+    const link = `http://localhost:3000/meetingroom/${encoded}`;
+    // console.log(encoded);
+    navigator.clipboard.writeText(encoded);
     Swal.fire({
       title: "초대링크 복사 성공!",
-      html: `<p>바로 이동하기 : <a href=${link} style="text-decoration: underline">${link}</a></p>`,
+      html: `<p>바로 이동하기 : <a href=${link} style="text-decoration: underline">이동하기</a></p>`,
       timer: 1000000,
       icon: "success",
     });

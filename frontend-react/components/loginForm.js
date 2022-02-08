@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import Router from "next/router";
 import Swal from "sweetalert2";
+import { motion } from "framer-motion";
 
 const LoginForm = () => {
   const [userId, setUserId] = useState("");
@@ -85,7 +86,11 @@ const LoginForm = () => {
 
   return (
     <div className="right snap-center flex flex-col items-center justify-center w-screen h-screen">
-      <section className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10">
+      <motion.section
+        className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10"
+        whileHover={{ scale: 1.4 }}
+        whileInView={{ scale: 1.2 }}
+      >
         <h1 className="text-center">로그인</h1>
         <form onSubmit={handleSubmit} className="mb-0">
           <div>
@@ -134,7 +139,7 @@ const LoginForm = () => {
             </button>
           </div>
         </form>
-      </section>
+      </motion.section>
     </div>
   );
 };
