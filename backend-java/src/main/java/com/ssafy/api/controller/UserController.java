@@ -90,11 +90,12 @@ public class UserController {
         @ApiResponse(code = 401, message = "수정 과정에서 오류 발생"),
         @ApiResponse(code = 500, message = "서버 오류")
     })
-	public ResponseEntity<BaseResponseBody> modifyUserInfo(@ApiIgnore Authentication authentication, Errors errors,
-			@Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserModifyPostReq modifyData) {
+	public ResponseEntity<BaseResponseBody> modifyUserInfo(@ApiIgnore Authentication authentication,
+			@Valid @RequestBody @ApiParam(value="수정 정보", required = true) UserModifyPostReq modifyData, Errors errors) {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 		String userId = userDetails.getUsername();
-		userService.getUserByUserId(userId);
+		User user = userService.getUserByUserId(userId);
+		userService.setUserInfoByUserId(user, modifyData);
 		
 		if(errors.hasErrors()) {
 			return ResponseEntity.status(400).body(BaseResponseBody.of(400, errors.getFieldError().getDefaultMessage()));
