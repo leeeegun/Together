@@ -119,7 +119,7 @@ public class CallHandler extends TextWebSocketHandler {
     final String name = params.get("name").getAsString();
     log.info("PARTICIPANT {}: trying to join room {}", name, roomName);
 
-    Room room = roomManager.getRoom(roomName);
+    Room room = roomManager.getRoom(roomName, name);
     final UserSession user = room.join(name, session);
     registry.register(user);
   }
