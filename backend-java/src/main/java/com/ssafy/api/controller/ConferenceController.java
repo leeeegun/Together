@@ -1,7 +1,5 @@
 package com.ssafy.api.controller;
 
-import java.util.Iterator;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,7 +11,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.ssafy.api.request.ConferencePostReq;
+import com.ssafy.api.response.ConferenceRes;
 import com.ssafy.api.response.UserLoginPostRes;
+import com.ssafy.api.response.UserRes;
 import com.ssafy.api.service.ConferenceService;
 import com.ssafy.api.service.UserService;
 import com.ssafy.common.model.response.BaseResponseBody;
@@ -130,5 +130,21 @@ public class ConferenceController {
 		}else {
 			return ResponseEntity.status(200).body(BaseResponseBody.of(401, "Fail"));
 		}
+	}
+	
+	@GetMapping("/info/{userId}")
+	@ApiOperation(value = "방 조회", notes = "<strong>해당 userId</strong>방의 정보를 반환시킨다.") 
+    @ApiResponses({
+        @ApiResponse(code = 201, message = "조회 성공", response = UserLoginPostRes.class),
+        @ApiResponse(code = 401, message = "조회 실패", response = BaseResponseBody.class),
+        @ApiResponse(code = 404, message = "사용자 없음", response = BaseResponseBody.class),
+        @ApiResponse(code = 500, message = "서버 오류", response = BaseResponseBody.class)
+    })
+	public ResponseEntity<ConferenceRes> info(@PathVariable String userId){
+		
+		User user = userService.getUserByUserId(userId);
+		Conference conference = conferenceService.getConferenceByOid(user.getUid());
+		
+		return ResponseEntity.status(200).body(ConferenceRes.of(conference));
 	}
 }
