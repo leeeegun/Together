@@ -1,28 +1,50 @@
 import React from "react";
 import Image from "next/image";
-import FacebookLogo from "../images/svg/facebook-brands.svg";
-import InstaLogo from "../images/svg/instagram-brands.svg";
-import TwitterLogo from "../images/svg/twitter-brands.svg";
+import { motion } from "framer-motion";
 
 export default function footer() {
   return (
-    <div className="text-center justify-center sticky">
+    <div className="flex flex-col text-center justify-center sticky mt-auto">
       <p className="font-extralight text-2xl">Together</p>
       <p className="mt-5">Contact us</p>
       <br></br>
-      <a href="https://facebook.com" className="mx-2">
-        <Image src={FacebookLogo} width={40} height={40}></Image>
-      </a>
-      <a href="https://instagram.com" className="mx-2">
-        <Image src={InstaLogo} width={40} height={40}></Image>
-      </a>
-      <a href="https://twitter.com" className="mx-2">
-        <Image src={TwitterLogo} width={40} height={40}></Image>
-      </a>
+      <div className="flex flex-row justify-center items-center">
+        <a href="https://facebook.com" className="mx-2">
+          <motion.img
+            src="/images/svg/facebook-brands.svg"
+            whileHover={{ scale: 1.4 }}
+            width={40}
+            height={40}
+            className="inline"
+          ></motion.img>
+        </a>
+        <a href="https://instagram.com" className="mx-2">
+          <motion.img
+            whileHover={{ scale: 1.4 }}
+            src="/images/svg/instagram-brands.svg"
+            width={40}
+            height={40}
+            className="inline"
+          ></motion.img>
+        </a>
+        <a href="https://twitter.com" className="mx-2">
+          <motion.img
+            whileHover={{ scale: 1.4 }}
+            src="/images/svg/twitter-brands.svg"
+            width={40}
+            height={40}
+            className="inline"
+          ></motion.img>
+        </a>
+      </div>
       <br></br>
-      <p className="my-10 hover:cursor-pointer">
+      <motion.p
+        className="my-10 hover:cursor-pointer"
+        whileHover={{ scale: 1.4 }}
+        className="hover:font-semibold"
+      >
         <a href="https://ssafy.com">@ SSAFY</a>
-      </p>
+      </motion.p>
     </div>
   );
 }
