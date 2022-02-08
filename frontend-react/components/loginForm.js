@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef } from "react";
 import Router from "next/router";
+import Swal from "sweetalert2";
 
 const LoginForm = () => {
   const [userId, setUserId] = useState("");
@@ -54,15 +55,30 @@ const LoginForm = () => {
     })
       .then((response) => {
         // 참고: https://stackoverflow.com/questions/49725012/handling-response-status-using-fetch-in-react-js/49725163
-        // if (!response.ok) throw new Error(response.status);
+        if (!response.ok) throw new Error(response.status);
         return response.json();
       })
       .then((data) => {
+        console.log(data);
         localStorage.setItem("token", data.accessToken);
+        Swal.fire({
+          position: "top-end",
+          icon: "success",
+          title: "로그인 성공!",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         setSuccessMessage("로그인 성공!");
         Router.push("/main");
       })
       .catch((error) => {
+        Swal.fire({
+          position: "top-end",
+          icon: "error",
+          title: "로그인 실패",
+          showConfirmButton: false,
+          timer: 1500,
+        });
         setErrorMessage(`로그인 실패 사유 : ${error}`);
       });
   };

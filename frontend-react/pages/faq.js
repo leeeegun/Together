@@ -1,8 +1,26 @@
 import Navbar from "../components/mainpage/Navbar";
+import { motion } from "framer-motion";
+import Footer from "../components/footer";
 
 export default function Faq() {
   return (
-    <>
+    <motion.div
+      initial="hidden"
+      animate="visible"
+      variants={{
+        hidden: {
+          scale: 2,
+          opacity: 0,
+        },
+        visible: {
+          scale: 1,
+          opacity: 1,
+          transition: {
+            delay: 0.5,
+          },
+        },
+      }}
+    >
       <Navbar />
       {/* <section className="w-1/2 mt-10 mx-auto">
       <div className="">
@@ -18,7 +36,7 @@ export default function Faq() {
 
       <section
         style={{ marginTop: "15vmin" }}
-        className="text-lg w-1/2 mx-auto"
+        className="text-lg w-1/2 mx-auto h-screen"
       >
         <details>
           <summary>
@@ -48,6 +66,7 @@ export default function Faq() {
           }}
         />
       </section>
-    </>
+      <Footer />
+    </motion.div>
   );
 }
