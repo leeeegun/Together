@@ -59,13 +59,6 @@ export default function Meeting({ roomName }) {
               <input type="submit" name="commit" value="Join!" />
             </button>
           </form>
-          <button className="meetingroom-red">
-            <img
-              src="/meetingroom/mic_muted.svg"
-              alt="마이크를 켜둘지 정하실 수 있습니다."
-            />
-          </button>
-          :
         </div>
       ) : (
         <Conference

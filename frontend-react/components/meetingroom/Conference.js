@@ -7,10 +7,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const PARTICIPANT_MAIN_CLASS = "participant main";
 const PARTICIPANT_CLASS = "participant";
 const URL = "3.38.253.61:8443";
+const participants = {}
 
 export default function Conference({ myName, myRoom, ws }) {
   // const ws = new WebSocket("wss://" + URL + "/groupcall");
-  const [participants, setParticipants] = useState({}); // 참가자들 목록 저장
+  // const [participants, setParticipants] = useState({}); // 참가자들 목록 저장
   const [isMicEnabled, setIsMicEnabled] = useState(true); // 마이크 켜고 끄기 토글
   const [isVideoEnabled, setIsVideoEnabled] = useState(true); // 비디오 켜고 끄기 토글
   const [isSharingEnabled, setIsSharingEnabled] = useState(false); // 화면 공유 켜고 끄기 토글
@@ -67,15 +68,18 @@ export default function Conference({ myName, myRoom, ws }) {
   }
 
   // 2. SDP offer 생성 및 백엔드 서버로 전달
+  // 다른 유저의 비디오 정보
   // 새로 들어온 유저의 경우
   function receiveVideo(sender) {
-    const newParticipants = {...participants}
+    // console.log("시작할 때는", participants)
+    // const newParticipants = {...participants}
     const participant = new Participant(sender);
-    newParticipants[sender] = participant;
+    participants[sender] = participant;
     
-    setParticipants(newParticipants), () => {
-      console.log('receivevideo 부분',participants)
-    }
+    // setParticipants(newParticipants)
+    // console.log('sender는',newParticipants)    
+    // console.log('receivevideo2 부분',newParticipants)
+
     const video = participant.getVideoElement();
 
     const options = {
@@ -109,9 +113,11 @@ export default function Conference({ myName, myRoom, ws }) {
 
     console.log(myName + " registered in room " + myRoom);
     const participant = new Participant(myName);
-    const newParticipants = {...participants}
-    newParticipants[myName] = participant;
-    setParticipants(newParticipants)
+    // const newParticipants = {...participants}
+    // newParticipants[myName] = participant;
+    // setParticipants(newParticipants)
+    // console.log('receivevideo 부분',newParticipants)
+    participants[myName] = participant;
     const video = participant.getVideoElement();
 
     const options = {
@@ -244,9 +250,11 @@ export default function Conference({ myName, myRoom, ws }) {
     }
     const participant = participants[request.name];
     participant.dispose();
-    const newParticipants = {...participants}
-    delete newParticipants[request.name];
-    setParticipants(newParticipants)
+    // const newParticipants = {...participants}
+    // delete newParticipants[request.name];
+    // setParticipants(newParticipants)
+
+    delete participants[request.name];
   }
 
   function sendMessage(message) {
