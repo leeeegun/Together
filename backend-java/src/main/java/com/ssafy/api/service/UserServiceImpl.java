@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import com.ssafy.api.request.UserModifyPostReq;
 import com.ssafy.api.request.UserRegisterPostReq;
 import com.ssafy.db.entity.User;
 import com.ssafy.db.repository.UserRepository;
@@ -46,5 +47,14 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public boolean checkIdDuplicate(String userId) {
 		return userRepository.existsByUserId(userId);
+	}
+	
+	@Override
+	public void setUserInfoByUserId(User user, UserModifyPostReq userInfo) {
+		user.setDisability(userInfo.getDisability());
+		user.setPassword(passwordEncoder.encode(userInfo.getPassword()));
+		user.setNickname(userInfo.getNickname());
+		
+		userRepository.flush();
 	}
 }
