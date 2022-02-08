@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Conference from "../../components/meetingroom/Conference";
 
 export const isBrowser = typeof window !== "undefined";
@@ -11,6 +11,12 @@ export default function Meeting({ roomName }) {
   const [isJoin, setIsJoin] = useState(true);
   const [myName, setMyName] = useState("");
 
+  useEffect(()=>{
+    window.onbeforeunload = function() {
+      return false;
+    };
+  },[])
+
   const joinRoom = async (e) => {
     e.preventDefault();
     console.log(e.target[0].value);
@@ -18,12 +24,13 @@ export default function Meeting({ roomName }) {
     await setIsJoin(false);
   };
 
+
   return (
     <>
       {isJoin ? (
-        <div id="join" className="animate join">
-          <h1>대기실?</h1>
-          <form onSubmit={joinRoom} acceptCharset="UTF-8">
+        <div className="animate join flex flex-col gap-10 mx-auto mt-10">
+          <h1 className="text-center text-5xl">대기실?</h1>
+          <form className="flex flex-col gap-10 text-center items-center" onSubmit={joinRoom} acceptCharset="UTF-8">
             <p>
               <input
                 type="text"
@@ -33,10 +40,11 @@ export default function Meeting({ roomName }) {
                 required
               />
             </p>
-            <p className="submit">
+            <button  className="w-20 bg-[#009e747a] hover:bg-[#009e7494] text-white font-bold py-2 px-4 rounded">
               <input type="submit" name="commit" value="Join!" />
-            </p>
+            </button>
           </form>
+          <button className="meetingroom-red"><img src="/meetingroom/mic_muted.svg" alt="마이크를 켜둘지 정하실 수 있습니다."/></button>:
         </div>
       ) : (
         <Conference myName={myName} myRoom={roomName} ws={ws}></Conference>
