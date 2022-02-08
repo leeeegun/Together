@@ -80,7 +80,14 @@ const SignupForm = () => {
         setErrorMessage(error);
       });
   };
-
+  const userConfirmedId = (e) => {
+    e.preventDefault();
+    const idNavigator = document.getElementById("id-navigator");
+    idNavigator.classList.toggle("hide");
+    idNavigator.classList.toggle("valid");
+    const idInput = document.getElementById("userId");
+    idInput.disabled = true;
+  };
   // 회원가입 누르면 회원 정보 입력창 정보 초기화
   const initializeData = async () => {
     setUserId("");
@@ -174,7 +181,7 @@ const SignupForm = () => {
   //나중에 코드 201로 바꿔야함
   useEffect(() => {
     console.log(successMessage);
-    if (successMessage.statusCode === 200) {
+    if (successMessage.statusCode === 201) {
       Swal.fire({
         title: "<strong>회원가입 완료!</strong>",
         html: "이제부터 모든 기능을 사용할 수 있어요!",
@@ -199,8 +206,8 @@ const SignupForm = () => {
 
   return (
     <div className="right snap-center flex flex-col items-center justify-center w-screen h-screen">
-      <section className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10">
-        <h1 className="text-center">Signup</h1>
+      <section className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10 w-5/12">
+        <h1 className="text-center">회원가입</h1>
 
         <form className="mb-0 " onSubmit={handleIdCheck}>
           <label
@@ -213,7 +220,7 @@ const SignupForm = () => {
               &#9746; 대소문자와 숫자를 혼합하여 3~20내로 작명해주세요!
             </span>
           </label>
-          <div className="container flex">
+          <div className="container">
             <div>
               <input
                 type="text"
@@ -223,18 +230,24 @@ const SignupForm = () => {
                 autoComplete="off"
                 value={userId}
                 required
-                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
+                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
               />
             </div>
             <div className="mx-auto">
-              <button
-                disabled={!validUserId}
-                className="border border-[#BEBBB1] bg-[#BEBBB1] px-3 py-1 rounded-lg shadow-sm ml-3"
+              <span
+                className={confirmedUserId ? "valid" : "hide"}
+                id="id-navigator"
               >
-                중복 검사
-              </button>
-              <span className={confirmedUserId ? "valid" : "hide"}>
                 사용 가능한 아이디입니다!
+                <p>
+                  사용하시겠습니까?{" "}
+                  <span
+                    onClick={(e) => userConfirmedId(e)}
+                    className="hover:cursor-pointer"
+                  >
+                    사용하기
+                  </span>
+                </p>
               </span>
               <span
                 className={!confirmedUserId && validUserId ? "valid" : "hide"}
@@ -272,7 +285,7 @@ const SignupForm = () => {
                 onChange={(e) => setUserPassword(e.target.value)}
                 value={userPassword}
                 required
-                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
+                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
               />
             </div>
           </div>
@@ -306,7 +319,7 @@ const SignupForm = () => {
                 value={matchPassword}
                 disabled={!validUserPassword}
                 required
-                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
+                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
               />
             </div>
           </div>
@@ -324,7 +337,7 @@ const SignupForm = () => {
                 autoComplete="off"
                 value={userName}
                 required
-                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
+                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
                 placeholder="홍길동(3~5글자)"
                 maxlength="5"
               />
@@ -344,7 +357,7 @@ const SignupForm = () => {
                 autoComplete="off"
                 value={userNickName}
                 required
-                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
+                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
               />
             </div>
           </div>
@@ -365,7 +378,7 @@ const SignupForm = () => {
                 autoComplete="off"
                 value={userEmail}
                 required
-                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
+                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
               />
             </div>
           </div>

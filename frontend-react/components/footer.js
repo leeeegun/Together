@@ -20,9 +20,9 @@ export default function footer() {
         <Image src={TwitterLogo} width={40} height={40}></Image>
       </a>
       <br></br>
-      <a href="https://ssafy.com" className="">
-        @ SSAFY
-      </a>
+      <p className="my-10 hover:cursor-pointer">
+        <a href="https://ssafy.com">@ SSAFY</a>
+      </p>
     </div>
   );
 }
