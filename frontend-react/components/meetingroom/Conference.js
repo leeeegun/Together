@@ -73,7 +73,6 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
 
   // 2. SDP offer 생성 및 백엔드 서버로 전달
   // 다른 유저의 비디오 정보
-  // 새로 들어온 유저의 경우
   function receiveVideo(sender) {
     const participant = new Participant(sender); // 새로 들어온 유저 객체
     setParticipants((participants) => {
@@ -349,11 +348,11 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
   return (
     <>
       {/* <h1>myName: {myName}</h1> */}
-      <h1 className="text-center text-3xl mt-1">room {myRoom}</h1>
+      <h1 className="mt-1 text-3xl text-center">room {myRoom}</h1>
       <div id="room">
         {/* <h2 id="room-header">Room {myRoom}</h2> */}
         <div
-          className="grid grid-cols-2 text-center gap-5 mx-auto"
+          className="grid grid-cols-2 gap-5 mx-auto text-center"
           id="meetingroom-participants"
         ></div>
       </div>
