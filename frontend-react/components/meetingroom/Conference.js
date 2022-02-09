@@ -14,6 +14,9 @@ export default function Conference({ myName, myRoom, ws }) {
   const [isMicEnabled, setIsMicEnabled] = useState(true); // 마이크 켜고 끄기 토글
   const [isVideoEnabled, setIsVideoEnabled] = useState(true); // 비디오 켜고 끄기 토글
   const [isSharingEnabled, setIsSharingEnabled] = useState(false); // 화면 공유 켜고 끄기 토글
+  const [sendSttMsg, setSendSttMsg] = useState("");
+  const [receiveSttMsg, setReceiveSttMsg] = useState("");
+  const [sttSender, setSttSender] = useState("");
 
 
   useEffect(() => {
@@ -25,6 +28,71 @@ export default function Conference({ myName, myRoom, ws }) {
     sendMessage(message);
   }, []); // 기본 코드의 register 과정입니다.
 
+  useEffect(() => {
+    createStt();
+  }, []); // 페이지 렌더 시 바로 STT 기능 활성화
+
+  useEffect(() => {
+    sendStt();
+    setSendSttMsg("");
+  }, [sendSttMsg]); // STT 상태값이 변하면 바로 참가자들에게 STT 전달
+
+  const createStt = () => {
+    
+    window.SpeechRecognition =
+      window.SpeechRecognition || window.webkitSpeechRecognition;
+
+    const recognition = new SpeechRecognition();
+    recognition.interimResult = true;
+    recognition.lang = "ko-KR";
+    recognition.continuous = true;
+    recognition.maxAlternatives = 1000;
+
+    let speechToText = "";
+    recognition.addEventListener("result", (event) => {
+      for (let i = event.resultIndex; i < event.results.length; i++) {
+        let stt = event.results[i][0].transcript;
+
+        // 이 부분에 kurento서버에 보내는 로직 필요함.
+        setSendSttMsg(stt);
+        console.log(stt);
+      }
+    });
+    recognition.start();
+  };  // STT 생성 로직
+
+  const sendStt = () => {
+    const msg = {
+      id: "chatMsg",
+      name: myName,
+      room: myRoom,
+      content: sendSttMsg,
+    };
+    console.log(`sending STT message : ${sendSttMsg} by ${myName}`);
+    sendMessage(msg);
+  };  // 생성된 STT 백서버로 전달
+
+  const receiveStt = (parsedMessage) => {
+    setReceiveSttMsg(parsedMessage.content);
+    setSttSender(parsedMessage.owner);
+  };  // 백서버로부터 받은 STT를 상태값에 저장
+
+  const showStt = () => {
+    const participant = new Participant(sttSender);
+    const sttMsg = participant.getSstElement();
+    sttMsg.innerText = receiveSttMsg;
+    setTimeout(function() {
+      sttMsg.remove();
+    }, 2000)
+
+  };  // participant 인스턴스상에 생성 되어 있는 말풍선 DOM에 stt 들어오는데로 입력
+  
+  useEffect(() => {
+    showStt();  // participant 인스턴스상에 생성 되어 있는 말풍선 DOM에 stt 들어오는데로 입력 (5초후 자동 초기화)
+    setReceiveSttMsg("");
+    setSttSender("");
+  }, [receiveSttMsg]);  // 새로운 STT 메세지가 감지되면 해당 STT를 보낸 참가자 밑에 말풍선으로 STT 메세지 표시
+
 
   ws.onmessage = function (message) {
     const parsedMessage = JSON.parse(message.data);
@@ -32,10 +100,10 @@ export default function Conference({ myName, myRoom, ws }) {
 
     switch (parsedMessage.id) {
       case "existingParticipants":
-        onExistingParticipants(parsedMessage);
+        onExistingParticipants(parsedMessage);  // 내가 방에 들어가면, 현재 모든 참가자들이름 알려줌
         break;
       case "newParticipantArrived":
-        onNewParticipant(parsedMessage);
+        onNewParticipant(parsedMessage);  // 새 participant가 들어왔을때 본인 제외한 방 안의 모든 클라이언트에서 실행
         break;
       case "participantLeft":
         onParticipantLeft(parsedMessage);
@@ -43,7 +111,9 @@ export default function Conference({ myName, myRoom, ws }) {
       case "receiveVideoAnswer":
         receiveVideoResponse(parsedMessage);
         break;
-      // ICE candidate peer 한테 보내기 혹은 받아오기 (아 정확히는 몰라)
+      case "receiveTextMsg":
+        receiveStt();
+        break;
       case "iceCandidate":
         participants[parsedMessage.name].rtcPeer.addIceCandidate(
           parsedMessage.candidate, function (error) {
@@ -52,7 +122,7 @@ export default function Conference({ myName, myRoom, ws }) {
               return;
             }
           },
-        );
+        );  // ICE candidate peer 한테 보내기 혹은 받아오기 (확실하지않네요)
         break;
       default:
         console.error("Unrecognized message", parsedMessage);
@@ -63,9 +133,7 @@ export default function Conference({ myName, myRoom, ws }) {
     receiveVideo(request.name);
   }
 
-  // 2. SDP offer 생성 및 백엔드 서버로 전달
-  // 다른 유저의 비디오 정보
-  // 새로 들어온 유저의 경우
+  // 2. 새로운 참가자에게 보내기 위한 본인의 SDP offer 생성
   function receiveVideo(sender) {
     const participant = new Participant(sender); // 새로 들어온 유저 객체
     setParticipants(participants => {return {...participants, [sender]: participant}}); // 비동기처리를 위한 콜백 setState
@@ -83,12 +151,12 @@ export default function Conference({ myName, myRoom, ws }) {
         if (error) {
           return console.error(error);
         }
-        this.generateOffer(participant.offerToReceiveVideo.bind(participant));
+        this.generateOffer(participant.offerToReceiveVideo.bind(participant));  // 백서버로 SDP offer 보내는 부분
       },
     );
   }
 
-  // 이미 들어와있는 유저들의 경우
+  // 본인이 방 참가한 경우
   function onExistingParticipants(msg) {
     const constraints = {
       audio: true,
@@ -149,7 +217,6 @@ export default function Conference({ myName, myRoom, ws }) {
     }
   }
 
-
   function Participant(name) {
     this.name = name;
     const container = document.createElement("div");
@@ -160,9 +227,13 @@ export default function Conference({ myName, myRoom, ws }) {
     const span = document.createElement("span");
     const video = document.createElement("video");
     // const rtcPeer;
-
+    
     container.appendChild(video);
     container.appendChild(span);
+    
+    const stt = document.createElement("blockquote");  // start
+    container.appendChild(stt);               // end
+    
     container.onclick = switchContainerClass;
     document.getElementById("meetingroom-participants").appendChild(container);
 
@@ -171,6 +242,10 @@ export default function Conference({ myName, myRoom, ws }) {
     video.id = "video-" + name;
     video.autoplay = true;
     video.controls = false;
+
+    this.getSttElement = () => {
+      return stt;
+    };
 
     this.getElement = function () {
       return container;
@@ -299,10 +374,10 @@ export default function Conference({ myName, myRoom, ws }) {
   return (
     <>
       {/* <h1>myName: {myName}</h1> */}
-      <h1 className="text-center text-3xl mt-1">room {myRoom}</h1>
+      <h1 className="mt-1 text-3xl text-center">room {myRoom}</h1>
       <div id="room">
         {/* <h2 id="room-header">Room {myRoom}</h2> */}
-        <div className="grid grid-cols-2 text-center gap-5 mx-auto" id="meetingroom-participants"></div>
+        <div className="grid grid-cols-2 gap-5 mx-auto text-center" id="meetingroom-participants"></div>
       </div>
       {/* <input
         type="button"
