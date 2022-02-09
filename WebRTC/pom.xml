@@ -15,9 +15,9 @@
 	<description>Demo project for Spring Boot</description>
 	
 	<properties>
-		<demo.port>8443</demo.port>
+		<demo.port>8446</demo.port>
         <start-class>com.ssafy.webrtc.GroupCallApp</start-class>
-		<java.version>1.8</java.version>
+		<java.version>11</java.version>
 	</properties>
 	
 	<dependencies>
@@ -111,10 +111,17 @@
             </activation>
             <build>
                 <plugins>
+                	<plugin>  
+        				<groupId>org.apache.maven.plugins</groupId>  
+        				<artifactId>maven-surefire-plugin</artifactId>
+        				<version>${maven-surefire-plugin.version}</version>
+        				<configuration>
+            				<testFailureIgnore>true</testFailureIgnore>
+        				</configuration> 
+		       		</plugin>
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-assembly-plugin</artifactId>
-                        <version>3.1.0</version>
                         <configuration>
                             <descriptors>
                                 <descriptor>src/assembly/bin.xml</descriptor>

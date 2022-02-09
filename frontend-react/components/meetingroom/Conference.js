@@ -35,6 +35,50 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
     sendMessage(message);
   }, []); // 기본 코드의 register 과정입니다.
 
+  ws.onmessage = function (message) {
+    const parsedMessage = JSON.parse(message.data);
+    // console.info("Received message: " + message.data);
+
+    switch (parsedMessage.id) {
+      case "existingParticipants":
+        onExistingParticipants(parsedMessage);  // 내가 방에 들어가면, 현재 모든 참가자들이름 알려줌
+        break;
+      case "newParticipantArrived":
+        onNewParticipant(parsedMessage);  // 새 participant가 들어왔을때 본인 제외한 방 안의 모든 클라이언트에서 실행
+        break;
+      case "participantLeft":
+        onParticipantLeft(parsedMessage);
+        break;
+      case "receiveVideoAnswer":
+        receiveVideoResponse(parsedMessage);
+        break;
+      case "receiveTextMsg":
+        receiveStt(parsedMessage);
+        break;
+      // ICE candidate peer 한테 보내기 혹은 받아오기 (아 정확히는 몰라)
+      case "iceCandidate":
+        // console.log(parsedMessage, "!!!!!!!!!!!!!!!!!!!!!!");
+        participants[parsedMessage.name].rtcPeer.addIceCandidate(
+          parsedMessage.candidate,
+          function (error) {
+            if (error) {
+              console.error("Error adding candidate: " + error);
+              return;
+            }
+          },
+        );  // ICE candidate peer 한테 보내기 혹은 받아오기 (확실하지않네요)
+        break;
+      default:
+        console.error("Unrecognized message", parsedMessage);
+    }
+  };
+
+  function onNewParticipant(request) {
+    receiveVideo(request.name);
+  }
+  
+  // 대박 STT 부분
+  ////////////////////////////////////////////////////////////////////////////////////////////////////////////
   useEffect(() => {
     createStt();
   }, []); // 페이지 렌더 시 바로 STT 기능 활성화
@@ -75,22 +119,25 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
       room: myRoom,
       content: sendSttMsg,
     };
-    console.log(`sending STT message : ${sendSttMsg} by ${myName}`);
+    console.log(`sending STT message : ${sendSttMsg}`);
     sendMessage(msg);
   };  // 생성된 STT 백서버로 전달
 
   const receiveStt = (parsedMessage) => {
-    setReceiveSttMsg(parsedMessage.content);
-    setSttSender(parsedMessage.owner);
+    parsedMessage && setReceiveSttMsg(parsedMessage.content);
+    parsedMessage && setSttSender(parsedMessage.owner);
   };  // 백서버로부터 받은 STT를 상태값에 저장
 
   const showStt = () => {
-    const participant = new Participant(sttSender);
-    const sttMsg = participant.getSstElement();
+    if (sttSender) {
+    const participant = participants[sttSender];
+    // const participant = new Participant(sttSender);
+    const sttMsg = participant.getSttElement();
     sttMsg.innerText = receiveSttMsg;
     setTimeout(function() {
-      sttMsg.remove();
-    }, 2000)
+      sttMsg.innerText = ""
+      // sttMsg.remove();
+    }, 2000)}
 
   };  // participant 인스턴스상에 생성 되어 있는 말풍선 DOM에 stt 들어오는데로 입력
   
@@ -98,51 +145,13 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
     showStt();  // participant 인스턴스상에 생성 되어 있는 말풍선 DOM에 stt 들어오는데로 입력 (5초후 자동 초기화)
     setReceiveSttMsg("");
     setSttSender("");
-  }, [receiveSttMsg]);  // 새로운 STT 메세지가 감지되면 해당 STT를 보낸 참가자 밑에 말풍선으로 STT 메세지 표시
+  }, [receiveSttMsg]);  // 새로운 STT 메세지가 감지되면 해당 STT를 보낸 참가자 밑에 말풍선으로 STT 메세지 표시  
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
-  ws.onmessage = function (message) {
-    const parsedMessage = JSON.parse(message.data);
-    // console.info("Received message: " + message.data);
-
-    switch (parsedMessage.id) {
-      case "existingParticipants":
-        onExistingParticipants(parsedMessage);  // 내가 방에 들어가면, 현재 모든 참가자들이름 알려줌
-        break;
-      case "newParticipantArrived":
-        onNewParticipant(parsedMessage);  // 새 participant가 들어왔을때 본인 제외한 방 안의 모든 클라이언트에서 실행
-        break;
-      case "participantLeft":
-        onParticipantLeft(parsedMessage);
-        break;
-      case "receiveVideoAnswer":
-        receiveVideoResponse(parsedMessage);
-        break;
-      case "receiveTextMsg":
-        receiveStt();
-        break;
-      case "iceCandidate":
-        // console.log(parsedMessage, "!!!!!!!!!!!!!!!!!!!!!!");
-        participants[parsedMessage.name].rtcPeer.addIceCandidate(
-          parsedMessage.candidate,
-          function (error) {
-            if (error) {
-              console.error("Error adding candidate: " + error);
-              return;
-            }
-          },
-        );  // ICE candidate peer 한테 보내기 혹은 받아오기 (확실하지않네요)
-        break;
-      default:
-        console.error("Unrecognized message", parsedMessage);
-    }
-  };
-
-  function onNewParticipant(request) {
-    receiveVideo(request.name);
-  }
-
-  // 2. 새로운 참가자에게 보내기 위한 본인의 SDP offer 생성
+  // 2. SDP offer 생성 및 백엔드 서버로 전달
+  // 다른 유저의 비디오 정보
+  // 새로 들어온 유저의 경우
   function receiveVideo(sender) {
     const participant = new Participant(sender); // 새로 들어온 유저 객체
     setParticipants((participants) => {
@@ -207,9 +216,6 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
 
   // 3. SDP answer 받아오기 및 P2P 연결!
   function receiveVideoResponse(result) {
-    // console.log("리시브", participants);
-    // console.log(result);
-    // console.log(result.name);
     participants[result.name].rtcPeer.processAnswer(
       result.sdpAnswer,
       function (error) {
@@ -244,10 +250,10 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
     
     container.appendChild(video);
     container.appendChild(span);
-    
+
     const stt = document.createElement("blockquote");  // start
     container.appendChild(stt);               // end
-    
+
     container.onclick = switchContainerClass;
     document.getElementById("meetingroom-participants").appendChild(container);
 
@@ -257,7 +263,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
     video.autoplay = true;
     video.controls = false;
 
-    this.getSttElement = () => {
+    this.getSttElement = function () {
       return stt;
     };
 
@@ -351,23 +357,20 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
 
     ws.close();
 
+    Router.reload("/")
     Router.push("/");
   }
 
   const toggleVideo = () => {
-    console.log(participants[myName]);
-    console.log(participants);
-    participants[myName].rtcPeer.videoEnabled =
-      !participants[myName].rtcPeer.videoEnabled;
-    setIsVideoEnabled(!isVideoEnabled);
-  };
+    participants[myName].rtcPeer.videoEnabled = !participants[myName].rtcPeer.videoEnabled
+    setIsVideoEnabled(!isVideoEnabled)
+  }
 
   const toggleAudio = () => {
-    console.log(participants[myName]);
-    participants[myName].rtcPeer.audioEnabled =
-      !participants[myName].rtcPeer.audioEnabled;
-    setIsMicEnabled(!isMicEnabled);
-  };
+    participants[myName].rtcPeer.audioEnabled = !participants[myName].rtcPeer.audioEnabled
+    setIsMicEnabled(!isMicEnabled)
+  }
+
 
   // 엉망인 상태입니다,, 손볼 것...!
   const toggleSharing = () => {

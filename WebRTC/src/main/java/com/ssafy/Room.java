@@ -70,9 +70,9 @@ public class Room implements Closeable {
     this.close();
   }
 
-  public UserSession join(String userName, WebSocketSession session) throws IOException {
-    log.info("ROOM {}: adding participant {}", this.name, userName);
-    final UserSession participant = new UserSession(userName, this.name, session, this.pipeline);
+  public UserSession join(String userName, String userNickname, WebSocketSession session) throws IOException {
+    log.info("ROOM {}: adding participant {} (nickname : {})", this.name, userName, userNickname);
+    final UserSession participant = new UserSession(userName, userNickname, this.name, session, this.pipeline);
     joinRoom(participant);
     participants.put(participant.getName(), participant);
     sendParticipantNames(participant);
@@ -81,7 +81,7 @@ public class Room implements Closeable {
 
   public void leave(UserSession user) throws IOException {
     log.debug("PARTICIPANT {}: Leaving room {}", user.getName(), this.name);
-    this.removeParticipant(user.getName());
+    this.removeParticipant(user.getName(), user.getNickname());
     user.close();
   }
 
@@ -89,10 +89,11 @@ public class Room implements Closeable {
     final JsonObject newParticipantMsg = new JsonObject();
     newParticipantMsg.addProperty("id", "newParticipantArrived");
     newParticipantMsg.addProperty("name", newParticipant.getName());
+    newParticipantMsg.addProperty("nickname", newParticipant.getName());
 
     final List<String> participantsList = new ArrayList<>(participants.values().size());
-    log.debug("ROOM {}: notifying other participants of new participant {}", name,
-        newParticipant.getName());
+    log.info("ROOM {}: notifying other participants of new participant {} (nickname : {})", name,
+        newParticipant.getName(), newParticipant.getNickname());
 
     for (final UserSession participant : participants.values()) {
       try {
@@ -106,7 +107,7 @@ public class Room implements Closeable {
     return participantsList;
   }
 
-  private void removeParticipant(String name) throws IOException {
+  private void removeParticipant(String name, String nickname) throws IOException {
     participants.remove(name);
 
     log.debug("ROOM {}: notifying all users that {} is leaving the room", this.name, name);
@@ -116,6 +117,7 @@ public class Room implements Closeable {
     participantLeftJson.addProperty("id", "participantLeft");
     participantLeftJson.addProperty("name", name);
     participantLeftJson.addProperty("host", this.host);
+    participantLeftJson.addProperty("nickname", nickname);
     for (final UserSession participant : participants.values()) {
       try {
         participant.cancelVideoFrom(name);
@@ -134,19 +136,23 @@ public class Room implements Closeable {
 
   public void sendParticipantNames(UserSession user) throws IOException {
 
-    final JsonArray participantsArray = new JsonArray();
+    final JsonArray participantsNames = new JsonArray();
+    final JsonArray participantsNicknames = new JsonArray();
     for (final UserSession participant : this.getParticipants()) {
       if (!participant.equals(user)) {
         final JsonElement participantName = new JsonPrimitive(participant.getName());
-        participantsArray.add(participantName);
+        final JsonElement participantNickname = new JsonPrimitive(participant.getNickname());
+        participantsNames.add(participantName);
+        participantsNicknames.add(participantNickname);
       }
     }
 
     final JsonObject existingParticipantsMsg = new JsonObject();
     existingParticipantsMsg.addProperty("id", "existingParticipants");
-    existingParticipantsMsg.add("data", participantsArray);
-    log.debug("PARTICIPANT {}: sending a list of {} participants", user.getName(),
-        participantsArray.size());
+    existingParticipantsMsg.add("data", participantsNames);
+    existingParticipantsMsg.add("nicknames", participantsNicknames);
+    log.info("PARTICIPANT {}: sending a list of {} participants", user.getName(),
+    	participantsNames.size());
     user.sendMessage(existingParticipantsMsg);
   }
 
