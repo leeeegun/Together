@@ -8,11 +8,11 @@ const PARTICIPANT_MAIN_CLASS = "participant main";
 const PARTICIPANT_CLASS = "participant";
 const URL = "3.38.253.61:8443";
 
-export default function Conference({ myName, myRoom, ws }) {
+export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
   // const ws = new WebSocket("wss://" + URL + "/groupcall");
   const [participants, setParticipants] = useState({}); // 참가자들 목록 저장
-  const [isMicEnabled, setIsMicEnabled] = useState(true); // 마이크 켜고 끄기 토글
-  const [isVideoEnabled, setIsVideoEnabled] = useState(true); // 비디오 켜고 끄기 토글
+  const [isMicEnabled, setIsMicEnabled] = useState(isMic); // 마이크 켜고 끄기 토글
+  const [isVideoEnabled, setIsVideoEnabled] = useState(isVideo); // 비디오 켜고 끄기 토글
   const [isSharingEnabled, setIsSharingEnabled] = useState(false); // 화면 공유 켜고 끄기 토글
 
 
@@ -135,6 +135,8 @@ export default function Conference({ myName, myRoom, ws }) {
         if (error) return console.error(error);
       },
     );
+    participants[myName].rtcPeer.videoEnabled = isVideo // 받아온 prop으로부터 시작할 때 비디오 on/off를 결정합니다.
+    participants[myName].rtcPeer.audioEnabled = isMic
   }
 
 
@@ -278,22 +280,57 @@ export default function Conference({ myName, myRoom, ws }) {
     setIsMicEnabled(!isMicEnabled)
   }
 
+
+  // 엉망인 상태입니다,, 손볼 것...!
   const toggleSharing = () => {
     const constraints = {
-      video: true
+      video: {
+        "width": 1920,
+        "height": 1080
+      },
+      audio: false
     };
 
-    function handleSuccess(stream) {
-        document.querySelector('video').srcObject = stream;
-    }
+
+    navigator.mediaDevices.getDisplayMedia(constraints)
+      .then((stream) => {
+        const videoInput = stream;
+        const options = {
+          localVideo: videoInput,
+          mediaConstraints: constraints,
+          onicecandidate: participants[myName].onIceCandidate,
+        };
+        webRtcPeerScreencast = kurentoUtils.WebRtcPeer.WebRtcPeerSendrecv(options, function(error) {
+          if (error) return handleError(error) //You'll need to use whatever you use for handling errors
+       
+          this.generateOffer(kurentoUtils.onOffer)
+        });
+      })
+      .catch(handleError);
+
 
     function handleError(error) {
         console.log('getDisplayMedia error: ', error);
     }
 
-    navigator.mediaDevices.getDisplayMedia(constraints)
-            .then(handleSuccess)
-            .catch(handleError);
+    // function handleSuccess(stream) {
+    //     document.querySelector('video').srcObject = stream;
+    // }
+
+    // function handleError(error) {
+    //     console.log('getDisplayMedia error: ', error);
+    // }
+
+    // navigator.mediaDevices.getDisplayMedia(constraints)
+    //         .then((stream) => {
+    //           document.querySelector('video').srcObject = stream;
+    //           const peerConnection = new RTCPeerConnection(iceConfig);
+    //           console.log(peerConnection)
+    //           localStream.getTracks().forEach(track => {
+    //             peerConnection.addTrack(track, localStream);
+    //           });
+    //         })
+    //         .catch(handleError);
   }
 
   return (
