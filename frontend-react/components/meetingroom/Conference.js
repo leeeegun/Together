@@ -1,12 +1,20 @@
 import kurentoUtils from "kurento-utils";
 import Router from "next/router";
 import { useState, useEffect } from "react";
-import { faDesktop, faMicrophone, faMicrophoneSlash, faPhoneSlash, faVideo, faVideoSlash } from "@fortawesome/free-solid-svg-icons";
+import {
+  faDesktop,
+  faMicrophone,
+  faMicrophoneSlash,
+  faPhoneSlash,
+  faVideo,
+  faVideoSlash,
+} from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const PARTICIPANT_MAIN_CLASS = "participant main";
 const PARTICIPANT_CLASS = "participant";
 const URL = "3.38.253.61:8443";
+const participants = {};
 
 export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
   // const ws = new WebSocket("wss://" + URL + "/groupcall");
@@ -14,7 +22,6 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
   const [isMicEnabled, setIsMicEnabled] = useState(isMic); // 마이크 켜고 끄기 토글
   const [isVideoEnabled, setIsVideoEnabled] = useState(isVideo); // 비디오 켜고 끄기 토글
   const [isSharingEnabled, setIsSharingEnabled] = useState(false); // 화면 공유 켜고 끄기 토글
-
 
   useEffect(() => {
     const message = {
@@ -25,10 +32,9 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
     sendMessage(message);
   }, []); // 기본 코드의 register 과정입니다.
 
-
   ws.onmessage = function (message) {
     const parsedMessage = JSON.parse(message.data);
-    console.info("Received message: " + message.data);
+    // console.info("Received message: " + message.data);
 
     switch (parsedMessage.id) {
       case "existingParticipants":
@@ -45,8 +51,10 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
         break;
       // ICE candidate peer 한테 보내기 혹은 받아오기 (아 정확히는 몰라)
       case "iceCandidate":
+        // console.log(parsedMessage, "!!!!!!!!!!!!!!!!!!!!!!");
         participants[parsedMessage.name].rtcPeer.addIceCandidate(
-          parsedMessage.candidate, function (error) {
+          parsedMessage.candidate,
+          function (error) {
             if (error) {
               console.error("Error adding candidate: " + error);
               return;
@@ -68,7 +76,9 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
   // 새로 들어온 유저의 경우
   function receiveVideo(sender) {
     const participant = new Participant(sender); // 새로 들어온 유저 객체
-    setParticipants(participants => {return {...participants, [sender]: participant}}); // 비동기처리를 위한 콜백 setState
+    setParticipants((participants) => {
+      return { ...participants, [sender]: participant };
+    }); // 비동기처리를 위한 콜백 setState
 
     const video = participant.getVideoElement();
 
@@ -102,8 +112,10 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
     };
 
     const participant = new Participant(myName); // 처리 대상 유저 객체
-    setParticipants(participants => {return {...participants, [myName]: participant}}) // 비동기처리를 위한 콜백 setState
-    
+    setParticipants((participants) => {
+      return { ...participants, [myName]: participant };
+    }); // 비동기처리를 위한 콜백 setState
+
     const video = participant.getVideoElement();
 
     const options = {
@@ -126,31 +138,29 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
 
   // 3. SDP answer 받아오기 및 P2P 연결!
   function receiveVideoResponse(result) {
-    console.log('리시브', participants)
-    console.log(result)
-    console.log(result.name)
+    // console.log("리시브", participants);
+    // console.log(result);
+    // console.log(result.name);
     participants[result.name].rtcPeer.processAnswer(
       result.sdpAnswer,
       function (error) {
         if (error) return console.error(error);
       },
     );
-    participants[myName].rtcPeer.videoEnabled = isVideo // 받아온 prop으로부터 시작할 때 비디오 on/off를 결정합니다.
-    participants[myName].rtcPeer.audioEnabled = isMic
+    participants[myName].rtcPeer.videoEnabled = isVideo; // 받아온 prop으로부터 시작할 때 비디오 on/off를 결정합니다.
+    participants[myName].rtcPeer.audioEnabled = isMic;
   }
 
-
   function callResponse(message) {
-    if (message.response != 'accepted') {
-      console.info('Call not accepted by peer. Closing call');
+    if (message.response != "accepted") {
+      console.info("Call not accepted by peer. Closing call");
       stop();
     } else {
       webRtcPeer.processAnswer(message.sdpAnswer, function (error) {
-        if (error) return console.error (error);
+        if (error) return console.error(error);
       });
     }
   }
-
 
   function Participant(name) {
     this.name = name;
@@ -234,15 +244,15 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
     console.log("Participant " + request.name + " left");
     // 방 제목(즉, userId)과 나간 사람의 userId가 같다면 방을 폭파!
     if (request.name === myRoom) {
-      leaveRoom()
-      return
+      leaveRoom();
+      return;
     }
     const participant = participants[request.name];
     participant.dispose();
 
-    const newParticipants = {...participants}
+    const newParticipants = { ...participants };
     delete newParticipants[request.name];
-    setParticipants(newParticipants)
+    setParticipants(newParticipants);
   }
 
   function sendMessage(message) {
@@ -268,31 +278,32 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
   }
 
   const toggleVideo = () => {
-    console.log(participants[myName])
-    console.log(participants)
-    participants[myName].rtcPeer.videoEnabled = !participants[myName].rtcPeer.videoEnabled
-    setIsVideoEnabled(!isVideoEnabled)
-  }
+    console.log(participants[myName]);
+    console.log(participants);
+    participants[myName].rtcPeer.videoEnabled =
+      !participants[myName].rtcPeer.videoEnabled;
+    setIsVideoEnabled(!isVideoEnabled);
+  };
 
   const toggleAudio = () => {
-    console.log(participants[myName])
-    participants[myName].rtcPeer.audioEnabled = !participants[myName].rtcPeer.audioEnabled
-    setIsMicEnabled(!isMicEnabled)
-  }
-
+    console.log(participants[myName]);
+    participants[myName].rtcPeer.audioEnabled =
+      !participants[myName].rtcPeer.audioEnabled;
+    setIsMicEnabled(!isMicEnabled);
+  };
 
   // 엉망인 상태입니다,, 손볼 것...!
   const toggleSharing = () => {
     const constraints = {
       video: {
-        "width": 1920,
-        "height": 1080
+        width: 1920,
+        height: 1080,
       },
-      audio: false
+      audio: false,
     };
 
-
-    navigator.mediaDevices.getDisplayMedia(constraints)
+    navigator.mediaDevices
+      .getDisplayMedia(constraints)
       .then((stream) => {
         const videoInput = stream;
         const options = {
@@ -300,17 +311,19 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
           mediaConstraints: constraints,
           onicecandidate: participants[myName].onIceCandidate,
         };
-        webRtcPeerScreencast = kurentoUtils.WebRtcPeer.WebRtcPeerSendrecv(options, function(error) {
-          if (error) return handleError(error) //You'll need to use whatever you use for handling errors
-       
-          this.generateOffer(kurentoUtils.onOffer)
-        });
+        webRtcPeerScreencast = kurentoUtils.WebRtcPeer.WebRtcPeerSendrecv(
+          options,
+          function (error) {
+            if (error) return handleError(error); //You'll need to use whatever you use for handling errors
+
+            this.generateOffer(kurentoUtils.onOffer);
+          },
+        );
       })
       .catch(handleError);
 
-
     function handleError(error) {
-        console.log('getDisplayMedia error: ', error);
+      console.log("getDisplayMedia error: ", error);
     }
 
     // function handleSuccess(stream) {
@@ -331,7 +344,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
     //           });
     //         })
     //         .catch(handleError);
-  }
+  };
 
   return (
     <>
@@ -339,7 +352,10 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
       <h1 className="text-center text-3xl mt-1">room {myRoom}</h1>
       <div id="room">
         {/* <h2 id="room-header">Room {myRoom}</h2> */}
-        <div className="grid grid-cols-2 text-center gap-5 mx-auto" id="meetingroom-participants"></div>
+        <div
+          className="grid grid-cols-2 text-center gap-5 mx-auto"
+          id="meetingroom-participants"
+        ></div>
       </div>
       {/* <input
         type="button"
@@ -348,23 +364,67 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
         value="Leave room"
       /> */}
       <div id="meetingroom-toolbar">
+        {isMicEnabled ? (
+          <button
+            aria-label="본인 마이크 끄기"
+            onClick={toggleAudio}
+            className="meetingroom-red"
+          >
+            <FontAwesomeIcon icon={faMicrophoneSlash} size="1x" />
+          </button>
+        ) : (
+          <button
+            aria-label="본인 마이크 켜기"
+            onClick={toggleAudio}
+            className="meetingroom-grey"
+          >
+            <FontAwesomeIcon icon={faMicrophone} size="1x" />
+          </button>
+        )}
 
-        {isMicEnabled?
-        <button aria-label="본인 마이크 끄기" onClick={toggleAudio} className="meetingroom-red"><FontAwesomeIcon icon={faMicrophoneSlash} size="1x" /></button>:
-        <button aria-label="본인 마이크 켜기" onClick={toggleAudio} className="meetingroom-grey"><FontAwesomeIcon icon={faMicrophone} size="1x" /></button>
-        }
+        {isVideoEnabled ? (
+          <button
+            aria-label="본인 비디오 끄기"
+            onClick={toggleVideo}
+            className="meetingroom-red"
+          >
+            <FontAwesomeIcon icon={faVideoSlash} size="1x" />
+          </button>
+        ) : (
+          <button
+            aria-label="본인 비디오 켜기"
+            onClick={toggleVideo}
+            className="meetingroom-grey"
+          >
+            <FontAwesomeIcon icon={faVideo} size="1x" />
+          </button>
+        )}
 
-        {isVideoEnabled?
-        <button aria-label="본인 비디오 끄기" onClick={toggleVideo} className="meetingroom-red"><FontAwesomeIcon icon={faVideoSlash} size="1x" /></button>:
-        <button aria-label="본인 비디오 켜기" onClick={toggleVideo} className="meetingroom-grey"><FontAwesomeIcon icon={faVideo} size="1x" /></button>
-        }
+        {isSharingEnabled ? (
+          <button
+            aria-label="화면 공유 끄기"
+            onClick={toggleSharing}
+            className="meetingroom-red"
+          >
+            <FontAwesomeIcon icon={faDesktop} size="1x" />
+          </button>
+        ) : (
+          <button
+            aria-label="화면 공유하기"
+            onClick={toggleSharing}
+            className="meetingroom-grey"
+          >
+            <FontAwesomeIcon icon={faDesktop} size="1x" />
+          </button>
+        )}
 
-        {isSharingEnabled?
-        <button aria-label="화면 공유 끄기" onClick={toggleSharing} className="meetingroom-red"><FontAwesomeIcon icon={faDesktop} size="1x" /></button>:
-        <button aria-label="화면 공유하기" onClick={toggleSharing} className="meetingroom-grey"><FontAwesomeIcon icon={faDesktop} size="1x" /></button>
-        }
-        
-        <button aria-label="연결 종료하고 회의실 나가기" onMouseUp={leaveRoom} className="meetingroom-red"><FontAwesomeIcon icon={faPhoneSlash} size="1x" /></button>
+        <button
+          aria-label="연결 종료하고 회의실 나가기"
+          onMouseUp={leaveRoom}
+          className="meetingroom-red"
+        >
+          <FontAwesomeIcon icon={faPhoneSlash} size="1x" />
+        </button>
       </div>
     </>
   );
