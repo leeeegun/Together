@@ -27,6 +27,7 @@ export default function Meeting({ roomName }) {
   const [isVideo, setIsVideo] = useState(true); // 초기에 비디오를 사용할지 정하는 state입니다.
   const [isHost, setIsHost] = useState(false);
   const [description, setDescription] = useState("");
+  const [uid, setUid] = useState("");
 
   useEffect(() => {
     setWs(new WebSocket("wss://" + URL + "/groupcall"));
@@ -45,7 +46,9 @@ export default function Meeting({ roomName }) {
       const base64Payload = token.split(".")[1];
       const payload = Buffer.from(base64Payload, "base64");
       const result = JSON.parse(payload.toString());
+      console.log(result);
       setUserId(result.sub);
+      setUid(result.uid);
     }
     console.log(isHost);
   }, []);
@@ -77,7 +80,29 @@ export default function Meeting({ roomName }) {
 
   const joinRoom = async (e) => {
     e.preventDefault();
-    console.log(e.target[0].value);
+    // console.log(e.target[0].value);
+    // return fetch(
+    //   `http://localhost:8443/conference/join/${conferenceName}/${uid}`,
+    // )
+    //   .then((response) => {
+    //     console.log(response);
+    //     if (!response.ok) {
+    //       Swal.fire({
+    //         icon: "error",
+    //         text: "호스트가 회의를 열지 않았습니다.",
+    //       });
+    //       throw new Error(response.status);
+    //     }
+    //     return response.json();
+    //   })
+    //   .then((res) => {
+    //     console.log(res);
+    //     setMyName(e.target[0].value);
+    //     setIsJoin(false);
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
     await setMyName(e.target[0].value);
     await setIsJoin(false);
   };
@@ -154,7 +179,24 @@ export default function Meeting({ roomName }) {
   return (
     <>
       {isJoin ? (
-        <div className="flex items-center justify-center h-screen">
+        <motion.div
+          className="flex items-center justify-center h-screen"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {
+              scale: 0.3,
+              opacity: 0,
+            },
+            visible: {
+              scale: 1,
+              opacity: 1,
+              transition: {
+                delay: 0.5,
+              },
+            },
+          }}
+        >
           <div className="bg-white rounded-2xl border shadow-xl max-w-4xl flex flex-row w-full h-3/6">
             <div className="flex flex-col items-start justify-center content-center p-10 w-6/12 bg-[#ece6cc] rounded-l-2xl">
               <h1 className="font-semibold text-2xl text-gray-500 mb-10 subject">
@@ -258,7 +300,7 @@ export default function Meeting({ roomName }) {
               )}
             </div>
           </div>
-        </div>
+        </motion.div>
       ) : (
         <Conference
           myName={myName}
