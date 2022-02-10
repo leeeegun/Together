@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 
 // export const isBrowser = typeof window !== "undefined";
-const URL = "3.38.253.61:8443";
+const URL = "3.38.253.61:8446";
 // export const ws = isBrowser
 //   ? new WebSocket("wss://" + URL + "/groupcall")
 //   : null;
@@ -154,7 +154,24 @@ export default function Meeting({ roomName }) {
   return (
     <>
       {isJoin ? (
-        <div className="flex items-center justify-center h-screen">
+        <motion.div
+          className="flex items-center justify-center h-screen"
+          initial="hidden"
+          animate="visible"
+          variants={{
+            hidden: {
+              scale: 0.3,
+              opacity: 0,
+            },
+            visible: {
+              scale: 1,
+              opacity: 1,
+              transition: {
+                delay: 0.5,
+              },
+            },
+          }}
+        >
           <div className="bg-white rounded-2xl border shadow-xl max-w-4xl flex flex-row w-full h-3/6">
             <div className="flex flex-col items-start justify-center content-center p-10 w-6/12 bg-[#ece6cc] rounded-l-2xl">
               <h1 className="font-semibold text-2xl text-gray-500 mb-10 subject">
@@ -258,7 +275,7 @@ export default function Meeting({ roomName }) {
               )}
             </div>
           </div>
-        </div>
+        </motion.div>
       ) : (
         <Conference
           myName={myName}
