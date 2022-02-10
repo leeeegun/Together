@@ -91,7 +91,7 @@ export default function Home() {
         <FontAwesomeIcon icon={faChevronDown} size="2x" />
       </button>
       <div className="left sidebar flex flex-col items-center justify-center">
-        <p className="md:text-7xl text-5xl mb-10 font-extralight">Together</p>
+        <img src="images/svg/Together.svg" className="mb-5"></img>
         <p>
           <button
             className="button text-black font-bold py-2 px-7 rounded-full mb-10 hover:bg-[#BEBBB1]"
