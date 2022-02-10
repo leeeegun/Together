@@ -14,7 +14,14 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 const PARTICIPANT_MAIN_CLASS = "participant main";
 const PARTICIPANT_CLASS = "participant";
 
-export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId }) {
+export default function Conference({
+  myName,
+  myRoom,
+  ws,
+  isMic,
+  isVideo,
+  userId,
+}) {
   // 받아오는 myName이 자신의 닉네임이고 userId가 아이디입니다!
   // participant 객체의 name은 해당 사용자의 아이디이고 nickname은 닉네임입니다!
   const [participants, setParticipants] = useState({}); // 참가자들 목록 저장
@@ -33,7 +40,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
       nickname: myName, // ㄹㅇ 닉네임
     };
     sendMessage(message);
-    console.log("설마 웹소켓이?", ws)
+    console.log("설마 웹소켓이?", ws);
     createStt(); // 페이지 렌더 시 바로 STT 기능 활성화
   }, []); // 기본 코드의 register 과정입니다.
 
@@ -95,19 +102,23 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
       window.SpeechRecognition || window.webkitSpeechRecognition;
 
     const recognition = new SpeechRecognition();
-    recognition.interimResult = true;
+    recognition.interimResult = false;
     recognition.lang = "ko-KR";
     recognition.continuous = true;
     recognition.maxAlternatives = 1000;
 
     let speechToText = "";
     recognition.addEventListener("result", (event) => {
+      let inter = "";
       for (let i = event.resultIndex; i < event.results.length; i++) {
         let stt = event.results[i][0].transcript;
-
+        if (event.results[i].isFinal) {
+          speechToText += stt;
+        } else {
+          inter += stt;
+        }
         // 이 부분에 kurento서버에 보내는 로직 필요함.
-        setSendSttMsg(stt);
-        console.log(stt);
+        setSendSttMsg(speechToText + inter);
       }
     });
     recognition.start();
@@ -190,12 +201,12 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
         },
       },
     };
-    console.log(msg)
+    console.log(msg);
     const participant = new Participant(userId, myName); // 처리 대상 유저 객체
     // participant.nickname = myName
-    console.log("파티", participant)
+    console.log("파티", participant);
     // console.log('우왕 닉네임이 저장된다!!', participant.nickname)
-    console.log("지울1", ws, participants)
+    console.log("지울1", ws, participants);
     setParticipants((participants) => {
       return { ...participants, [userId]: participant };
     }); // 비동기처리를 위한 콜백 setState
@@ -212,13 +223,13 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
         if (error) {
           return console.error(error);
         }
-        console.log("지울2", ws, participants)
+        console.log("지울2", ws, participants);
         this.generateOffer(participant.offerToReceiveVideo.bind(participant));
       },
     );
-    
-    for(let i = 0; i < msg.data.length; i++){
-      receiveVideo(msg.data[i], msg.nicknames[i])
+
+    for (let i = 0; i < msg.data.length; i++) {
+      receiveVideo(msg.data[i], msg.nicknames[i]);
     }
     // msg.data.forEach(receiveVideo);
   }
@@ -248,7 +259,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
 
   function Participant(name, nickname) {
     this.name = name;
-    this.nickname = nickname
+    this.nickname = nickname;
     const container = document.createElement("div");
     container.className = isPresentMainParticipant()
       ? PARTICIPANT_CLASS
@@ -309,7 +320,12 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
     this.offerToReceiveVideo = function (error, offerSdp, wp) {
       if (error) return console.error("sdp offer error");
       console.log("Invoking SDP offer callback function");
-      const msg = { id: "receiveVideoFrom", sender: name, sdpOffer: offerSdp, nickname: nickname };
+      const msg = {
+        id: "receiveVideoFrom",
+        sender: name,
+        sdpOffer: offerSdp,
+        nickname: nickname,
+      };
       sendMessage(msg);
     };
 
@@ -351,7 +367,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
   function sendMessage(message) {
     const jsonMessage = JSON.stringify(message);
     console.log("Sending message: " + jsonMessage);
-    console.log(ws)
+    console.log(ws);
     ws.send(jsonMessage);
   }
 
@@ -368,13 +384,8 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
 
     ws.close();
 
-<<<<<<< HEAD
     Router.reload("/");
-    Router.push("/");
-=======
-    Router.reload("/")
     // Router.push("/");
->>>>>>> eca6ed561ef33945788e42d65b6f56b06766c324
   }
 
   const toggleVideo = () => {
