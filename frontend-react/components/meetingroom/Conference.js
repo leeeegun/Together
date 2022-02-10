@@ -392,15 +392,15 @@ export default function Conference({
 
   const toggleVideo = () => {
     console.log("비디오 토글:", participants)
-    participants[myName].rtcPeer.videoEnabled = !participants[myName].rtcPeer.videoEnabled
+    participants[userId].rtcPeer.videoEnabled = !participants[userId].rtcPeer.videoEnabled
     setIsVideoEnabled(!isVideoEnabled)
   }
 
   const toggleAudio = () => {
-    participants[myName].rtcPeer.audioEnabled =
-      !participants[myName].rtcPeer.audioEnabled;
-    setIsMicEnabled(!isMicEnabled);
-  };
+    participants[userId].rtcPeer.audioEnabled = !participants[userId].rtcPeer.audioEnabled
+    setIsMicEnabled(!isMicEnabled)
+  }
+
 
   // 엉망인 상태입니다,, 손볼 것...!
   const toggleSharing = () => {
