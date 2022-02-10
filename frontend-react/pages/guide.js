@@ -97,6 +97,7 @@ function guide() {
                   Nvaccess
                 </a>,
                 "에 접속하여 Download 링크를 클릭하여 NVDA를 다운로드 받습니다.",
+                <br></br>,
                 <img
                   src="guide/download.png"
                   alt="다운로드 버튼"
@@ -106,7 +107,9 @@ function guide() {
                   src="guide/NVDAinstall.png"
                   alt="컴퓨터에 NVDA 설치"
                 ></img>,
+                <br></br>,
                 "2. 다운로드 받은 파일을 설치합니다.",
+                <br></br>,
                 "3. 바탕화면에 있는 NVDA를 실행하면 TTS 기능을 사용하실 수 있습니다.",
               ]}
             ></CustomLi>

@@ -213,7 +213,7 @@ const SignupForm = () => {
 
   return (
     <div className="right snap-center flex flex-col items-center justify-center w-screen h-screen">
-      <section className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10 lg:max-w-sm w-4/12">
+      <section className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10 lg:max-w-sm w-4/12 xs:min-w-max">
         <h1 className="text-center">회원가입</h1>
 
         <form
