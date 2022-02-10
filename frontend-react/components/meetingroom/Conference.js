@@ -102,23 +102,19 @@ export default function Conference({
       window.SpeechRecognition || window.webkitSpeechRecognition;
 
     const recognition = new SpeechRecognition();
-    recognition.interimResult = false;
+    recognition.interimResults = false;
     recognition.lang = "ko-KR";
     recognition.continuous = true;
-    recognition.maxAlternatives = 1000;
+    recognition.maxAlternatives = 100000;
 
     let speechToText = "";
     recognition.addEventListener("result", (event) => {
       let inter = "";
       for (let i = event.resultIndex; i < event.results.length; i++) {
         let stt = event.results[i][0].transcript;
-        if (event.results[i].isFinal) {
-          speechToText += stt;
-        } else {
-          inter += stt;
-        }
+
         // 이 부분에 kurento서버에 보내는 로직 필요함.
-        setSendSttMsg(speechToText + inter);
+        setSendSttMsg(stt);
       }
     });
     recognition.start();
