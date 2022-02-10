@@ -16,7 +16,7 @@ const PARTICIPANT_CLASS = "participant";
 const URL = "3.38.253.61:8443";
 const participants = {};
 
-export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
+export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId }) {
   // const ws = new WebSocket("wss://" + URL + "/groupcall");
   const [participants, setParticipants] = useState({}); // 참가자들 목록 저장
   const [isMicEnabled, setIsMicEnabled] = useState(isMic); // 마이크 켜고 끄기 토글
@@ -25,12 +25,15 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
   const [sendSttMsg, setSendSttMsg] = useState("");
   const [receiveSttMsg, setReceiveSttMsg] = useState("");
   const [sttSender, setSttSender] = useState("");
+  
+  
 
   useEffect(() => {
     const message = {
       id: "joinRoom",
-      name: myName,
+      name: userId,
       room: myRoom,
+      nickname: myName,
     };
     sendMessage(message);
   }, []); // 기본 코드의 register 과정입니다.
@@ -150,8 +153,6 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
 
 
   // 2. SDP offer 생성 및 백엔드 서버로 전달
-  // 다른 유저의 비디오 정보
-  // 새로 들어온 유저의 경우
   function receiveVideo(sender) {
     const participant = new Participant(sender); // 새로 들어온 유저 객체
     setParticipants((participants) => {
@@ -211,7 +212,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo }) {
       },
     );
 
-    msg.data.forEach(receiveVideo);
+    msg.data.forEach(receiveVideo); // 다른 참가자들에게 SDP offer 전달
   }
 
   // 3. SDP answer 받아오기 및 P2P 연결!
