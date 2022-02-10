@@ -98,10 +98,10 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
       window.SpeechRecognition || window.webkitSpeechRecognition;
 
     const recognition = new SpeechRecognition();
-    recognition.interimResult = true;
+    recognition.interimResults = true;
     recognition.lang = "ko-KR";
     recognition.continuous = true;
-    recognition.maxAlternatives = 1000;
+    recognition.maxAlternatives = 100000;
 
     let speechToText = "";
     recognition.addEventListener("result", (event) => {
