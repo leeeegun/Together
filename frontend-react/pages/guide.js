@@ -25,9 +25,14 @@ function guide() {
         },
       }}
     >
-      <div className="text-center justify-center mt-5 text-4xl font-extralight hover:font-normal">
+      <div className="flex text-center justify-center items-center mt-5 text-4xl font-extralight hover:font-normal">
         <Link href="/">
-          <a>Together</a>
+          <motion.img
+            src="images/svg/Together.svg"
+            alt="Together 로고"
+            className="w-24 text-center hover:cursor-pointer"
+            whileHover={{ scale: 1.2 }}
+          ></motion.img>
         </Link>
       </div>
       <div className="guide-container px-10 py-10 w-3/5 min-h-fit">
@@ -108,9 +113,12 @@ function guide() {
           </ul>
           <div className="flex justify-center">
             <Link href="/" passHref={false}>
-              <button className="btn rounded-full bg-[#bebbb1] px-5 py-3 hover:font-bold">
+              <motion.button
+                className="btn rounded-full bg-[#bebbb1] px-5 py-3 hover:font-bold"
+                whileHover={{ scale: 1.2 }}
+              >
                 잘 알았어요!
-              </button>
+              </motion.button>
             </Link>
           </div>
         </div>
