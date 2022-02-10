@@ -63,7 +63,7 @@ export default function Meeting({ roomName }) {
     }
   }, [userId]);
 
-  //설명 얻어오는 함수.
+  // 설명 얻어오는 함수.
   const getInformation = () => {
     return fetch(`http://localhost:8443/conference/info/${conferenceName}`)
       .then((response) => {
