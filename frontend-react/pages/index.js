@@ -94,7 +94,7 @@ export default function Home() {
         <img src="images/svg/Together.svg" className="mb-5"></img>
         <p>
           <button
-            className="button text-black font-bold py-2 px-7 rounded-full mb-10 hover:bg-[#BEBBB1]"
+            className="button text-black font-bold py-2 px-7 rounded-full my-5 hover:bg-[#BEBBB1]"
             onClick={signUpClick}
             id="signup-button"
           >
