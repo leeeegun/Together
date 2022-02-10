@@ -13,11 +13,10 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const PARTICIPANT_MAIN_CLASS = "participant main";
 const PARTICIPANT_CLASS = "participant";
-const URL = "3.38.253.61:8443";
-const participants = {};
 
 export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId }) {
-  // const ws = new WebSocket("wss://" + URL + "/groupcall");
+  // 받아오는 myName이 자신의 닉네임이고 userId가 아이디입니다!
+  // participant 객체의 name은 해당 사용자의 아이디이고 nickname은 닉네임입니다!
   const [participants, setParticipants] = useState({}); // 참가자들 목록 저장
   const [isMicEnabled, setIsMicEnabled] = useState(isMic); // 마이크 켜고 끄기 토글
   const [isVideoEnabled, setIsVideoEnabled] = useState(isVideo); // 비디오 켜고 끄기 토글
@@ -31,16 +30,18 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
   useEffect(() => {
     const message = {
       id: "joinRoom",
-      name: userId,
+      name: userId, // 가입할 때 쓴 userId
       room: myRoom,
-      nickname: myName,
+      nickname: myName, // ㄹㅇ 닉네임
     };
     sendMessage(message);
+    console.log("설마 웹소켓이?", ws)
+    createStt(); // 페이지 렌더 시 바로 STT 기능 활성화
   }, []); // 기본 코드의 register 과정입니다.
 
   ws.onmessage = function (message) {
     const parsedMessage = JSON.parse(message.data);
-    // console.info("Received message: " + message.data);
+    console.info("Received message: " + message.data);
 
     switch (parsedMessage.id) {
       case "existingParticipants":
@@ -77,14 +78,14 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
   };
 
   function onNewParticipant(request) {
-    receiveVideo(request.name);
+    receiveVideo(request.name, request.nickname);
   }
   
   // 대박 STT 부분
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
-  useEffect(() => {
-    createStt();
-  }, []); // 페이지 렌더 시 바로 STT 기능 활성화
+  // useEffect(() => {
+  //   createStt();
+  // }, []); // 페이지 렌더 시 바로 STT 기능 활성화
 
   useEffect(() => {
     sendStt();
@@ -118,7 +119,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
   const sendStt = () => {
     const msg = {
       id: "chatMsg",
-      name: myName,
+      name: userId,
       room: myRoom,
       content: sendSttMsg,
     };
@@ -153,8 +154,11 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
 
 
   // 2. SDP offer 생성 및 백엔드 서버로 전달
-  function receiveVideo(sender) {
-    const participant = new Participant(sender); // 새로 들어온 유저 객체
+  // 다른 유저의 비디오 정보
+  // 새로 들어온 유저의 경우
+  function receiveVideo(sender, nickname) {
+    const participant = new Participant(sender, nickname); // 새로 들어온 유저 객체
+    // participant.nickname = nickname
     setParticipants((participants) => {
       return { ...participants, [sender]: participant };
     }); // 비동기처리를 위한 콜백 setState
@@ -189,12 +193,15 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
         },
       },
     };
-
-    const participant = new Participant(myName); // 처리 대상 유저 객체
+    console.log(msg)
+    const participant = new Participant(userId, myName); // 처리 대상 유저 객체
+    // participant.nickname = myName
+    console.log("파티", participant)
+    // console.log('우왕 닉네임이 저장된다!!', participant.nickname)
+    console.log("지울1", ws, participants)
     setParticipants((participants) => {
-      return { ...participants, [myName]: participant };
+      return { ...participants, [userId]: participant };
     }); // 비동기처리를 위한 콜백 setState
-
     const video = participant.getVideoElement();
 
     const options = {
@@ -208,11 +215,15 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
         if (error) {
           return console.error(error);
         }
+        console.log("지울2", ws, participants)
         this.generateOffer(participant.offerToReceiveVideo.bind(participant));
       },
     );
-
-    msg.data.forEach(receiveVideo); // 다른 참가자들에게 SDP offer 전달
+    
+    for(let i = 0; i < msg.data.length; i++){
+      receiveVideo(msg.data[i], msg.nicknames[i])
+    }
+    // msg.data.forEach(receiveVideo);
   }
 
   // 3. SDP answer 받아오기 및 P2P 연결!
@@ -223,8 +234,8 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
         if (error) return console.error(error);
       },
     );
-    participants[myName].rtcPeer.videoEnabled = isVideo; // 받아온 prop으로부터 시작할 때 비디오 on/off를 결정합니다.
-    participants[myName].rtcPeer.audioEnabled = isMic;
+    // participants[myName].rtcPeer.videoEnabled = isVideo; // 받아온 prop으로부터 시작할 때 비디오 on/off를 결정합니다.
+    // participants[myName].rtcPeer.audioEnabled = isMic;
   }
 
   function callResponse(message) {
@@ -238,8 +249,9 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
     }
   }
 
-  function Participant(name) {
+  function Participant(name, nickname) {
     this.name = name;
+    this.nickname = nickname
     const container = document.createElement("div");
     container.className = isPresentMainParticipant()
       ? PARTICIPANT_CLASS
@@ -300,7 +312,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
     this.offerToReceiveVideo = function (error, offerSdp, wp) {
       if (error) return console.error("sdp offer error");
       console.log("Invoking SDP offer callback function");
-      const msg = { id: "receiveVideoFrom", sender: name, sdpOffer: offerSdp };
+      const msg = { id: "receiveVideoFrom", sender: name, sdpOffer: offerSdp, nickname: nickname };
       sendMessage(msg);
     };
 
@@ -325,7 +337,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
   }
 
   function onParticipantLeft(request) {
-    console.log("Participant " + request.name + " left");
+    console.log("Participant " + request.nickname + " left");
     // 방 제목(즉, userId)과 나간 사람의 userId가 같다면 방을 폭파!
     if (request.name === myRoom) {
       leaveRoom();
@@ -342,6 +354,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
   function sendMessage(message) {
     const jsonMessage = JSON.stringify(message);
     console.log("Sending message: " + jsonMessage);
+    console.log(ws)
     ws.send(jsonMessage);
   }
 
@@ -359,7 +372,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
     ws.close();
 
     Router.reload("/")
-    Router.push("/");
+    // Router.push("/");
   }
 
   const toggleVideo = () => {
@@ -448,6 +461,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
         {isMicEnabled ? (
           <button
             aria-label="본인 마이크 끄기"
+            title="클릭 시 마이크를 끕니다"
             onClick={toggleAudio}
             className="meetingroom-red"
           >
@@ -456,6 +470,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
         ) : (
           <button
             aria-label="본인 마이크 켜기"
+            title="클릭 시 마이크를 켭니다"
             onClick={toggleAudio}
             className="meetingroom-grey"
           >
@@ -466,6 +481,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
         {isVideoEnabled ? (
           <button
             aria-label="본인 비디오 끄기"
+            title="클릭 시 비디오를 끕니다"
             onClick={toggleVideo}
             className="meetingroom-red"
           >
@@ -474,6 +490,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
         ) : (
           <button
             aria-label="본인 비디오 켜기"
+            title="클릭 시 비디오를 켭니다"
             onClick={toggleVideo}
             className="meetingroom-grey"
           >
@@ -484,6 +501,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
         {isSharingEnabled ? (
           <button
             aria-label="화면 공유 끄기"
+            title="화면 공유를 중단합니다."
             onClick={toggleSharing}
             className="meetingroom-red"
           >
@@ -492,6 +510,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
         ) : (
           <button
             aria-label="화면 공유하기"
+            title="화면 공유를 시작합니다."
             onClick={toggleSharing}
             className="meetingroom-grey"
           >
@@ -501,6 +520,7 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
 
         <button
           aria-label="연결 종료하고 회의실 나가기"
+          title="연결 종료하고 회의실을 나갑니다"
           onMouseUp={leaveRoom}
           className="meetingroom-red"
         >
