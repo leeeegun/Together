@@ -270,7 +270,9 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
     container.onclick = switchContainerClass;
     document.getElementById("meetingroom-participants").appendChild(container);
 
-    span.appendChild(document.createTextNode(name));
+    span.appendChild(document.createTextNode(nickname));
+    // span.appendChild(document.createTextNode(name));
+
 
     video.id = "video-" + name;
     video.autoplay = true;
@@ -376,12 +378,13 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
   }
 
   const toggleVideo = () => {
-    participants[myName].rtcPeer.videoEnabled = !participants[myName].rtcPeer.videoEnabled
+    console.log("비디오 토글:", participants)
+    participants[userId].rtcPeer.videoEnabled = !participants[userId].rtcPeer.videoEnabled
     setIsVideoEnabled(!isVideoEnabled)
   }
 
   const toggleAudio = () => {
-    participants[myName].rtcPeer.audioEnabled = !participants[myName].rtcPeer.audioEnabled
+    participants[userId].rtcPeer.audioEnabled = !participants[userId].rtcPeer.audioEnabled
     setIsMicEnabled(!isMicEnabled)
   }
 
