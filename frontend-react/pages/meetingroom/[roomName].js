@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 
 // export const isBrowser = typeof window !== "undefined";
-const URL = "3.38.253.61:8443";
+const URL = "3.38.253.61:8446";
 // export const ws = isBrowser
 //   ? new WebSocket("wss://" + URL + "/groupcall")
 //   : null;

@@ -21,6 +21,17 @@
   object-fit: cover;
 }
 
+#meetingroom-participants span {
+  display: block;
+  margin: auto;
+  width: 50%;
+  position: relative;
+  padding: 0.5rem;
+  background-color: rgba(128, 128, 128, 0.3);
+  color: white;
+  transform: translateY(-3rem);
+}
+
 #meetingroom-toolbar {
   position: fixed;
   left: 20vw;
@@ -34,16 +45,16 @@
 .meetingroom-red {
   border-radius: 100%;
   background-color: #D55E00;
-  width: 6vh;
-  height: 6vh;
+  width: max(4vw, 3rem);
+  height: max(4vw, 3rem);
   color: white;
 }
 
 .meetingroom-grey {
   border-radius: 100%;
   background-color: rgb(144, 144, 144);
-  width: 6vh;
-  height: 6vh;
+  width: max(4vw, 3rem);
+  height: max(4vw, 3rem);
   color: white;
 }
 
