@@ -45,16 +45,16 @@
 .meetingroom-red {
   border-radius: 100%;
   background-color: #D55E00;
-  width: max(4vw, 3rem);
-  height: max(4vw, 3rem);
+  width: max(2.5vw, 2.8rem);
+  height: max(2.5vw, 2.8rem);
   color: white;
 }
 
 .meetingroom-grey {
   border-radius: 100%;
   background-color: rgb(144, 144, 144);
-  width: max(4vw, 3rem);
-  height: max(4vw, 3rem);
+  width: max(2.5vw, 2.8rem);
+  height: max(2.5vw, 2.8rem);
   color: white;
 }
 

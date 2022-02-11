@@ -43,7 +43,8 @@ const LoginForm = () => {
 
   // 로그인 POST 요청
   const submitLogin = async () => {
-    fetch("http://localhost:8443/auth/login", {
+    // fetch("http://localhost:8443/auth/login", {
+    fetch("https://3.38.253.61:8443/auth/login", {
       method: "POST",
       body: JSON.stringify({
         userId: userId,
@@ -62,23 +63,41 @@ const LoginForm = () => {
       .then((data) => {
         console.log(data);
         localStorage.setItem("token", data.accessToken);
-        Swal.fire({
+        const Toast = Swal.mixin({
+          toast: true,
           position: "top-end",
+          showConfirmButton: false,
+          timer: 1000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
           icon: "success",
           title: "로그인 성공!",
-          showConfirmButton: false,
-          timer: 1500,
         });
         setSuccessMessage("로그인 성공!");
         Router.push("/main");
       })
       .catch((error) => {
-        Swal.fire({
+        const Toast = Swal.mixin({
+          toast: true,
           position: "top-end",
-          icon: "error",
-          title: "로그인 실패",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 1000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
+          icon: "error",
+          title: "로그인 실패..",
         });
         setErrorMessage(`로그인 실패 사유 : ${error}`);
       });
