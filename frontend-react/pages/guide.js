@@ -25,9 +25,14 @@ function guide() {
         },
       }}
     >
-      <div className="text-center justify-center mt-5 text-4xl font-extralight hover:font-normal">
+      <div className="flex text-center justify-center items-center mt-5 text-4xl font-extralight hover:font-normal">
         <Link href="/">
-          <a>Together</a>
+          <motion.img
+            src="images/svg/Together.svg"
+            alt="Together 로고"
+            className="w-24 text-center hover:cursor-pointer"
+            whileHover={{ scale: 1.2 }}
+          ></motion.img>
         </Link>
       </div>
       <div className="guide-container px-10 py-10 w-3/5 min-h-fit">
@@ -92,6 +97,7 @@ function guide() {
                   Nvaccess
                 </a>,
                 "에 접속하여 Download 링크를 클릭하여 NVDA를 다운로드 받습니다.",
+                <br></br>,
                 <img
                   src="guide/download.png"
                   alt="다운로드 버튼"
@@ -101,16 +107,21 @@ function guide() {
                   src="guide/NVDAinstall.png"
                   alt="컴퓨터에 NVDA 설치"
                 ></img>,
+                <br></br>,
                 "2. 다운로드 받은 파일을 설치합니다.",
+                <br></br>,
                 "3. 바탕화면에 있는 NVDA를 실행하면 TTS 기능을 사용하실 수 있습니다.",
               ]}
             ></CustomLi>
           </ul>
           <div className="flex justify-center">
             <Link href="/" passHref={false}>
-              <button className="btn rounded-full bg-[#bebbb1] px-5 py-3 hover:font-bold">
+              <motion.button
+                className="btn rounded-full bg-[#bebbb1] px-5 py-3 hover:font-bold"
+                whileHover={{ scale: 1.2 }}
+              >
                 잘 알았어요!
-              </button>
+              </motion.button>
             </Link>
           </div>
         </div>

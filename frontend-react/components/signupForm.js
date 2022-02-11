@@ -213,10 +213,14 @@ const SignupForm = () => {
 
   return (
     <div className="right snap-center flex flex-col items-center justify-center w-screen h-screen">
-      <section className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10 w-5/12">
+      <section className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10 lg:max-w-sm w-4/12 xs:min-w-max">
         <h1 className="text-center">회원가입</h1>
 
-        <form className="mb-0 " onSubmit={handleIdCheck}>
+        <form
+          className="mb-0 "
+          onSubmit={handleIdCheck}
+          className="lg:max-w-xs"
+        >
           <label
             htmlFor="userId"
             className="relative block mt-10 text-sm font-medium 10"
@@ -227,7 +231,7 @@ const SignupForm = () => {
               &#9746; 대소문자와 숫자를 혼합하여 3~20내로 작명해주세요!
             </span>
           </label>
-          <div className="container">
+          <div className="container w-">
             <div>
               <input
                 type="text"

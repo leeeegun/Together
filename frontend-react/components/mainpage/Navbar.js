@@ -38,7 +38,7 @@ export default function Navbar() {
             <motion.img
               whileHover={{ scale: 1.3 }}
               src="mainpage/Home-Logo.png"
-              alt="home logo"
+              alt="홈 로고"
               style={{ width: "40px", marginRight: "1rem", cursor: "pointer" }}
               className="inline-block"
             />
@@ -49,13 +49,10 @@ export default function Navbar() {
         </div>
 
         <div className="flex flex-row justify-center items-center text-center">
-          <span className="text-xl font-semibold c-footer-social_link mx-3">
-            로그아웃
-          </span>
           <motion.img
             whileHover={{ scale: 1.3 }}
             src="images/svg/logout.svg"
-            alt="home logo"
+            alt="로그아웃"
             style={{ width: "40px", marginRight: "1rem", cursor: "pointer" }}
             className="inline-block"
             onTap={() => {
