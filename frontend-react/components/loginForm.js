@@ -43,7 +43,8 @@ const LoginForm = () => {
 
   // 로그인 POST 요청
   const submitLogin = async () => {
-    fetch("http://localhost:8443/auth/login", {
+    // fetch("http://localhost:8443/auth/login", {
+    fetch("https://3.38.253.61:8443/auth/login", {
       method: "POST",
       body: JSON.stringify({
         userId: userId,

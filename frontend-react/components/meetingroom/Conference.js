@@ -32,6 +32,10 @@ export default function Conference({
   const [receiveSttMsg, setReceiveSttMsg] = useState("");
   const [sttSender, setSttSender] = useState("");
 
+  const alertUser = (e) => {
+    e.preventDefault()
+    e.returnValue = ''
+  }
   useEffect(() => {
     const message = {
       id: "joinRoom",
@@ -42,6 +46,11 @@ export default function Conference({
     sendMessage(message);
     console.log("설마 웹소켓이?", ws);
     createStt(); // 페이지 렌더 시 바로 STT 기능 활성화
+
+    window.addEventListener("beforeunload", alertUser);
+    return () => {
+      window.addEventListener("beforeunload", alertUser)
+    };
   }, []); // 기본 코드의 register 과정입니다.
 
   ws.onmessage = function (message) {
@@ -108,6 +117,7 @@ export default function Conference({
     recognition.maxAlternatives = 100000;
 
     let speechToText = "";
+    console.log("생성")
     recognition.addEventListener("result", (event) => {
       let inter = "";
       for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -118,6 +128,10 @@ export default function Conference({
       }
     });
     recognition.start();
+    recognition.addEventListener("end", (event) => {
+      console.log("하지만 다시")
+      recognition.start()
+    });
   }; // STT 생성 로직
 
   const sendStt = () => {
@@ -145,7 +159,7 @@ export default function Conference({
       setTimeout(function () {
         sttMsg.innerText = "";
         // sttMsg.remove();
-      }, 2000);
+      }, 3000);
     }
   }; // participant 인스턴스상에 생성 되어 있는 말풍선 DOM에 stt 들어오는데로 입력
 
@@ -238,8 +252,8 @@ export default function Conference({
         if (error) return console.error(error);
       },
     );
-    // participants[myName].rtcPeer.videoEnabled = isVideo; // 받아온 prop으로부터 시작할 때 비디오 on/off를 결정합니다.
-    // participants[myName].rtcPeer.audioEnabled = isMic;
+    participants[userId].rtcPeer.videoEnabled = isVideo; // 받아온 prop으로부터 시작할 때 비디오 on/off를 결정합니다.
+    participants[userId].rtcPeer.audioEnabled = isMic;
   }
 
   function callResponse(message) {
@@ -350,6 +364,7 @@ export default function Conference({
     console.log("Participant " + request.nickname + " left");
     // 방 제목(즉, userId)과 나간 사람의 userId가 같다면 방을 폭파!
     if (request.name === myRoom) {
+      window.alert('호스트가 연결을 종료하여 회의를 종료합니다')
       leaveRoom();
       return;
     }
@@ -372,16 +387,16 @@ export default function Conference({
     sendMessage({
       id: "leaveRoom",
     });
-
-    for (let key in participants) {
-      participants[key].dispose();
-    }
-
-    // setIsJoin(true)
-
-    ws.close();
-
     Router.reload("/");
+
+    // for (let key in participants) {
+    //   participants[key].dispose();
+    // }
+
+    // // setIsJoin(true)
+
+    // ws.close();
+
     // Router.push("/");
   }
 
