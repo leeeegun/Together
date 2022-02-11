@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import Swal from "sweetalert2";
 import Router from "next/router";
 import { motion } from "framer-motion";

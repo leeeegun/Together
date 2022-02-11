@@ -12,7 +12,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 
 // export const isBrowser = typeof window !== "undefined";
-const URL = "3.38.253.61:8446";
 // export const ws = isBrowser
 //   ? new WebSocket("wss://" + URL + "/groupcall")
 //   : null;
@@ -30,7 +29,11 @@ export default function Meeting({ roomName }) {
   const [uid, setUid] = useState("");
 
   useEffect(() => {
-    setWs(new WebSocket("wss://" + URL + "/groupcall"));
+    setWs(
+      new WebSocket(
+        "wss://" + process.env.NEXT_PUBLIC_MEDIA_SERVER_URL + "/groupcall",
+      ),
+    );
     if (!localStorage.getItem("token")) {
       Swal.fire({
         icon: "error",
@@ -43,11 +46,9 @@ export default function Meeting({ roomName }) {
       const base64Payload = token.split(".")[1];
       const payload = Buffer.from(base64Payload, "base64");
       const result = JSON.parse(payload.toString());
-      console.log(result);
       setUserId(result.sub);
       setUid(result.uid);
     }
-    console.log(isHost);
   }, []);
 
   useEffect(() => {
@@ -63,7 +64,9 @@ export default function Meeting({ roomName }) {
   // 설명 얻어오는 함수.
   const getInformation = () => {
     // return fetch(`http://localhost:8443/conference/info/${conferenceName}`)
-    return fetch(`https://3.38.253.61:8443/conference/info/${conferenceName}`)
+    return fetch(
+      `${process.env.NEXT_PUBLIC_API_URL}/conference/info/${conferenceName}`,
+    )
       .then((response) => {
         if (!response.ok) throw new Error(response.statusText);
         return response.json();
@@ -71,19 +74,15 @@ export default function Meeting({ roomName }) {
       .then((res) => {
         setDescription(res.description);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(() => {});
   };
 
   const joinRoom = async (e) => {
     e.preventDefault();
-    // console.log(e.target[0].value);
     // return fetch(
-    //   `http://localhost:8443/conference/join/${conferenceName}/${uid}`,
+    //   `${process.env.NEXT_PUBLIC_API_URL}/conference/join/${conferenceName}/${uid}`,
     // )
     //   .then((response) => {
-    //     console.log(response);
     //     if (!response.ok) {
     //       Swal.fire({
     //         icon: "error",
@@ -94,13 +93,10 @@ export default function Meeting({ roomName }) {
     //     return response.json();
     //   })
     //   .then((res) => {
-    //     console.log(res);
     //     setMyName(e.target[0].value);
     //     setIsJoin(false);
     //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    //   .catch(() => {});
     await setMyName(e.target[0].value);
     await setIsJoin(false);
   };
@@ -142,7 +138,7 @@ export default function Meeting({ roomName }) {
       showLoaderOnConfirm: true,
       backdrop: true,
       preConfirm: (desc) => {
-        return fetch(`http://localhost:8443/conference/update`, {
+        return fetch(`${process.env.NEXT_PUBLIC_API_URL}/conference/update`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -326,7 +322,3 @@ export async function getStaticPaths() {
     fallback: "blocking",
   };
 }
-
-// export async function getStaticProps({ params }) {
-//   console.log(params)
-// }
