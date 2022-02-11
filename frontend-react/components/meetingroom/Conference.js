@@ -101,10 +101,10 @@ export default function Conference({
   //   createStt();
   // }, []); // 페이지 렌더 시 바로 STT 기능 활성화
 
-  useEffect(() => {
-    sendStt();
-    setSendSttMsg("");
-  }, [sendSttMsg]); // STT 상태값이 변하면 바로 참가자들에게 STT 전달
+  // useEffect(() => {
+  //   sendStt();
+  //   setSendSttMsg("");
+  // }, [sendSttMsg]); // STT 상태값이 변하면 바로 참가자들에게 STT 전달
 
   const createStt = () => {
     window.SpeechRecognition =
@@ -124,30 +124,41 @@ export default function Conference({
         let stt = event.results[i][0].transcript;
 
         // 이 부분에 kurento서버에 보내는 로직 필요함.
-        setSendSttMsg(stt);
+        sendStt(stt)
+        // setSendSttMsg(stt);
       }
     });
     recognition.start();
     recognition.addEventListener("end", (event) => {
       console.log("하지만 다시")
-      recognition.start()
+      recognition.start() // 음성인식 기능이 꺼지면 다시 켜지게
     });
   }; // STT 생성 로직
 
-  const sendStt = () => {
+  const sendStt = (stt) => {
     const msg = {
       id: "chatMsg",
       name: userId,
       room: myRoom,
-      content: sendSttMsg,
+      // content: sendSttMsg,
+      content: stt,
     };
-    console.log(`sending STT message : ${sendSttMsg}`);
+    console.log(`sending STT message : ${stt}`);
     sendMessage(msg);
   }; // 생성된 STT 백서버로 전달
 
   const receiveStt = (parsedMessage) => {
-    parsedMessage && setReceiveSttMsg(parsedMessage.content);
-    parsedMessage && setSttSender(parsedMessage.owner);
+    const participant = participants[parsedMessage.owner];
+    if (participant) {
+      console.log("된다!!")
+      const sttMsg = participant.getSttElement();
+      sttMsg.innerText = parsedMessage.content
+      setTimeout(function () {
+        sttMsg.innerText = "";
+      }, 3000);
+    }
+    // setReceiveSttMsg(parsedMessage.content);
+    // setSttSender(parsedMessage.owner);
   }; // 백서버로부터 받은 STT를 상태값에 저장
 
   const showStt = () => {
@@ -163,11 +174,11 @@ export default function Conference({
     }
   }; // participant 인스턴스상에 생성 되어 있는 말풍선 DOM에 stt 들어오는데로 입력
 
-  useEffect(() => {
-    showStt(); // participant 인스턴스상에 생성 되어 있는 말풍선 DOM에 stt 들어오는데로 입력 (5초후 자동 초기화)
-    setReceiveSttMsg("");
-    setSttSender("");
-  }, [receiveSttMsg]); // 새로운 STT 메세지가 감지되면 해당 STT를 보낸 참가자 밑에 말풍선으로 STT 메세지 표시
+  // useEffect(() => {
+  //   showStt(); // participant 인스턴스상에 생성 되어 있는 말풍선 DOM에 stt 들어오는데로 입력 (5초후 자동 초기화)
+  //   setReceiveSttMsg("");
+  //   setSttSender("");
+  // }, [receiveSttMsg]); // 새로운 STT 메세지가 감지되면 해당 STT를 보낸 참가자 밑에 말풍선으로 STT 메세지 표시
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -219,7 +230,7 @@ export default function Conference({
     console.log("지울1", ws, participants);
     setParticipants((participants) => {
       return { ...participants, [userId]: participant };
-    }); // 비동기처리를 위한 콜백 setState
+    }); // 비동기처리를 위한 콜백 setState 
     const video = participant.getVideoElement();
 
     const options = {

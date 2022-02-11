@@ -32,6 +32,20 @@
   transform: translateY(-3rem);
 }
 
+#meetingroom-participants blockquote {
+  position: relative;
+  border-radius: .4em;
+  color: #FFFFFF;
+  background-color: #BEBBB1;
+  border-bottom-color: #BEBBB1;
+  /* border: 24px solid transparent; */
+  border-top: 0;
+  border-right: 0;
+  width: 50%;
+  margin: auto;
+}
+
+
 #meetingroom-toolbar {
   position: fixed;
   left: 20vw;
