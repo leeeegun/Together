@@ -9,22 +9,13 @@ const LoginForm = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  // const userIdRef = useRef();
-
-  // 페이지 렌서시 아이디 입력창에 포커스
-  // useEffect(() => {
-  //   userIdRef.current.focus();
-  // }, []);
-
   // 성공 메세지 출력
   useEffect(() => {
-    console.log(successMessage);
     setSuccessMessage("");
   }, [successMessage]);
 
   // 실패 메세지 출력
   useEffect(() => {
-    console.log(errorMessage);
     setErrorMessage("");
   }, [errorMessage]);
 
@@ -43,8 +34,7 @@ const LoginForm = () => {
 
   // 로그인 POST 요청
   const submitLogin = async () => {
-    // fetch("http://localhost:8443/auth/login", {
-    fetch("https://3.38.253.61:8443/auth/login", {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
       method: "POST",
       body: JSON.stringify({
         userId: userId,
@@ -61,7 +51,6 @@ const LoginForm = () => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         localStorage.setItem("token", data.accessToken);
         const Toast = Swal.mixin({
           toast: true,

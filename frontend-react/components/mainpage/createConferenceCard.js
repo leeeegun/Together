@@ -3,7 +3,6 @@ import Image from "next/image";
 import svg from "../../public/images/svg/background.svg";
 import Swal from "sweetalert2";
 import Router from "next/router";
-import { motion } from "framer-motion";
 
 export default function createConferenceCard({ text, src, link, username }) {
   const handleClickParticipateConference = (e) => {
