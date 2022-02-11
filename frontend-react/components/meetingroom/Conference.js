@@ -75,7 +75,6 @@ export default function Conference({
         break;
       // ICE candidate peer 한테 보내기 혹은 받아오기 (아 정확히는 몰라)
       case "iceCandidate":
-        // console.log(parsedMessage, "!!!!!!!!!!!!!!!!!!!!!!");
         participants[parsedMessage.name].rtcPeer.addIceCandidate(
           parsedMessage.candidate,
           function (error) {
@@ -117,7 +116,6 @@ export default function Conference({
     recognition.maxAlternatives = 100000;
 
     let speechToText = "";
-    console.log("생성");
     recognition.addEventListener("result", (event) => {
       let inter = "";
       for (let i = event.resultIndex; i < event.results.length; i++) {
@@ -130,7 +128,6 @@ export default function Conference({
     });
     recognition.start();
     recognition.addEventListener("end", (event) => {
-      console.log("하지만 다시");
       recognition.start(); // 음성인식 기능이 꺼지면 다시 켜지게
     });
   }; // STT 생성 로직
@@ -150,7 +147,6 @@ export default function Conference({
   const receiveStt = (parsedMessage) => {
     const participant = participants[parsedMessage.owner];
     if (participant) {
-      console.log("된다!!");
       const sttMsg = participant.getSttElement();
       sttMsg.innerText = parsedMessage.content;
       setTimeout(function () {
@@ -225,12 +221,9 @@ export default function Conference({
     console.log(msg);
     const participant = new Participant(userId, myName); // 처리 대상 유저 객체
     // participant.nickname = myName
-    console.log("파티", participant);
-    // console.log('우왕 닉네임이 저장된다!!', participant.nickname)
-    console.log("지울1", ws, participants);
     setParticipants((participants) => {
       return { ...participants, [userId]: participant };
-    }); // 비동기처리를 위한 콜백 setState
+    }); // 비동기처리를 위한 콜백 setState 
     const video = participant.getVideoElement();
 
     const options = {
@@ -244,7 +237,6 @@ export default function Conference({
         if (error) {
           return console.error(error);
         }
-        console.log("지울2", ws, participants);
         this.generateOffer(participant.offerToReceiveVideo.bind(participant));
       },
     );
