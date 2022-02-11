@@ -35,8 +35,8 @@ const SignupForm = () => {
   // 아이디 중복확인
   const handleIdCheck = async (e) => {
     e.preventDefault();
-    console.log(userId);
-    fetch(`http://localhost:8443/users/${userId}/exists`)
+
+    fetch(`https://${process.env.NEXT_PUBLIC_API_URL}/users/${userId}/exists`)
       .then((response) => response.json())
       .then((data) => {
         setConfirmedUserId(data);
@@ -46,14 +46,13 @@ const SignupForm = () => {
   // 회원가입 버튼 눌렀을때 로직
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(userId, userPassword, userName, userNickName, userEmail, userStatus);
     submitRegistration();
     initializeData();
   };
 
   // 회원가입 POST 요청
   const submitRegistration = async () => {
-    fetch("http://localhost:8443/users", {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/users`, {
       method: "POST",
       body: JSON.stringify({
         userId: userId,
@@ -75,13 +74,13 @@ const SignupForm = () => {
       })
       .then((data) => {
         setSuccessMessage(data);
-        return fetch(`http://localhost:8443/conference/create/${userId}`)
+        return fetch(
+          `${process.env.NEXT_PUBLIC_API_URL}/conference/create/${userId}`,
+        )
           .then((response) => {
             if (!response.ok) throw new Error(response.statusText);
           })
-          .catch((err) => {
-            console.log(err);
-          });
+          .catch(() => {});
       })
       .catch((error) => {
         setErrorMessage(error);
@@ -113,7 +112,7 @@ const SignupForm = () => {
 
   useEffect(() => {
     if (validUserId && userId) {
-      fetch(`http://localhost:8443/users/${userId}/exists`)
+      fetch(`${process.env.NEXT_PUBLIC_API_URL}/users/${userId}/exists`)
         .then((response) => response.json())
         .then((data) => {
           setConfirmedUserId(data);
@@ -187,7 +186,6 @@ const SignupForm = () => {
 
   //나중에 코드 201로 바꿔야함
   useEffect(() => {
-    console.log(successMessage);
     if (successMessage.statusCode === 201) {
       Swal.fire({
         title: "<strong>회원가입 완료!</strong>",
@@ -207,7 +205,6 @@ const SignupForm = () => {
 
   // 회원가입 실패 메세지 반환
   useEffect(() => {
-    console.log(errorMessage);
     setErrorMessage("");
   }, [errorMessage]);
 
@@ -350,7 +347,7 @@ const SignupForm = () => {
                 required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
                 placeholder="홍길동(3~5글자)"
-                maxlength="5"
+                maxLength="5"
               />
             </div>
           </div>
