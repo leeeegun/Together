@@ -259,20 +259,18 @@ export default function Conference({ myName, myRoom, ws, isMic, isVideo, userId 
     container.id = name;
     const span = document.createElement("span");
     const video = document.createElement("video");
-    // const rtcPeer;
     
     container.appendChild(video);
     container.appendChild(span);
 
     const stt = document.createElement("blockquote");  // start
+    stt.className = "speech-bubble";
     container.appendChild(stt);               // end
 
     container.onclick = switchContainerClass;
     document.getElementById("meetingroom-participants").appendChild(container);
 
     span.appendChild(document.createTextNode(nickname));
-    // span.appendChild(document.createTextNode(name));
-
 
     video.id = "video-" + name;
     video.autoplay = true;
