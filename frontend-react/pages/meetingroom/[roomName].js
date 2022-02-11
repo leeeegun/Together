@@ -31,9 +31,6 @@ export default function Meeting({ roomName }) {
 
   useEffect(() => {
     setWs(new WebSocket("wss://" + URL + "/groupcall"));
-    window.onbeforeunload = function () {
-      return false;
-    };
     if (!localStorage.getItem("token")) {
       Swal.fire({
         icon: "error",
@@ -65,7 +62,8 @@ export default function Meeting({ roomName }) {
 
   // 설명 얻어오는 함수.
   const getInformation = () => {
-    return fetch(`http://localhost:8443/conference/info/${conferenceName}`)
+    // return fetch(`http://localhost:8443/conference/info/${conferenceName}`)
+    return fetch(`https://3.38.253.61:8443/conference/info/${conferenceName}`)
       .then((response) => {
         if (!response.ok) throw new Error(response.statusText);
         return response.json();
