@@ -84,14 +84,14 @@ export default function Home() {
         },
       }}
     >
-      <button className="prev fixed" onClick={(e) => scrollEvent(e, "up")}>
+      {/* <button className="fixed prev" onClick={(e) => scrollEvent(e, "up")} >
         <FontAwesomeIcon icon={faChevronUp} size="2x" />
       </button>
-      <button className="next fixed" onClick={(e) => scrollEvent(e, "down")}>
+      <button className="fixed next" onClick={(e) => scrollEvent(e, "down")}>
         <FontAwesomeIcon icon={faChevronDown} size="2x" />
-      </button>
-      <div className="left sidebar flex flex-col items-center justify-center">
-        <img src="images/svg/Together.svg" className="mb-5"></img>
+      </button> */}
+      <div className="flex flex-col items-center justify-center left sidebar">
+        <img src="images/svg/Together.svg" alt="웹앱 로고, Together" className="mb-5" tabIndex="0"></img>
         <p>
           <button
             className="button text-black font-bold py-2 px-7 rounded-full my-5 hover:bg-[#BEBBB1]"
@@ -101,37 +101,37 @@ export default function Home() {
             <a className="text-xs">회원가입</a>
           </button>
         </p>
-        <p className="md:text-sm text-xs mb-3">
+        <p className="mb-3 text-xs md:text-sm">
           이미 가입된 회원이세요?
           <span className="text-red-500 cursor-pointer" onClick={loginClick}>
-            <a
-              className="hover:text-red-600 hover:font-bold rounded-full"
+            <button
+              className="rounded-full hover:text-red-600 hover:font-bold"
               id="login-button"
             >
               {" "}
               로그인{"    "}
-            </a>
+            </button>
           </span>
         </p>
-        <p className="lg:text-sm text-xs mb-40">
-          <Link href="/guide" replace={false} shallow>
+        <p className="mb-40 text-xs lg:text-sm">
+          <Link href="/guide" replace={false} shallow role="link">
             <a>
-              <span className="text-xl">📖 </span>가이드 보기
+              <span className="text-xl" aria-hidden="true">📖 </span >가이드 보기
             </a>
           </Link>
         </p>
-        <p className="lg:text-sm text-xs">
+        <p className="text-xs lg:text-sm">
           이미 만들어진 회의에 참여하고 싶으세요?
           <span className="text-red-500">
             <Link href="/signup" passHref>
-              <a className="hover:text-red-600 hover:font-semibold block text-center">
+              <a className="block text-center hover:text-red-600 hover:font-semibold" aria-label="생성된 회의에 참여하기">
                 회의 참여하기
               </a>
             </Link>
           </span>
         </p>
       </div>
-      <div className="snap-y snap-mandatory h-screen w-screen overflow-scroll scroll-smooth">
+      <div className="w-screen h-screen overflow-scroll snap-y snap-mandatory scroll-smooth">
         <LandingParagraph
           src={LandingImage01}
           text="화상회의 플랫폼 Together와 함께 재미있는 시간을 보내봐요!"
@@ -147,6 +147,12 @@ export default function Home() {
         {showSignUpForm ? <SignUpForm /> : null}
         {showLoginForm ? <LoginForm /> : null}
       </div>
+      <button className="fixed prev" onClick={(e) => scrollEvent(e, "up")} >
+        <FontAwesomeIcon icon={faChevronUp} size="2x" />
+      </button>
+      <button className="fixed next" onClick={(e) => scrollEvent(e, "down")}>
+        <FontAwesomeIcon icon={faChevronDown} size="2x" />
+      </button>
     </motion.div>
   );
 }
