@@ -1,56 +1,93 @@
-# 웹/모바일(웹 기술) 스켈레톤 프로젝트
+<!-- logo -->
 
-<!-- 필수 항목 -->
+## 👬 TOGETHER
+### 🎉 프로젝트 소개
+```TOGETHER```는 기존의 화상회의 프로그램에 **STT**(speach to text)와 **TTS**(text to speach) 기능을 추가하여   
+듣고 말하고 보기 어려웠던 장애인 분들에게 편리함을 제공하는 서비스 입니다.  
 
-## 카테고리
+### 💡 기술 스택
+#### FrontEnd
+<img alt="React" src ="https://img.shields.io/badge/React-61DAFB.svg?&style=for-the-badge&logo=react&logoColor=white"/>
+<img alt="Next" src ="https://img.shields.io/badge/Next-000000.svg?&style=for-the-badge&logo=Next.js&logoColor=white"/>
+<img alt="JavaScript" src ="https://img.shields.io/badge/JavaScript-F7DF1E.svg?&style=for-the-badge&logo=JavaScript&logoColor=white"/>
+<img alt="Tailwind CSS" src ="https://img.shields.io/badge/Tailwind CSS-06B6D4.svg?&style=for-the-badge&logo=Tailwind CSS&logoColor=white"/>
+<img alt="CSS3" src ="https://img.shields.io/badge/CSS3-1572B6.svg?&style=for-the-badge&logo=CSS3&logoColor=white"/>
+<img alt="Babel" src ="https://img.shields.io/badge/Babel-F9DC3E.svg?&style=for-the-badge&logo=Babel&logoColor=white"/>
+<img alt="Netlify" src ="https://img.shields.io/badge/Netlify-00C7B7.svg?&style=for-the-badge&logo=Netlify&logoColor=white"/>
 
-| Application | Domain | Language | Framework |
-| ---- | ---- | ---- | ---- |
-| :white_check_mark: Desktop Web | :black_square_button: AI | :white_check_mark: JavaScript | :white_check_mark: Vue.js |
-| :white_check_mark: Mobile Web | :black_square_button: Big Data | :black_square_button: TypeScript | :black_square_button: React |
-| :white_check_mark: Responsive Web | :black_square_button: Blockchain | :black_square_button: C/C++ | :black_square_button: Angular |
-| :black_square_button: Android App | :black_square_button: IoT | :black_square_button: C# | :black_square_button: Node.js |
-| :black_square_button: iOS App | :black_square_button: AR/VR/Metaverse | :white_check_mark: Python | :white_check_mark: Flask/Django |
-| :black_square_button: Desktop App | :black_square_button: Game | :white_check_mark: Java | :white_check_mark: Spring/Springboot |
-| | | :black_square_button: Kotlin | |
+#### BackEnd
+<img alt="Spring Boot" src ="https://img.shields.io/badge/Spring Boot-6DB33F.svg?&style=for-the-badge&logo=Spring Boot&logoColor=white"/>
+<img alt="Spring Security" src ="https://img.shields.io/badge/Spring Security-6DB33F.svg?&style=for-the-badge&logo=Spring Security&logoColor=white"/>
+<img alt="Gradle" src ="https://img.shields.io/badge/Gradle-02303A.svg?&style=for-the-badge&logo=Gradle&logoColor=white"/>
+<img alt="Apache Maven" src ="https://img.shields.io/badge/Apache Maven-C71A36.svg?&style=for-the-badge&logo=Apache Maven&logoColor=white"/>
+<img alt="Kurrento" src ="https://img.shields.io/badge/Kurrento-008080.svg?&style=for-the-badge&logo=Apache Maven&logoColor=008080"/>
+<img alt="Coturn" src ="https://img.shields.io/badge/Coturn-EB680B.svg?&style=for-the-badge&logo=Apache Maven&logoColor=EB680B"/>
+<img alt="MySQL" src ="https://img.shields.io/badge/MySQL-4479A1.svg?&style=for-the-badge&logo=MySQL&logoColor=white"/>
+<img alt="OpenSSL" src ="https://img.shields.io/badge/OpenSSL-721412.svg?&style=for-the-badge&logo=OpenSSL&logoColor=white"/>
+<img alt="Amazon AWS" src ="https://img.shields.io/badge/Amazon AWS-232F3E.svg?&style=for-the-badge&logo=Amazon AWS&logoColor=white"/>
 
-<!-- 필수 항목 -->
+### 📌 주요 기능
+* **회원 관리**
+  - 회원 가입 시 장애 유무를 선택하여 사용자가 필요한 서비스를 제공받을 수 있습니다.
+* **메인 화면**
+  - 사용자의 고유 방을 확인할 수 있습니다.
+  <!-- 화면 -->
+  - 초대 코드를 입력하여 방에 입장할 수 있습니다.
+  <!-- 화면 -->
+* **컨퍼런스 기능**
+  - `컨퍼런스`에 입장하기 전 닉네임을 설정해 입장할 수 있습니다.
+  <!-- gif -->
+  - `시각장애`를 가지고 계신 분은 **TTS** 기능을 제공받을 수 있으며  
+  <!-- 입력 받은 채팅을 읽어 소리로 들려줌.gif -->
+  - `청각장애`를 가지고 계신 분은 **STT** 기능을 제공받을 수 있습니다.
+  <!-- 소리를 텍스트로 바꿔 채팅으로 제공.gif -->
 
-## 프로젝트 소개
+### 🧑 팀원 소개
+_Click!_
+<details><summary><strong>유재룡</strong> [ BE ]</summary>
 
-* 프로젝트명: 그룹 비디오 컨퍼런스 서비스
-* 서비스 특징: 웹/모바일(웹 기술) 프로젝트를 위한 스켈레톤 프로젝트
-* 주요 기능
-  - 회원 관리
-  - 화상 미팅룸
-  - 그룹 채팅
-* 주요 기술
-  - WebRTC
-  - WebSocket
-  - JWT Authentication
-  - REST API
-* 참조 리소스
-  * Vuetify: 디자인 전반 적용
-  * Vue Argon Design System: 디자인 전반 적용
-  * Vue Black Dashboard Pro(유료): 캘린더 컴포넌트 사용
-  * AR Core: 구글에서 제공하는 AR 지원 라이브러리. 이미지 인식 및 오버레이 영상에 활용
-  * Color Thief: 이미지 색상 추출 라이브러리. 커버 사진 색상 추출 및 배경 변경에 활용
-  * Animation.css: CSS 애니메이션 지원 라이브러리. 메인 페이지 진입 애니메이션에 활용
-* 배포 환경
-  - URL: // 웹 서비스, 랜딩 페이지, 프로젝트 소개 등의 배포 URL 기입
-  - 테스트 계정: // 로그인이 필요한 경우, 사용 가능한 테스트 계정(ID/PW) 기입
+ * **팀장**
+ * Database
+ * Login API
+ * 동영상 제작
+</details>
+<details><summary><strong>이　건</strong> [ BE ]</summary>
 
-<!-- 자유 양식 -->
+  * Kurrento, Socket
+  * User API
+  * 문서 작성
+  * Http
+</details>
+<details><summary><strong>이호성</strong> [ BE ]</summary>
 
-## 팀 소개
-* 김ㅇㅇ: 팀장, 프론트엔드 개발
-* 이ㅇㅇ: 부팀장, 기획 및 와이어프레임 작성, 프론트엔드 개발
-* 박ㅇㅇ: 백엔드 개발 및 QA 담당
-* 홍ㅇㅇ: 백엔드 개발, Swagger API 문서 관리
-* 전ㅇㅇ: 코드 리뷰 및 인프라 담당, CI/CD, HTTPS, Docker 구성
+  * Kurrento, Socket
+  * Conference API
+  * 문서 작성
+  * Http
+</details>
+<details><summary><strong>강민수</strong> [ FE ]</summary>
 
-<!-- 자유 양식 -->
+  * Kurrento, Socket
+  * Conference API
+  * 문서 작성
+  * Http
+</details>
+<details><summary><strong>김태훈</strong> [ FE ]</summary>
 
-## 프로젝트 상세 설명
+  * Kurrento, Socket
+  * Conference API
+  * 문서 작성
+  * Http
+</details>
+<details><summary><strong>진민규</strong> [ FE ]</summary>
 
-// 개발 환경, 기술 스택, 시스템 구성도, ERD, 기능 상세 설명 등
+  * Kurrento, Socket
+  * Conference API
+  * 문서 작성
+  * Http
+</details>
+<br>
+<br>
+
+## 목차
+
