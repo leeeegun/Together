@@ -15,14 +15,8 @@ import lombok.Setter;
  */
 @Getter
 @Setter
-@ApiModel("UserRegisterPostRequest")
+@ApiModel("UserModifyPostRequest")
 public class UserModifyPostReq {
-
-	@ApiModelProperty(name="유저 Password", example="your_password")
-    @NotBlank(message = "Password size invaalid")
-	@Pattern(regexp = "(?=.*[A-Za-z])(?=.*[0-9])(?=.*[$@$!%*#?&]).+", message = "Password Pattern invalid")
-    @Size(min = 8, max = 24, message = "Password size invalid")
-	String password;
 	
 	@ApiModelProperty(name="장애 종류", example="시각장애")
     @NotBlank(message = "disability size invaild")

@@ -9,11 +9,11 @@ import {
   faVideo,
   faVideoSlash,
   faEllipsisV,
-  faPaperPlane
+  faPaperPlane,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
-import Chat from "./Chat"
+import Chat from "./Chat";
 
 const PARTICIPANT_MAIN_CLASS = "participant main";
 const PARTICIPANT_CLASS = "participant";
@@ -32,11 +32,11 @@ export default function Conference({
   const [isMicEnabled, setIsMicEnabled] = useState(isMic); // 마이크 켜고 끄기 토글
   const [isVideoEnabled, setIsVideoEnabled] = useState(isVideo); // 비디오 켜고 끄기 토글
   const [isSharingEnabled, setIsSharingEnabled] = useState(false); // 화면 공유 켜고 끄기 토글
-  const [chats, setChats] = useState([]) // 채팅기록을 저장합니다.
-  const [isChatEnabled, setIsChatEnabled] = useState(false) // 채팅창을 표시할지 토글합니다.
-  const [isNoti, setIsNoti] = useState(false) // 메시지 알람을 활성화할지 토글합니다.
-  const messageInput = useRef()
-  const meetingroomMessage = useRef()
+  const [chats, setChats] = useState([]); // 채팅기록을 저장합니다.
+  const [isChatEnabled, setIsChatEnabled] = useState(false); // 채팅창을 표시할지 토글합니다.
+  const [isNoti, setIsNoti] = useState(false); // 메시지 알람을 활성화할지 토글합니다.
+  const messageInput = useRef();
+  const meetingroomMessage = useRef();
 
   const alertUser = (e) => {
     e.preventDefault();
@@ -53,17 +53,14 @@ export default function Conference({
     sendMessage(message);
     console.log("설마 웹소켓이?", ws);
     createStt(); // 페이지 렌더 시 바로 STT 기능 활성화
-    window.screen.orientation
-    .lock("portrait")
-    .then(
-        success => console.log(success),
-        failure => console.log(failure)
+    window.screen.orientation.lock("portrait").then(
+      (success) => console.log(success),
+      (failure) => console.log(failure),
     ); // 모바일 환경에서는 화면을 가로로 고정!
     window.addEventListener("beforeunload", alertUser);
     return () => {
       window.addEventListener("beforeunload", alertUser);
     };
-
   }, []); // 기본 코드의 register 과정입니다.
 
   ws.onmessage = function (message) {
@@ -159,13 +156,19 @@ export default function Conference({
         sttMsg.innerText = "";
       }, 3000);
     } else if (participant && parsedMessage.content[0] === "a") {
-      const chatMsg =  parsedMessage.content.slice(1);
+      const chatMsg = parsedMessage.content.slice(1);
       const now = new Date();
       const nickname = participants[parsedMessage.owner].nickname;
-      const newChats = [...chats, [nickname, now.toTimeString().slice(0, 5), chatMsg]];
+      const newChats = [
+        ...chats,
+        [nickname, now.toTimeString().slice(0, 5), chatMsg],
+      ];
       setChats(newChats);
       !isChatEnabled && setIsNoti(true);
-      meetingroomMessage.current.scrollTo(0, meetingroomMessage.current.scrollHeight);
+      meetingroomMessage.current.scrollTo(
+        0,
+        meetingroomMessage.current.scrollHeight,
+      );
     }
     // setReceiveSttMsg(parsedMessage.content);
     // setSttSender(parsedMessage.owner);
@@ -189,19 +192,19 @@ export default function Conference({
       remoteVideo: video,
       onicecandidate: participant.onIceCandidate.bind(participant),
     };
-    console.log("video 태그: ", video)
+    console.log("video 태그: ", video);
     participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
       options,
       function (error) {
         if (error) {
           return console.error(error);
         }
-        this.generateOffer(participant.offerToReceiveVideo.bind(participant));
+        this.generateOffer(participant.offerToReceiveVideo.bind(participant)); // 백서버로 SDP offer 보내는 부분
       },
     );
   }
 
-  // 이미 들어와있는 유저들의 경우
+  // 본인이 방 참가한 경우
   function onExistingParticipants(msg) {
     const constraints = {
       audio: true,
@@ -219,9 +222,9 @@ export default function Conference({
     // participant.nickname = myName
     setParticipants((participants) => {
       return { ...participants, [userId]: participant };
-    }); // 비동기처리를 위한 콜백 setState 
+    }); // 비동기처리를 위한 콜백 setState
     const video = participant.getVideoElement();
-    console.log("내 비디오:", video)
+    console.log("내 비디오:", video);
     const options = {
       localVideo: video,
       mediaConstraints: constraints,
@@ -280,18 +283,18 @@ export default function Conference({
     // const rtcPeer;
 
     videoFrame.appendChild(video);
-    videoFrame.className = "meetingroom-frame"
+    videoFrame.className = "meetingroom-frame";
     container.appendChild(videoFrame); // video를 videoFrame 안에 넣어서 container에 추가
     container.appendChild(span);
 
     const stt = document.createElement("blockquote"); // start
+    stt.className = "speech-bubble";
     container.appendChild(stt); // end
 
     container.onclick = switchContainerClass;
     document.getElementById("meetingroom-participants").appendChild(container);
 
     span.appendChild(document.createTextNode(nickname));
-    // span.appendChild(document.createTextNode(name));
 
     video.id = "video-" + name;
     video.autoplay = true;
@@ -471,18 +474,18 @@ export default function Conference({
   // 채팅창 토글
   const toggleChats = () => {
     if (isChatEnabled) {
-      setIsChatEnabled(false)
+      setIsChatEnabled(false);
     } else {
-      isNoti && setIsNoti(false) // 메시지를 확인하므로 알림 삭제
-      setIsChatEnabled(true)
-      messageInput.current.focus()
+      isNoti && setIsNoti(false); // 메시지를 확인하므로 알림 삭제
+      setIsChatEnabled(true);
+      messageInput.current.focus();
     }
-  }
+  };
 
   // 메시지 보내기
   const sendChatMsg = (event) => {
-    event.preventDefault()
-    const content = event.target[0].value
+    event.preventDefault();
+    const content = event.target[0].value;
     const msg = {
       id: "chatMsg",
       name: userId,
@@ -491,20 +494,23 @@ export default function Conference({
     };
     sendMessage(msg);
     messageInput.current.value = "";
-  }
+  };
 
   return (
-    <section id="meetingroom-meetingroom" 
-      style={isChatEnabled? 
-      {gridTemplateColumns: "2fr 0.7fr"} 
-      : {gridTemplateColumns: "2fr 0.3fr"}}>
+    <section
+      id="meetingroom-meetingroom"
+      style={
+        isChatEnabled
+          ? { gridTemplateColumns: "2fr 0.7fr" }
+          : { gridTemplateColumns: "2fr 0.3fr" }
+      }
+    >
       {/* <h1>myName: {myName}</h1> */}
       <div id="room">
         <div
-          className="grid grid-cols-2 text-center gap-5 mx-auto"
+          className="grid grid-cols-2 gap-5 mx-auto text-center"
           id="meetingroom-participants"
-        >
-        </div>
+        ></div>
         <div id="meetingroom-toolbar">
           {isMicEnabled ? (
             <button
@@ -569,54 +575,75 @@ export default function Conference({
           <button
             aria-label="연결 종료하고 회의실 나가기"
             title="연결 종료하고 회의실을 나갑니다"
-            onMouseUp={leaveRoom}
+            onClick={leaveRoom}
             className="meetingroom-red"
           >
             <FontAwesomeIcon icon={faPhoneSlash} size="1x" />
           </button>
         </div>
       </div>
-      <div style={{overflow: "hidden"}}>
+      <div style={{ overflow: "hidden" }}>
         {/* 채팅창 */}
         <motion.div
           id="meetingroom-chats"
-          initial={{opacity: 0}}
+          initial={{ opacity: 0 }}
           animate={isChatEnabled ? "open" : "closed"}
-          variants={{open: { opacity: 1, x: 0 }, closed: { opacity: 0, x: "-50%" }}}
-          transition={{duration: 0.5}}
+          variants={{
+            open: { opacity: 1, x: 0 },
+            closed: { opacity: 0, x: "-50%" },
+          }}
+          transition={{ duration: 0.5 }}
         >
           {/* 메시지 칸 */}
           <div id="meetingroom-messages" ref={meetingroomMessage}>
-            {chats.map((chat, key) => 
-            <Chat chat={chat} key={key}>
-            </Chat>)}
-
+            {chats.map((chat, key) => (
+              <Chat chat={chat} key={key}></Chat>
+            ))}
           </div>
-          <form onSubmit={sendChatMsg} style={{display: "flex", justifyContent: "space-between", flexWrap: "wrap"}}>
-            <input style={{width: "80%"}} className="min-w-fit rounded py-1 mt-2" 
-              type="text" 
-              placeholder="채팅을 입력하세요" 
-              ref={messageInput}>
-            </input>
+          <form
+            onSubmit={sendChatMsg}
+            style={{
+              display: "flex",
+              justifyContent: "space-between",
+              flexWrap: "wrap",
+            }}
+          >
+            <input
+              style={{ width: "80%" }}
+              className="py-1 mt-2 rounded min-w-fit"
+              type="text"
+              placeholder="채팅을 입력하세요"
+              ref={messageInput}
+            ></input>
             <button className="w-2/12 min-w-fit mt-2 bg-[#009e747a] hover:bg-[#009e7494] text-white font-bold py-1 px-2 rounded">
               <FontAwesomeIcon icon={faPaperPlane} size="1x" />
             </button>
           </form>
         </motion.div>
         <button
-              style={{margin: "auto", position: "fixed", right: "1rem", bottom: "1rem",}}
-              aria-label="메시지 창 토글"
-              title="메시지 창을 켜거나 끕니다."
-              onClick={toggleChats}
-              className="meetingroom-grey"
-            >
-              <FontAwesomeIcon icon={faEllipsisV} size="1x" />
+          style={{
+            margin: "auto",
+            position: "fixed",
+            right: "1rem",
+            bottom: "1rem",
+          }}
+          aria-label="메시지 창 토글"
+          title="메시지 창을 켜거나 끕니다."
+          onClick={toggleChats}
+          className="meetingroom-grey"
+        >
+          <FontAwesomeIcon icon={faEllipsisV} size="1x" />
 
-              {/* 새 메시지 도착 시 알림. 새 메시지가 도착했으며, 그를 읽지 않았을 때! */}
-              {!isChatEnabled && isNoti && <div aria-label="새 메시지가 있습니다" title="새 메시지가 있습니다." id="meetingroom-noti"></div>}
+          {/* 새 메시지 도착 시 알림. 새 메시지가 도착했으며, 그를 읽지 않았을 때! */}
+          {!isChatEnabled && isNoti && (
+            <div
+              aria-label="새 메시지가 있습니다"
+              title="새 메시지가 있습니다."
+              id="meetingroom-noti"
+            ></div>
+          )}
         </button>
       </div>
-      
     </section>
   );
 }

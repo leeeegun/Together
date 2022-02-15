@@ -27,14 +27,9 @@ export default function Meeting({ roomName }) {
   const [isHost, setIsHost] = useState(false);
   const [description, setDescription] = useState("");
   const [uid, setUid] = useState("");
-  const [disability, setDisability] = useState(1)
 
   useEffect(() => {
-    setWs(
-      new WebSocket(
-        "wss://" + process.env.NEXT_PUBLIC_MEDIA_SERVER_URL + "/groupcall",
-      ),
-    );
+    setWs(new WebSocket("wss://" + "i6a406.p.ssafy.io:8446" + "/groupcall"));
     if (!localStorage.getItem("token")) {
       Swal.fire({
         icon: "error",
@@ -67,7 +62,7 @@ export default function Meeting({ roomName }) {
   const getInformation = () => {
     // return fetch(`http://localhost:8443/conference/info/${conferenceName}`)
     return fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/conference/info/${conferenceName}`,
+      `https://i6a406.p.ssafy.io:8443/conference/info/${conferenceName}`,
     )
       .then((response) => {
         if (!response.ok) throw new Error(response.statusText);
@@ -140,7 +135,7 @@ export default function Meeting({ roomName }) {
       showLoaderOnConfirm: true,
       backdrop: true,
       preConfirm: (desc) => {
-        return fetch(`${process.env.NEXT_PUBLIC_API_URL}/conference/update`, {
+        return fetch(`https://i6a406.p.ssafy.io:8443/conference/update`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -305,7 +300,6 @@ export default function Meeting({ roomName }) {
           userId={userId}
           isMic={isMic} // 마이크를 사용할지 prop으로 넘겨줍니다.
           isVideo={isVideo}
-          disability={1}
         ></Conference>
       )}
     </>
