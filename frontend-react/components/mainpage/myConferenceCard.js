@@ -2,7 +2,13 @@ import React from "react";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
 
-export default function myConferenceCard({ text, src, link, username, description }) {
+export default function myConferenceCard({
+  text,
+  src,
+  link,
+  username,
+  description,
+}) {
   const onHover = () => {
     const myTag = document.querySelector(`#link${link}`);
     const myDescription = document.querySelector(`#description${link}`);
