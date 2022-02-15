@@ -22,15 +22,13 @@ export default function profileCard({
     e.preventDefault();
     Swal.fire({
       text: "",
-      html: `사용중인 아이디와 비밀번호를 입력해주세요
-            <input type="text" id="login" class="swal2-input" placeholder="아이디">
+      html: `비밀번호를 입력해주세요
             <input type="password" id="password" class="swal2-input" placeholder="비밀번호">`,
       confirmButtonText: "확인",
       showCancelButton: true,
       cancelButtonText: "취소",
       showLoaderOnConfirm: true,
       preConfirm: () => {
-        const userId = Swal.getPopup().querySelector("#login").value;
         const userPassword = Swal.getPopup().querySelector("#password").value;
         return fetch(`https://i6a406.p.ssafy.io:8443/auth/login`, {
           method: "POST",
@@ -63,21 +61,9 @@ export default function profileCard({
           cancelButtonText: "취소",
           showLoaderOnConfirm: true,
           preConfirm: () => {
-            const userId = Swal.getPopup().querySelector("#nickname").value;
-            return fetch(`https://i6a406.p.ssafy.io:8443/users/modify`, {
-              method: "POST",
-              body: JSON.stringify({
-                nickname: userId,
-                disability: null,
-              }),
-              headers: {
-                "Content-Type": "application/json",
-                Accept: "application/json",
-              },
-            }).then((response) => {
-              if (!response.ok) throw new Error(response.status);
-              return response.json();
-            });
+            const customNickname =
+              Swal.getPopup().querySelector("#nickname").value;
+            setUserNickName(customNickname);
           },
         }).then((result) => {
           if (result.isConfirmed) {
