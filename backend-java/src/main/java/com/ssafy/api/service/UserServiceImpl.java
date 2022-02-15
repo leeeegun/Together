@@ -52,7 +52,6 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public void setUserInfoByUserId(User user, UserModifyPostReq userInfo) {
 		user.setDisability(userInfo.getDisability());
-		user.setPassword(passwordEncoder.encode(userInfo.getPassword()));
 		user.setNickname(userInfo.getNickname());
 		
 		userRepository.flush();
