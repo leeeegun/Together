@@ -7,11 +7,11 @@ export default function footer() {
       <img
         src="images/svg/Together.svg"
         alt="Together 로고"
-        className="w-24 self-center"
+        className="self-center w-24"
       ></img>
       <p className="mt-5">Contact us</p>
       <br></br>
-      <div className="flex flex-row justify-center items-center">
+      <div className="flex flex-row items-center justify-center">
         <a href="https://facebook.com" className="mx-2">
           <motion.img
             src="/images/svg/facebook-brands.svg"

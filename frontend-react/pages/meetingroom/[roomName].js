@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Conference from "../../components/meetingroom/Conference";
 import Swal from "sweetalert2";
 import Router from "next/router";
+import Link from "next/link"
 import {
   faMicrophone,
   faMicrophoneSlash,
@@ -28,11 +29,12 @@ export default function Meeting({ roomName }) {
   const [isHost, setIsHost] = useState(false);
   const [description, setDescription] = useState("");
   const [uid, setUid] = useState("");
+  const [disability, setDisability] = useState(1)
 
   useEffect(() => {
     setWs(
       new WebSocket(
-        "wss://" + process.env.NEXT_PUBLIC_MEDIA_SERVER_URL + "/groupcall",
+        "wss://i6a406.p.ssafy.io:8446/groupcall"
       ),
     );
     if (!localStorage.getItem("token")) {
@@ -193,20 +195,21 @@ export default function Meeting({ roomName }) {
             },
           }}
         >
-          <div className="bg-white rounded-2xl border shadow-xl max-w-4xl flex flex-row w-full h-3/6">
-            <div className="flex flex-col items-start justify-center content-center p-10 w-6/12 bg-[#ece6cc] rounded-l-2xl">
-              <h1 className="font-semibold text-2xl text-gray-500 mb-10 subject">
+          <div className="flex flex-row w-full max-w-4xl bg-white border shadow-xl rounded-2xl h-3/6">
+            <div tabIndex="0" className="flex flex-col items-start justify-center content-center p-10 w-6/12 bg-[#ece6cc] rounded-l-2xl">
+              <h1 className="mb-10 text-2xl font-semibold text-gray-500 subject">
                 {conferenceName}님의 회의실
               </h1>
               <br></br>
               <p>{description ? description : "설명이 없습니다"}</p>
             </div>
-            <div className="flex flex-col items-center justify-center content-center p-10 space-y-4 w-6/12">
-              <strong className="font-bold text-2xl text-gray-700 w-4/6 text-center waiting z-10">
+            <div tabIndex="0" aria-labelledby="info" className="flex flex-col items-center content-center justify-center w-6/12 p-10 space-y-4">
+              <strong className="z-10 w-4/6 text-2xl font-bold text-center text-gray-700 waiting">
                 대기실
               </strong>
+              <span id="info" hidden>대기실, 회의실에 입장하기 전, username 마이크 비디오 상태설정이 가능하고, 호스트라면 회의방에 대한 설명도 추가 할 수 있습니다.</span>
               <form
-                className="flex flex-col gap-10 text-center items-center"
+                className="flex flex-col items-center gap-10 text-center"
                 onSubmit={joinRoom}
                 acceptCharset="UTF-8"
               >
@@ -229,7 +232,7 @@ export default function Meeting({ roomName }) {
                     aria-label="본인 마이크 끄기"
                     title="누르시면 마이크를 끈 채로 시작합니다"
                     onClick={toggleMic}
-                    className="meetingroom-red inline"
+                    className="inline meetingroom-red"
                     whileHover={{ scale: 1.2 }}
                   >
                     <FontAwesomeIcon
@@ -243,7 +246,7 @@ export default function Meeting({ roomName }) {
                     aria-label="본인 마이크 켜기"
                     title="누르시면 마이크를 켠 채로 시작합니다"
                     onClick={toggleMic}
-                    className="meetingroom-grey inline"
+                    className="inline meetingroom-grey"
                     whileHover={{ scale: 1.2 }}
                   >
                     <FontAwesomeIcon
@@ -259,7 +262,7 @@ export default function Meeting({ roomName }) {
                     aria-label="본인 비디오 끄기"
                     title="누르시면 비디오를 끈 채로 시작합니다"
                     onClick={toggleVideo}
-                    className="meetingroom-red inline mx-3"
+                    className="inline mx-3 meetingroom-red"
                     whileHover={{ scale: 1.2 }}
                   >
                     <FontAwesomeIcon
@@ -273,7 +276,7 @@ export default function Meeting({ roomName }) {
                     aria-label="본인 비디오 켜기"
                     title="누르시면 비디오를 켠 채로 시작합니다"
                     onClick={toggleVideo}
-                    className="meetingroom-grey inline mx-3"
+                    className="inline mx-3 meetingroom-grey"
                     whileHover={{ scale: 1.2 }}
                   >
                     <FontAwesomeIcon
@@ -286,7 +289,7 @@ export default function Meeting({ roomName }) {
               </div>
               {isHost ? (
                 <button
-                  className="hover:font-semibold inline"
+                  className="inline hover:font-semibold"
                   onClick={changeConference}
                 >
                   호스트시네요? 방 정보 수정하기
@@ -294,6 +297,7 @@ export default function Meeting({ roomName }) {
               ) : (
                 <></>
               )}
+              <Link href="/main">나가기</Link>
             </div>
           </div>
         </motion.div>
@@ -305,6 +309,7 @@ export default function Meeting({ roomName }) {
           userId={userId}
           isMic={isMic} // 마이크를 사용할지 prop으로 넘겨줍니다.
           isVideo={isVideo}
+          disability={1}
         ></Conference>
       )}
     </>
