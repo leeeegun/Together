@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Conference from "../../components/meetingroom/Conference";
 import Swal from "sweetalert2";
 import Router from "next/router";
+import Link from "next/link"
 import {
   faMicrophone,
   faMicrophoneSlash,
@@ -293,6 +294,7 @@ export default function Meeting({ roomName }) {
               ) : (
                 <></>
               )}
+              <Link href="/main">나가기</Link>
             </div>
           </div>
         </motion.div>
