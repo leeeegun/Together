@@ -1,24 +1,34 @@
+/* 회의실 전체 틀 */
+#meetingroom-meetingroom {
+  display: grid;
+  margin-left: 3vw;
+  gap: 3vw;
+  height: 100vh;
+  overflow-x: hidden;
+}
+
+/* 참가자 비디오 */
 #meetingroom-participants {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 5%;
-  margin-left: 3vw;
-  margin-top: 3vw;
-  width: 80vw;
-  height: 75vh;
+  gap: 1rem;
+  margin-top: 2vh;
+  width: 100%;
+  height: 84vh;
   overflow-y: auto;
+  transition: all ease-out 0.5s;
 }
 
-#meetingroom-participants > div {
+.meetingroom-frame {
   width: 100%;
-  /* max-height: 50%; */
+  height: 37vh;
   /* overflow: hidden; */
 }
 
 #meetingroom-participants video {
   width: 100%;
-  max-height: 31vh;
   object-fit: cover;
+  max-height: 100%;
 }
 
 #meetingroom-participants span {
@@ -43,15 +53,15 @@
   border-right: 0;
   width: 50%;
   margin: auto;
+  margin-top: -1rem;
 }
 
 
 #meetingroom-toolbar {
-  position: fixed;
-  left: 20vw;
-  top: 87vh;
+  margin: auto;
+  margin-top: 3rem;
   display: flex;
-  width: 50vw;
+  width: 40vw;
   align-items: center;
   justify-content: space-evenly;
 }
@@ -59,16 +69,16 @@
 .meetingroom-red {
   border-radius: 100%;
   background-color: #D55E00;
-  width: max(2.5vw, 2.8rem);
-  height: max(2.5vw, 2.8rem);
+  width: 2.5rem;
+  height: 2.5rem;
   color: white;
 }
 
 .meetingroom-grey {
   border-radius: 100%;
   background-color: rgb(144, 144, 144);
-  width: max(2.5vw, 2.8rem);
-  height: max(2.5vw, 2.8rem);
+  width: 2.5rem;
+  height: 2.5rem;
   color: white;
 }
 
@@ -80,5 +90,66 @@
   object-fit: cover;
 }
 
+/* 회의실 채팅창 */
+#meetingroom-chats {
+  width: 23vw;
+  height: 86vh;
+  border-radius: 1rem;
+  background-color: white;
+  margin: auto;
+  margin-top: 1rem;
+  position: relative;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: space-between;
+}
+
+#meetingroom-noti {
+  position: fixed;
+  background-color: #D55E00;
+  border-radius: 50%;
+  width: 10px;
+  height: 10px;
+  right: 1.1rem;
+  bottom: 1.2rem;
+}
+
+#meetingroom-messages {
+  overflow-y: scroll;
+}
+
+/* 스크롤바 설정*/
+#meetingroom-messages::-webkit-scrollbar{
+  width: 6px;
+}
+
+/* 스크롤바 막대 설정*/
+#meetingroom-messages::-webkit-scrollbar-thumb{
+  height: 5%;
+  background-color: rgba(223, 145, 223, 0.733);
+  background-color: #bebbb9;
+  /* 스크롤바 둥글게 설정    */
+  border-radius: 10px;  
+}
+
+/* 스크롤바 뒷 배경 설정*/
+#meetingroom-messages::-webkit-scrollbar-track{
+  background-color: #FFFFFF;
+}
 
 
+/* 스크롤바 설정*/
+#meetingroom-participants::-webkit-scrollbar{
+  width: 6px;
+}
+
+/* 스크롤바 막대 설정*/
+#meetingroom-participants::-webkit-scrollbar-thumb{
+  height: 5%;
+  background-color: rgba(223, 145, 223, 0.733);
+  background-color: #bebbb9;
+  /* 스크롤바 둥글게 설정    */
+  border-radius: 10px;  
+}

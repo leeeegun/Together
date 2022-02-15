@@ -28,6 +28,7 @@ export default function Meeting({ roomName }) {
   const [isHost, setIsHost] = useState(false);
   const [description, setDescription] = useState("");
   const [uid, setUid] = useState("");
+  const [disability, setDisability] = useState(1)
 
   useEffect(() => {
     setWs(
@@ -306,6 +307,7 @@ export default function Meeting({ roomName }) {
           userId={userId}
           isMic={isMic} // 마이크를 사용할지 prop으로 넘겨줍니다.
           isVideo={isVideo}
+          disability={1}
         ></Conference>
       )}
     </>
