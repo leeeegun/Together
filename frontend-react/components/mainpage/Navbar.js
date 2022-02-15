@@ -43,21 +43,27 @@ export default function Navbar() {
               className="inline-block"
             />
           </a>
-          <span className="text-xl font-semibold c-footer-social_link" tabIndex="0">
+          <span
+            className="text-xl font-semibold c-footer-social_link"
+            tabIndex="0"
+          >
             {userId ? userId : null}님, 안녕하세요!
           </span>
         </div>
 
         <div className="flex flex-row items-center justify-center text-center">
-          <button tabIndex="0" onClick={() => {
-            localStorage.clear("token");
-            Swal.fire({
-              icon: "success",
-              title: "로그아웃 성공!",
-              text: "다음에 또 오세요!",
-            });
-            Router.push("/");
-          }}>
+          <button
+            tabIndex="0"
+            onClick={() => {
+              localStorage.clear("token");
+              Swal.fire({
+                icon: "success",
+                title: "로그아웃 성공!",
+                text: "다음에 또 오세요!",
+              });
+              Router.push("/");
+            }}
+          >
             <motion.img
               whileHover={{ scale: 1.3 }}
               src="images/svg/logout.svg"
