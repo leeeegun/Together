@@ -215,6 +215,7 @@ const SignupForm = () => {
             <span className={validUserId || !userId ? "hide" : "invalid"}>
               &#9746; 대소문자와 숫자를 혼합하여 3~20내로 작명해주세요!
             </span>
+            <span role="note" hidden id="idInfo">아이디, 대소문자와 숫자를 혼합하여 3글자에서 20글자 내로 작명해주세요!</span>
           </label>
           <div className="container w-">
             <div>
@@ -226,13 +227,16 @@ const SignupForm = () => {
                 autoComplete="off"
                 value={userId}
                 required
-                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
+                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"                
+                aria-labelledby="idInfo"
               />
             </div>
             <div className="mx-auto">
               <span
                 className={confirmedUserId ? "valid" : "hide"}
                 id="id-navigator"
+                role="note"
+                tabIndex="0"
               >
                 사용 가능한 아이디입니다!
                 <p>
@@ -240,12 +244,16 @@ const SignupForm = () => {
                   <span
                     onClick={(e) => userConfirmedId(e)}
                     className="hover:cursor-pointer"
+                    tabIndex="0"
+                    role="button"
                   >
                     사용하기
                   </span>
                 </p>
               </span>
               <span
+                tabIndex="0"
+                role="note"
                 className={!confirmedUserId && validUserId ? "valid" : "hide"}
               >
                 이미 사용중인 아이디입니다.
@@ -273,6 +281,7 @@ const SignupForm = () => {
                 <br />
                 8~24내로 작성해주세요!
               </span>
+              <span id="pwInfo" role="note" hidden>비밀번호, 대소문자 숫자 특수문자 !@#$* 를 혼합하여 8글자에서 24글자 내로 작성해주세요</span>
             </label>
             <div className="mt-1">
               <input
@@ -282,8 +291,10 @@ const SignupForm = () => {
                 value={userPassword}
                 required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
+                aria-labelledby="pwInfo"
               />
             </div>
+            <span role="note" tabIndex="0" className={userPassword ? "valid" : "hide"} >{validUserPassword ? "사용가능한 비밀번호" : "사용불가능한 비밀번호"}</span>
           </div>
 
           <div>
@@ -304,7 +315,7 @@ const SignupForm = () => {
                   validMatchPassword || !matchPassword ? "hide" : "invalid"
                 }
               >
-                &#9746; 비밀번호가 일치하지 않습니다!
+                &#9746;
               </span>
             </label>
             <div style={{ marginTop: 0 }}>
@@ -318,6 +329,7 @@ const SignupForm = () => {
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
               />
             </div>
+            <span role="note" tabIndex="0" className={matchPassword ? "valid" : "hide"}>{validMatchPassword ? "비밀번호 일치" : "비밀번호 불일치"}</span>
           </div>
 
           <div>
@@ -336,8 +348,10 @@ const SignupForm = () => {
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
                 placeholder="홍길동(3~5글자)"
                 maxLength="5"
+                aria-labelledby="nameInfo"
               />
             </div>
+            <span role="note" id="nameInfo" hidden>이름, 3글자에서 5글자로 작성해주세요</span>
           </div>
 
           <div>
@@ -361,7 +375,7 @@ const SignupForm = () => {
           <div>
             <label htmlFor="userEmail" className="block text-sm font-medium">
               이메일
-              <span className={!validUserEmail && userEmail ? "valid" : "hide"}>
+              <span id="emailInfo" className={!validUserEmail && userEmail ? "valid" : "hide"}>
                 이메일 형식으로 작성 해주세요! (예: xxx@xxx.com)
               </span>
             </label>
@@ -375,8 +389,11 @@ const SignupForm = () => {
                 value={userEmail}
                 required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
+                aria-required
+                aria-labelledby="emailInfo"
               />
             </div>
+            <span role="note" tabIndex="0" className={userEmail ? "valid" : "hide"}>{validUserEmail ? "유효한 이메일" : "유효하지 않은 이메일"}</span>
           </div>
 
           <div className="container flex justify-evenly">

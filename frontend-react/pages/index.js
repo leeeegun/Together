@@ -147,10 +147,10 @@ export default function Home() {
         {showSignUpForm ? <SignUpForm /> : null}
         {showLoginForm ? <LoginForm /> : null}
       </div>
-      <button className="fixed prev" onClick={(e) => scrollEvent(e, "up")} >
+      <button className="fixed prev" onClick={(e) => scrollEvent(e, "up")} aria-hidden>
         <FontAwesomeIcon icon={faChevronUp} size="2x" />
       </button>
-      <button className="fixed next" onClick={(e) => scrollEvent(e, "down")}>
+      <button className="fixed next" onClick={(e) => scrollEvent(e, "down")} aria-hidden>
         <FontAwesomeIcon icon={faChevronDown} size="2x" />
       </button>
     </motion.div>
