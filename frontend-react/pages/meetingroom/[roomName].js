@@ -10,6 +10,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
+import Navbar from "../../components/mainpage/Navbar";
 
 // export const isBrowser = typeof window !== "undefined";
 // export const ws = isBrowser
@@ -172,6 +173,7 @@ export default function Meeting({ roomName }) {
 
   return (
     <>
+      <Navbar></Navbar>
       {isJoin ? (
         <motion.div
           className="flex items-center justify-center h-screen"

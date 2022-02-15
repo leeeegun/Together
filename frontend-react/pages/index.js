@@ -8,6 +8,7 @@ import SignUpForm from "../components/signupForm";
 import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import Router from "next/router";
+import Swal from "sweetalert2";
 
 export default function Home() {
   const [showSignUpForm, setShowSignUpForm] = useState(false);
@@ -37,6 +38,34 @@ export default function Home() {
 
   const loginClick = () => {
     setShowLoginForm(!showLoginForm);
+    const loginButton = document.querySelector("#login-button");
+    loginButton.classList.toggle("login-clicked");
+    if (showSignUpForm) {
+      const signupButton = document.querySelector("#signup-button");
+      signupButton.classList.toggle("signup-clicked");
+      setShowSignUpForm(!showSignUpForm);
+    }
+  };
+
+  const loginClickJoin = () => {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "top-end",
+      showConfirmButton: false,
+      timer: 1000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.addEventListener("mouseenter", Swal.stopTimer);
+        toast.addEventListener("mouseleave", Swal.resumeTimer);
+      },
+    });
+
+    Toast.fire({
+      icon: "question",
+      title: "로그인이 필요합니다.",
+    });
+    setShowLoginForm(!showLoginForm);
+
     const loginButton = document.querySelector("#login-button");
     loginButton.classList.toggle("login-clicked");
     if (showSignUpForm) {
@@ -123,11 +152,11 @@ export default function Home() {
         <p className="lg:text-sm text-xs">
           이미 만들어진 회의에 참여하고 싶으세요?
           <span className="text-red-500">
-            <Link href="/signup" passHref>
-              <a className="hover:text-red-600 hover:font-semibold block text-center">
+            <span onClick={loginClickJoin}>
+              <a className="hover:text-red-600 hover:font-semibold block text-center hover:cursor-pointer">
                 회의 참여하기
               </a>
-            </Link>
+            </span>
           </span>
         </p>
       </div>
