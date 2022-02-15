@@ -37,7 +37,7 @@ export default function Navbar() {
           <Link href="/main">
             <motion.img
               whileHover={{ scale: 1.3 }}
-              src="mainpage/Home-Logo.png"
+              src="/mainpage/Home-Logo.png"
               alt="홈 로고"
               style={{ width: "40px", marginRight: "1rem", cursor: "pointer" }}
               className="inline-block"
@@ -51,7 +51,7 @@ export default function Navbar() {
         <div className="flex flex-row justify-center items-center text-center">
           <motion.img
             whileHover={{ scale: 1.3 }}
-            src="images/svg/logout.svg"
+            src="/images/svg/logout.svg"
             alt="로그아웃"
             style={{ width: "40px", marginRight: "1rem", cursor: "pointer" }}
             className="inline-block"
