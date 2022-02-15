@@ -7,7 +7,6 @@ import { motion } from "framer-motion";
 import LinkCard from "../components/mainpage/linkCard";
 import MyConferenceCard from "../components/mainpage/myConferenceCard";
 import ParticipateConferenceCard from "../components/mainpage/participateConferenceCard";
-import ProfileCard from "../components/mainpage/profileCard";
 
 export default function Main() {
   const [username, setUsername] = useState("");
@@ -83,13 +82,12 @@ export default function Main() {
                 src="images/svg/faq.svg"
                 description="도움말, 도움말을 보며 궁금증을 해결해봐요!"
               ></LinkCard>
-              <ProfileCard
-                text="프로필 수정"
+              <LinkCard
+                text="마이 페이지"
                 link="mypage"
-                username={userId}
                 src="images/svg/profile.svg"
-                description="내 프로필을 수정할 수 있어요!"
-              ></ProfileCard>
+                description="프로필, 내 프로필로 들어가봐요!"
+              ></LinkCard>
             </div>
           </section>
         </div>
