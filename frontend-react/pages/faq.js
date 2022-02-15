@@ -39,7 +39,9 @@ export default function Faq() {
         style={{ marginTop: "15vmin" }}
         className="w-1/2 h-screen mx-auto text-lg"
       >
-        <h1 className="text-3xl" tabIndex="0">자주 묻는 질문</h1>
+        <h1 className="text-3xl" tabIndex="0">
+          자주 묻는 질문
+        </h1>
         <ul>
           <CustomLi
             text="회의에 참여하기 위해선 어떻게 해야 하죠?"
