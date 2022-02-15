@@ -2,11 +2,11 @@ import Image from "next/image";
 
 function LandingParagraph({ src, text }) {
   return (
-    <div className="right snap-center flex flex-col items-center justify-center h-screen w-screen">
-      <p className="mb-20 w-2/3">
-        <Image className="rounded-full" src={src} alt="people" />
+    <div className="flex flex-col items-center justify-center w-screen h-screen right snap-center">
+      <p className="w-2/3 mb-20">
+        <Image tabIndex="0" className="rounded-full" src={src} alt="people, image" />
       </p>
-      <h1 className="text-sm font-semibold w-2/3">{text}</h1>
+      <h1 tabIndex="0" className="w-2/3 text-sm font-semibold">{text}</h1>
     </div>
   );
 }

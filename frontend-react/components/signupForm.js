@@ -6,6 +6,7 @@ const PW_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$*]).{8,24}$/;
 const EMAIL_REGEX = /^(?=.*[@])(?=.*[.com]).{8,40}$/;
 
 const SignupForm = () => {
+
   const userEmailRef = useRef();
   const userStatusRef = useRef();
   const signupRef = useRef();
@@ -30,27 +31,25 @@ const SignupForm = () => {
   const [formReady, setFormReady] = useState(false);
   const [successMessage, setSuccessMessage] = useState(false);
 
-  // 아이디 중복확인
+
   const handleIdCheck = async (e) => {
     e.preventDefault();
 
-    fetch(`https://i6a406.p.ssafy.io:8443/users/${userId}/exists`)
+    fetch(`https://3.38.253.61:8443/users/${userId}/exists`)
       .then((response) => response.json())
       .then((data) => {
         setConfirmedUserId(data);
       });
-  };
+  };  // 아이디 중복확인
 
-  // 회원가입 버튼 눌렀을때 로직
   const handleSubmit = async (e) => {
     e.preventDefault();
     submitRegistration();
     initializeData();
-  };
+  };  // 회원가입 버튼 눌렀을때 로직
 
-  // 회원가입 POST 요청
   const submitRegistration = async () => {
-    fetch(`https://i6a406.p.ssafy.io:8443/users`, {
+    fetch(`https://3.38.253.61:8446/users`, {
       method: "POST",
       body: JSON.stringify({
         userId: userId,
@@ -73,7 +72,7 @@ const SignupForm = () => {
       .then((data) => {
         setSuccessMessage(data);
         return fetch(
-          `https://i6a406.p.ssafy.io:8443/conference/create/${userId}`,
+          `3.38.253.61:8446/conference/create/${userId}`,
         )
           .then((response) => {
             if (!response.ok) throw new Error(response.statusText);
@@ -83,7 +82,8 @@ const SignupForm = () => {
       .catch((error) => {
         setErrorMessage(error);
       });
-  };
+  };  // 회원가입 POST 요청
+
   const userConfirmedId = (e) => {
     e.preventDefault();
     const idNavigator = document.getElementById("id-navigator");
@@ -92,7 +92,7 @@ const SignupForm = () => {
     const idInput = document.getElementById("userId");
     idInput.disabled = true;
   };
-  // 회원가입 누르면 회원 정보 입력창 정보 초기화
+
   const initializeData = async () => {
     setUserId("");
     setUserPassword("");
@@ -101,16 +101,11 @@ const SignupForm = () => {
     setUserNickName("");
     setUserEmail("");
     setUserStatus("해당 없음");
-  };
-
-  // 페이지 렌더링 시 아이디 입력창에 포커스
-  // useEffect(() => {
-  //   userIdRef.current.focus();
-  // }, []);
+  };  // 회원가입 누르면 회원 정보 입력창 정보 초기화
 
   useEffect(() => {
     if (validUserId && userId) {
-      fetch(`https://i6a406.p.ssafy.io:8443/users/${userId}/exists`)
+      fetch(`3.38.253.61:8446/users/${userId}/exists`)
         .then((response) => response.json())
         .then((data) => {
           setConfirmedUserId(data);
@@ -118,7 +113,6 @@ const SignupForm = () => {
     }
   }, [validUserId, userId]);
 
-  // 회원가입 버튼 활성화 조건
   useEffect(() => {
     if (
       confirmedUserId &&
@@ -138,16 +132,14 @@ const SignupForm = () => {
     userNickName,
     userEmail,
     userStatus,
-  ]);
+  ]); // 회원가입 버튼 활성화 조건
 
-  // 아이디 조건 충족 여부 확인
   useEffect(() => {
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/RegExp/test
     const result = ID_REGEX.test(userId);
     setValidUserId(result);
-  }, [userId]);
+  }, [userId]); // 아이디 조건 충족 여부 확인
 
-  // 아이디 다 지우면 아이디 state 초기화
   useEffect(() => {
     if (!userId) {
       setUserId("");
@@ -157,30 +149,25 @@ const SignupForm = () => {
     if (validUserId === false) {
       setConfirmedUserId(false);
     }
-  }, [userId]);
+  }, [userId]); // 아이디 다 지우면 아이디 state 초기화
 
-  // 비밀번호와 비밀번호학인 일치 여부 판단
   useEffect(() => {
     const result = PW_REGEX.test(userPassword);
     setValidUserPassword(result);
     const match = userPassword === matchPassword;
     setValidMatchPassword(match);
-  }, [userPassword, matchPassword]);
+  }, [userPassword, matchPassword]);  // 비밀번호와 비밀번호학인 일치 여부 판단
 
-  // 비밀번호 다 지우면 비밀번화 확인 값도 초기화
   useEffect(() => {
     if (!userPassword) {
       setMatchPassword("");
     }
-  }, [userPassword]);
+  }, [userPassword]); // 비밀번호 다 지우면 비밀번화 확인 값도 초기화
 
-  // 이메일 유효성 확인
   useEffect(() => {
     const result = EMAIL_REGEX.test(userEmail);
     setValidUserEmail(result);
-  }, [userEmail]);
-
-  // 회원가입 성공 메세지 반환
+  }, [userEmail]);  // 이메일 유효성 확인
 
   //나중에 코드 201로 바꿔야함
   useEffect(() => {
@@ -199,19 +186,20 @@ const SignupForm = () => {
       });
     }
     setSuccessMessage("");
-  }, [successMessage]);
+  }, [successMessage]); // 회원가입 성공 메세지 반환
 
-  // 회원가입 실패 메세지 반환
   useEffect(() => {
     setErrorMessage("");
-  }, [errorMessage]);
+  }, [errorMessage]); // 회원가입 실패 메세지 반환
+
+  useEffect(() => {
+    signupRef.current.focus();
+  }, []); // 회원가입 클릭 시 회원가입 컴포넌트 포커스
 
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen right snap-center">
       <section className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10 lg:max-w-sm w-4/12 xs:min-w-max">
-        <h1 className="text-center" tabIndex="0" ref={signupRef}>
-          회원가입
-        </h1>
+        <h1 className="text-center" tabIndex="0" ref={signupRef}>회원가입</h1>
 
         <form
           className="mb-0 "
@@ -227,6 +215,7 @@ const SignupForm = () => {
             <span className={validUserId || !userId ? "hide" : "invalid"}>
               &#9746; 대소문자와 숫자를 혼합하여 3~20내로 작명해주세요!
             </span>
+            <span role="note" hidden id="idInfo">아이디, 대소문자와 숫자를 혼합하여 3글자에서 20글자 내로 작명해주세요!</span>
           </label>
           <div className="container w-">
             <div>
@@ -238,7 +227,7 @@ const SignupForm = () => {
                 autoComplete="off"
                 value={userId}
                 required
-                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
+                className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"                
                 aria-labelledby="idInfo"
               />
             </div>
@@ -292,10 +281,7 @@ const SignupForm = () => {
                 <br />
                 8~24내로 작성해주세요!
               </span>
-              <span id="pwInfo" role="note" hidden>
-                비밀번호, 대소문자 숫자 특수문자 !@#$* 를 혼합하여 8글자에서
-                24글자 내로 작성해주세요
-              </span>
+              <span id="pwInfo" role="note" hidden>비밀번호, 대소문자 숫자 특수문자 !@#$* 를 혼합하여 8글자에서 24글자 내로 작성해주세요</span>
             </label>
             <div className="mt-1">
               <input
@@ -308,15 +294,7 @@ const SignupForm = () => {
                 aria-labelledby="pwInfo"
               />
             </div>
-            <span
-              role="note"
-              tabIndex="0"
-              className={userPassword ? "valid" : "hide"}
-            >
-              {validUserPassword
-                ? "사용가능한 비밀번호"
-                : "사용불가능한 비밀번호"}
-            </span>
+            <span role="note" tabIndex="0" className={userPassword ? "valid" : "hide"} >{validUserPassword ? "사용가능한 비밀번호" : "사용불가능한 비밀번호"}</span>
           </div>
 
           <div>
@@ -351,13 +329,7 @@ const SignupForm = () => {
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
               />
             </div>
-            <span
-              role="note"
-              tabIndex="0"
-              className={matchPassword ? "valid" : "hide"}
-            >
-              {validMatchPassword ? "비밀번호 일치" : "비밀번호 불일치"}
-            </span>
+            <span role="note" tabIndex="0" className={matchPassword ? "valid" : "hide"}>{validMatchPassword ? "비밀번호 일치" : "비밀번호 불일치"}</span>
           </div>
 
           <div>
@@ -379,9 +351,7 @@ const SignupForm = () => {
                 aria-labelledby="nameInfo"
               />
             </div>
-            <span role="note" id="nameInfo" hidden>
-              이름, 3글자에서 5글자로 작성해주세요
-            </span>
+            <span role="note" id="nameInfo" hidden>이름, 3글자에서 5글자로 작성해주세요</span>
           </div>
 
           <div>
@@ -405,10 +375,7 @@ const SignupForm = () => {
           <div>
             <label htmlFor="userEmail" className="block text-sm font-medium">
               이메일
-              <span
-                id="emailInfo"
-                className={!validUserEmail && userEmail ? "valid" : "hide"}
-              >
+              <span id="emailInfo" className={!validUserEmail && userEmail ? "valid" : "hide"}>
                 이메일 형식으로 작성 해주세요! (예: xxx@xxx.com)
               </span>
             </label>
@@ -422,13 +389,16 @@ const SignupForm = () => {
                 value={userEmail}
                 required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
+                aria-required
+                aria-labelledby="emailInfo"
               />
             </div>
+            <span role="note" tabIndex="0" className={userEmail ? "valid" : "hide"}>{validUserEmail ? "유효한 이메일" : "유효하지 않은 이메일"}</span>
           </div>
 
           <div className="container flex justify-evenly">
             <label htmlFor="userStatus" className="my-auto text-sm font-medium">
-              장애 유형 :
+              신체 조건 :
             </label>
             <select
               id="userStatus"
