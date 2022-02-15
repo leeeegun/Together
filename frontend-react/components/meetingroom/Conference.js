@@ -8,7 +8,8 @@ import {
   faPhoneSlash,
   faVideo,
   faVideoSlash,
-  faEllipsisV
+  faEllipsisV,
+  faPaperPlane
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
@@ -160,9 +161,9 @@ export default function Conference({
       const chatMsg =  parsedMessage.content.slice(1);
       const now = new Date();
       const nickname = participants[parsedMessage.owner].nickname;
-      const newChats = [...chats, [nickname, `${now.getHours()}:${now.getMinutes()}`, chatMsg]];
+      const newChats = [...chats, [nickname, now.toTimeString().slice(0, 5), chatMsg]];
       setChats(newChats);
-      isChatEnabled && setIsNoti(true);
+      !isChatEnabled && setIsNoti(true);
       meetingroomMessage.current.scrollTo(0, meetingroomMessage.current.scrollHeight);
     }
     // setReceiveSttMsg(parsedMessage.content);
@@ -591,13 +592,13 @@ export default function Conference({
 
           </div>
           <form onSubmit={sendChatMsg} style={{display: "flex", justifyContent: "space-between", flexWrap: "wrap"}}>
-            <input className="w-9/12 min-w-fit rounded py-1 mt-2" 
+            <input style={{width: "80%"}} className="min-w-fit rounded py-1 mt-2" 
               type="text" 
               placeholder="채팅을 입력하세요" 
               ref={messageInput}>
             </input>
             <button className="w-2/12 min-w-fit mt-2 bg-[#009e747a] hover:bg-[#009e7494] text-white font-bold py-1 px-2 rounded">
-              전송
+              <FontAwesomeIcon icon={faPaperPlane} size="1x" />
             </button>
           </form>
         </motion.div>
@@ -610,7 +611,7 @@ export default function Conference({
             >
               <FontAwesomeIcon icon={faEllipsisV} size="1x" />
 
-              {/* 새 메시지 도착 시 알림 */}
+              {/* 새 메시지 도착 시 알림. 새 메시지가 도착했으며, 그를 읽지 않았을 때! */}
               {!isChatEnabled && isNoti && <div aria-label="새 메시지가 있습니다" title="새 메시지가 있습니다." id="meetingroom-noti"></div>}
         </button>
       </div>
