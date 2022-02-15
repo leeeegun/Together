@@ -8,7 +8,6 @@ export default function participateConferenceCard({
   src,
   link,
   username,
-  description
 }) {
   const onHover = () => {
     const myTag = document.querySelector(`#link${link}`);

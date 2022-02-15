@@ -3,7 +3,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import LandingImage01 from "../public/images/LandingImage01.jpg";
 import LandingParagraph from "../components/LandingParagraph";
-import LoginForm from "../components/LoginForm";
+import LoginForm from "../components/loginForm";
 import SignUpForm from "../components/signupForm";
 import { faChevronUp, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -74,7 +74,6 @@ export default function Home() {
       setShowSignUpForm(!showSignUpForm);
     }
   };
-
   useEffect(() => {
     const snapScroll = document.querySelector(".overflow-scroll");
     snapScroll.scrollTo(0, 0);
