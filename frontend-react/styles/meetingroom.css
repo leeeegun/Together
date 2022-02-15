@@ -21,6 +21,31 @@
   object-fit: cover;
 }
 
+#meetingroom-participants span {
+  display: block;
+  margin: auto;
+  width: 50%;
+  position: relative;
+  padding: 0.5rem;
+  background-color: rgba(128, 128, 128, 0.3);
+  color: white;
+  transform: translateY(-3rem);
+}
+
+#meetingroom-participants blockquote {
+  position: relative;
+  border-radius: .4em;
+  color: #FFFFFF;
+  background-color: #BEBBB1;
+  border-bottom-color: #BEBBB1;
+  /* border: 24px solid transparent; */
+  border-top: 0;
+  border-right: 0;
+  width: 50%;
+  margin: auto;
+}
+
+
 #meetingroom-toolbar {
   position: fixed;
   left: 20vw;
@@ -34,16 +59,16 @@
 .meetingroom-red {
   border-radius: 100%;
   background-color: #D55E00;
-  width: 6vh;
-  height: 6vh;
+  width: max(2.5vw, 2.8rem);
+  height: max(2.5vw, 2.8rem);
   color: white;
 }
 
 .meetingroom-grey {
   border-radius: 100%;
   background-color: rgb(144, 144, 144);
-  width: 6vh;
-  height: 6vh;
+  width: max(2.5vw, 2.8rem);
+  height: max(2.5vw, 2.8rem);
   color: white;
 }
 
@@ -54,3 +79,6 @@
 .meetingroom-red svg {
   object-fit: cover;
 }
+
+
+

@@ -4,46 +4,39 @@ import Swal from "sweetalert2";
 import { motion } from "framer-motion";
 
 const LoginForm = () => {
+
+  const loginRef = useRef();
+
   const [userId, setUserId] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  // const userIdRef = useRef();
-
-  // 페이지 렌서시 아이디 입력창에 포커스
-  // useEffect(() => {
-  //   userIdRef.current.focus();
-  // }, []);
-
-  // 성공 메세지 출력
   useEffect(() => {
-    console.log(successMessage);
+    loginRef.current.focus();
+  }, []); // 로그인 클릭 시 로그인 컴포넌트에 포커스
+
+  useEffect(() => {
     setSuccessMessage("");
-  }, [successMessage]);
+  }, [successMessage]); // 성공 메세지 출력
 
-  // 실패 메세지 출력
   useEffect(() => {
-    console.log(errorMessage);
     setErrorMessage("");
-  }, [errorMessage]);
+  }, [errorMessage]); // 실패 메세지 출력
 
-  // 로그인 로직
   const handleSubmit = async (e) => {
     e.preventDefault();
     submitLogin();
     initializeData();
-  };
+  };  // 로그인 로직
 
-  // 로그인 입력 정보의 상태들 초기화
   const initializeData = async () => {
     setUserId("");
     setUserPassword("");
-  };
+  };  // 로그인 입력 정보의 상태들 초기화
 
-  // 로그인 POST 요청
   const submitLogin = async () => {
-    fetch("http://localhost:8443/auth/login", {
+    fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/login`, {
       method: "POST",
       body: JSON.stringify({
         userId: userId,
@@ -60,38 +53,55 @@ const LoginForm = () => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         localStorage.setItem("token", data.accessToken);
-        Swal.fire({
+        const Toast = Swal.mixin({
+          toast: true,
           position: "top-end",
+          showConfirmButton: false,
+          timer: 1000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
           icon: "success",
           title: "로그인 성공!",
-          showConfirmButton: false,
-          timer: 1500,
         });
         setSuccessMessage("로그인 성공!");
         Router.push("/main");
       })
       .catch((error) => {
-        Swal.fire({
+        const Toast = Swal.mixin({
+          toast: true,
           position: "top-end",
-          icon: "error",
-          title: "로그인 실패",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 1000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
+          icon: "error",
+          title: "로그인 실패..",
         });
         setErrorMessage(`로그인 실패 사유 : ${error}`);
       });
-  };
+  };  // 로그인 POST 요청
 
   return (
-    <div className="right snap-center flex flex-col items-center justify-center w-screen h-screen">
+    <div className="flex flex-col items-center justify-center w-screen h-screen right snap-center">
       <motion.section
         className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10"
         whileHover={{ scale: 1.4 }}
         whileInView={{ scale: 1.2 }}
       >
-        <h1 className="text-center">로그인</h1>
+        <h1 className="text-center" tabIndex="0" ref={loginRef}>로그인</h1>
         <form onSubmit={handleSubmit} className="mb-0">
           <div>
             <label

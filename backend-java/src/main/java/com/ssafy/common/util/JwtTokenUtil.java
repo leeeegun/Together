@@ -47,28 +47,30 @@ public class JwtTokenUtil {
                 .build();
     }
     
-    public static String getToken(String userId, String nickname, long uid) {
+    public static String getToken(String userId, String nickname, long uid, String disability) {
 		Date expires = JwtTokenUtil.getTokenExpiration(expirationTime);
     return JWT.create()
             .withSubject(userId)
             .withClaim("nickname", nickname)
             .withClaim("uid", uid)
+            .withClaim("disability", disability)
             .withExpiresAt(expires)
             .withIssuer(ISSUER)
             .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
             .sign(Algorithm.HMAC512(secretKey.getBytes()));
-}
+    }
 
-public static String getToken(Instant expires, String userId, String nickname, long uid) {
-    return JWT.create()
-            .withSubject(userId)
-            .withClaim("nickname", nickname)
-            .withClaim("uid", uid)
-            .withExpiresAt(Date.from(expires))
-            .withIssuer(ISSUER)
-            .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
-            .sign(Algorithm.HMAC512(secretKey.getBytes()));
-}
+    public static String getToken(Instant expires, String userId, String nickname, long uid, String disability) {
+	    return JWT.create()
+	            .withSubject(userId)
+	            .withClaim("nickname", nickname)
+	            .withClaim("uid", uid)
+	            .withClaim("disability", disability)
+	            .withExpiresAt(Date.from(expires))
+	            .withIssuer(ISSUER)
+	            .withIssuedAt(Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault()).toInstant()))
+	            .sign(Algorithm.HMAC512(secretKey.getBytes()));
+	}
     
     public static Date getTokenExpiration(int expirationTime) {
     		Date now = new Date();

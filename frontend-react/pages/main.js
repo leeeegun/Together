@@ -1,16 +1,9 @@
-// import Head from "next/head";
-// import styles from "../styles/main.module.css"
-// import "../styles/main.module.css"
 import { useState, useEffect } from "react";
-import Image from "next/image";
-import Link from "next/link";
 import Navbar from "../components/mainpage/Navbar";
 import Router from "next/router";
 import Swal from "sweetalert2";
 import Footer from "../components/footer";
 import { motion } from "framer-motion";
-import RandomSvg from "../public/images/svg/background.svg";
-import RandomSvg2 from "../public/images/svg/facebook-brands.svg";
 import LinkCard from "../components/mainpage/linkCard";
 import MyConferenceCard from "../components/mainpage/myConferenceCard";
 import ParticipateConferenceCard from "../components/mainpage/participateConferenceCard";
@@ -43,59 +36,63 @@ export default function Main() {
   }, []);
 
   return (
-    <motion.div
-      initial="hidden"
-      animate="visible"
-      variants={{
-        hidden: {
-          scale: 1,
-          opacity: 0,
-        },
-        visible: {
-          scale: 1,
-          opacity: 1,
-          transition: {
-            delay: 0.5,
+    <>
+      <motion.div
+        initial="hidden"
+        animate="visible"
+        variants={{
+          hidden: {
+            scale: 1,
+            opacity: 0,
           },
-        },
-      }}
-    >
-      <div className="h-screen w-screen maindiv">
-        <Navbar username={username} />
-        {isFirst && <div id="mainpage-tempside"></div>}
-        <section
-          id="mainpage"
-          className="flex flex-col justify-center justify-items-center items-center"
-        >
-          <div id="mainpage-menu">
-            <MyConferenceCard
-              src={RandomSvg}
-              text="내 회의실"
-              link="myconference"
-              username={username}
-              uid={uid}
-              description="도움말을 보며 궁금증을 해결해봐요!"
-            />
-            <ParticipateConferenceCard
-              src={RandomSvg2}
-              text="회의 참가"
-              link="participate"
-              description="도움말을 보며 궁금증을 해결해봐요!"
-            ></ParticipateConferenceCard>
-            <LinkCard
-              text="도움말"
-              link="faq"
-              description="도움말을 보며 궁금증을 해결해봐요!"
-            ></LinkCard>
-            <LinkCard
-              text="마이 페이지"
-              link="mypage"
-              description="내 프로필로 들어가봐요!"
-            ></LinkCard>
-          </div>
-          <Footer />
-        </section>
-      </div>
-    </motion.div>
+          visible: {
+            scale: 1,
+            opacity: 1,
+            transition: {
+              delay: 0.5,
+            },
+          },
+        }}
+      >
+        <div className="w-screen h-screen maindiv">
+          <Navbar username={username} />
+          {isFirst && <div id="mainpage-tempside"></div>}
+          <section
+            id="mainpage"
+            className="flex flex-col items-center justify-center justify-items-center"
+          >
+            <div id="mainpage-menu">
+              <MyConferenceCard
+                src="images/svg/newConference.svg"
+                text="내 회의실"
+                link="myconference"
+                username={username}
+                uid={uid}
+                description="내 회의실, 회의를 열어 사람들과 소통해보세요!"
+              />
+              <ParticipateConferenceCard
+                src="images/svg/participateConference.svg"
+                text="회의 참가"
+                link="participate"
+                description="회의 참가, 회의에 참가해 사람들과 소통해보세요!"
+              ></ParticipateConferenceCard>
+              <LinkCard
+                text="도움말"
+                link="faq"
+                src="images/svg/faq.svg"
+                description="도움말, 도움말을 보며 궁금증을 해결해봐요!"
+              ></LinkCard>
+              <LinkCard
+                text="마이 페이지"
+                link="mypage"
+                src="images/svg/profile.svg"
+                description="프로필, 내 프로필로 들어가봐요!"
+              ></LinkCard>
+            </div>
+          </section>
+        </div>
+      </motion.div>
+      <Footer />
+    </>
   );
 }
