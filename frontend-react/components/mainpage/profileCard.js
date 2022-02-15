@@ -53,64 +53,44 @@ export default function profileCard({
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
-          text: "",
-          html: `바꾸실 닉네임을 입력해주세요.
-            <input type="text" id="nickname" class="swal2-input" placeholder="닉네임" value=${username}>`,
+          html:
+            `<label for="swal-input1">닉네임</label><input id="swal-input1" class="swal2-input" value=${username} placeholder="3-5글자">` +
+            `<br></br>` +
+            `<input type="radio" id="a" name="chk_info" value=" 해당 없음" checked="checked"><label for="a">해당 없음</label>
+            <input type="radio" id="b" name="chk_info" value=" 시각 장애" ><label for="b">시각 장애</label>
+            <input type="radio" id="c" name="chk_info" value=" 청각 장애"><label for="c">청각 장애</label>` +
+            `<br></br>`,
           confirmButtonText: "확인",
           showCancelButton: true,
           cancelButtonText: "취소",
           showLoaderOnConfirm: true,
           preConfirm: () => {
-            const customNickname =
-              Swal.getPopup().querySelector("#nickname").value;
-            setUserNickName(customNickname);
+            const customNickname = document.getElementById("swal-input1").value;
+            const disability = document.querySelector(
+              "input[name='chk_info']:checked",
+            ).value;
+            const token = localStorage.getItem("token");
+            return fetch(`https://i6a406.p.ssafy.io:8443/users/modify`, {
+              method: "POST",
+              body: JSON.stringify({
+                nickname: customNickname,
+                disability: disability,
+              }),
+              headers: {
+                "Content-Type": "application/json",
+                Accept: "application/json",
+                Authorization: `Bearer ${token}`,
+              },
+            })
+              .then((response) => {
+                console.log(response);
+                if (!response.ok) throw new Error(response.status);
+                return response.json();
+              })
+              .catch((error) => {
+                Swal.showValidationMessage(`오류가 발생했습니다.`);
+              });
           },
-        }).then((result) => {
-          if (result.isConfirmed) {
-            Swal.fire({
-              text: "",
-              input: "select",
-              inputOptions: {
-                "해당 없음": "해당 없음",
-                "시각 장애": "시각 장애",
-                "청각 장애": "청각 장애",
-              },
-              confirmButtonText: "확인",
-              showCancelButton: true,
-              cancelButtonText: "취소",
-              showLoaderOnConfirm: true,
-              inputValidator: (value) => {
-                console.log(value);
-                console.log(userNickname);
-                return fetch(`https://i6a406.p.ssafy.io:8443/users/modify`, {
-                  method: "POST",
-                  body: JSON.stringify({
-                    nickname: userNickname,
-                    disability: value,
-                  }),
-                  headers: {
-                    Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    "Content-Type": "application/json",
-                    Accept: "application/json",
-                  },
-                })
-                  .then((response) => {
-                    if (!response.ok) throw new Error(response.status);
-                    return response.json();
-                  })
-                  .catch((error) => {
-                    Swal.showValidationMessage(`Error`);
-                  });
-              },
-            }).then((result) => {
-              if (result.isConfirmed) {
-                Swal.fire({
-                  icon: "success",
-                  title: "변경 성공!",
-                });
-              }
-            });
-          }
         });
       }
     });
