@@ -553,7 +553,7 @@ export default function Conference({
         <button
           aria-label="연결 종료하고 회의실 나가기"
           title="연결 종료하고 회의실을 나갑니다"
-          onMouseUp={leaveRoom}
+          onClick={leaveRoom}
           className="meetingroom-red"
         >
           <FontAwesomeIcon icon={faPhoneSlash} size="1x" />

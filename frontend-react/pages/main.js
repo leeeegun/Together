@@ -54,12 +54,12 @@ export default function Main() {
           },
         }}
       >
-        <div className="h-screen w-screen maindiv">
+        <div className="w-screen h-screen maindiv">
           <Navbar username={username} />
           {isFirst && <div id="mainpage-tempside"></div>}
           <section
             id="mainpage"
-            className="flex flex-col justify-center justify-items-center items-center"
+            className="flex flex-col items-center justify-center justify-items-center"
           >
             <div id="mainpage-menu">
               <MyConferenceCard
@@ -68,25 +68,25 @@ export default function Main() {
                 link="myconference"
                 username={username}
                 uid={uid}
-                description="도움말을 보며 궁금증을 해결해봐요!"
+                description="내 회의실, 회의를 열어 사람들과 소통해보세요!"
               />
               <ParticipateConferenceCard
                 src="images/svg/participateConference.svg"
                 text="회의 참가"
                 link="participate"
-                description="도움말을 보며 궁금증을 해결해봐요!"
+                description="회의 참가, 회의에 참가해 사람들과 소통해보세요!"
               ></ParticipateConferenceCard>
               <LinkCard
                 text="도움말"
                 link="faq"
                 src="images/svg/faq.svg"
-                description="도움말을 보며 궁금증을 해결해봐요!"
+                description="도움말, 도움말을 보며 궁금증을 해결해봐요!"
               ></LinkCard>
               <LinkCard
                 text="마이 페이지"
                 link="mypage"
                 src="images/svg/profile.svg"
-                description="내 프로필로 들어가봐요!"
+                description="프로필, 내 프로필로 들어가봐요!"
               ></LinkCard>
             </div>
           </section>

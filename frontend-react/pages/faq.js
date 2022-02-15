@@ -23,7 +23,7 @@ export default function Faq() {
       }}
     >
       <Navbar />
-      {/* <section className="w-1/2 mt-10 mx-auto">
+      {/* <section className="w-1/2 mx-auto mt-10">
       <div className="">
         <div className="question">
           <p>Q. How can I receive the PFP image?</p>
@@ -37,9 +37,9 @@ export default function Faq() {
 
       <section
         style={{ marginTop: "15vmin" }}
-        className="text-lg w-1/2 mx-auto h-screen"
+        className="w-1/2 h-screen mx-auto text-lg"
       >
-        <p className="text-3xl">자주 묻는 질문</p>
+        <h1 className="text-3xl" tabIndex="0">자주 묻는 질문</h1>
         <ul>
           <CustomLi
             text="회의에 참여하기 위해선 어떻게 해야 하죠?"

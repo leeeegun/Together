@@ -31,7 +31,7 @@ export default function Meeting({ roomName }) {
   useEffect(() => {
     setWs(
       new WebSocket(
-        "wss://" + process.env.NEXT_PUBLIC_MEDIA_SERVER_URL + "/groupcall",
+        "wss://i6a406.p.ssafy.io:8446/groupcall"
       ),
     );
     if (!localStorage.getItem("token")) {
@@ -200,9 +200,10 @@ export default function Meeting({ roomName }) {
               <p>{description ? description : "설명이 없습니다"}</p>
             </div>
             <div className="flex flex-col items-center content-center justify-center w-6/12 p-10 space-y-4">
-              <strong className="z-10 w-4/6 text-2xl font-bold text-center text-gray-700 waiting">
+              <strong tabIndex="0" aria-labelledby="info" className="z-10 w-4/6 text-2xl font-bold text-center text-gray-700 waiting">
                 대기실
               </strong>
+              <span id="info" hidden>대기실, 회의실에 입장하기 전, username, 마이크, 비디오 상태설정이 가능하고, 호스트라면 회의방에 대한 설명도 추가 할 수 있습니다.</span>
               <form
                 className="flex flex-col items-center gap-10 text-center"
                 onSubmit={joinRoom}

@@ -8,6 +8,7 @@ export default function participateConferenceCard({
   src,
   link,
   username,
+  description
 }) {
   const onHover = () => {
     const myTag = document.querySelector(`#link${link}`);
@@ -37,34 +38,36 @@ export default function participateConferenceCard({
     }).then(() => {});
   };
   return (
-    <motion.div
-      whileHover={{ scale: 1.2 }}
-      whileTap={{ scale: 0.8 }}
-      onTap={handleClickParticipateConference}
-      onHoverStart={onHover}
-      onHoverEnd={onHover}
-      className="hover:cursor-pointer"
-    >
-      <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 lg:max-w-lg">
-        <div className="max-w-md mx-auto">
-          <div className="divide-y divide-gray-400/50">
-            <div className="h-1/3">
-              <img src={src} className="main-image"></img>
+    <button aria-label={description} onClick={handleClickParticipateConference}>
+      <motion.div
+        whileHover={{ scale: 1.2 }}
+        whileTap={{ scale: 0.8 }}
+        onTap={handleClickParticipateConference}
+        onHoverStart={onHover}
+        onHoverEnd={onHover}
+        className="hover:cursor-pointer"
+      >
+        <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 lg:max-w-lg">
+          <div className="max-w-md mx-auto">
+            <div className="divide-y divide-gray-400/50">
+              <div className="h-1/3">
+                <img src={src} className="main-image"></img>
+              </div>
+              <div className="flex justify-center py-8">
+                <a className="opacity-75 cursor-pointer">
+                  <p className="text-3xl" id={"link" + link}>
+                    {text}
+                  </p>
+                  <p id={"description" + link} className="hidden">
+                    회의에 참가해 사람들과 소통해보세요! 😆
+                  </p>
+                </a>
+              </div>
+              <div className="divide-y divide-gray-400/50"></div>
             </div>
-            <div className="py-8 flex justify-center">
-              <a className="opacity-75 cursor-pointer">
-                <p className="text-3xl" id={"link" + link}>
-                  {text}
-                </p>
-                <p id={"description" + link} className="hidden">
-                  회의에 참가해 사람들과 소통해보세요! 😆
-                </p>
-              </a>
-            </div>
-            <div className="divide-y divide-gray-400/50"></div>
           </div>
         </div>
-      </div>
-    </motion.div>
+      </motion.div>
+    </button>
   );
 }
