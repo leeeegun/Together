@@ -106,6 +106,7 @@
   justify-content: space-between;
 }
 
+/* 메시지 알림 */
 #meetingroom-noti {
   position: fixed;
   background-color: #D55E00;
@@ -116,6 +117,7 @@
   bottom: 1.2rem;
 }
 
+/* 메시지 목록 */
 #meetingroom-messages {
   overflow-y: scroll;
 }

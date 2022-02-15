@@ -45,7 +45,8 @@ export default function Conference({
   useEffect(() => {
     const message = {
       id: "joinRoom",
-      name: userId, // 가입할 때 쓴 userId
+      // name: userId, // 가입할 때 쓴 userId
+      name: "jdalskjdlkasjdlkjaslkdjaslkdja",
       room: myRoom,
       nickname: myName, // ㄹㅇ 닉네임
     };
