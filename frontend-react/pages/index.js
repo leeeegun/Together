@@ -167,11 +167,11 @@ export default function Home() {
         />
         <LandingParagraph
           src={LandingImage01}
-          text="The quick brown fox jumps over the lazy dog The quick brown fox jumps over the lazy dogThe quick brown fox jumps over the lazy dogThe quick brown fox jumps over the lazy dogThe quick brown fox jumps over the lazy dog"
+          text="화상회의 플랫폼 Together와 함께 재미있는 시간을 보내봐요!"
         />
         <LandingParagraph
           src={LandingImage01}
-          text="국회의원과 정부는 법률안을 제출할 수 있다. 헌법재판소 재판관은 정당에 가입하거나 정치에 관여할 수 없다. 모든 국민은 소급입법에 의하여 참정권의 제한을 받거나 재산권을 박탈당하지 아니한다. 국무회의는 정부의."
+          text="화상회의 플랫폼 Together와 함께 재미있는 시간을 보내봐요!"
         />
         {showSignUpForm ? <SignUpForm /> : null}
         {showLoginForm ? <LoginForm /> : null}
