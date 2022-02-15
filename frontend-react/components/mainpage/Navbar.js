@@ -1,50 +1,79 @@
-import React from "react";
-import Image from "next/image";
+// import {ReactComponent as Home} from '../../public/mainpage/home-icon.svg';
+import Link from "next/link";
+import Swal from "sweetalert2";
 import Router from "next/router";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-export default function linkCard({ text, src, link, username, description }) {
-  const handleClickLinkCard = () => {
-    Router.push(link);
-  };
-  const onHover = () => {
-    // console.log(`link${link}`);
-    const myTag = document.querySelector(`#link${link}`);
-    const myDescription = document.querySelector(`#description${link}`);
-    // console.log(myTag);
-    myTag.classList.toggle("hidden");
-    myDescription.classList.toggle("hidden");
-  };
+export default function Navbar() {
+  const [userId, setUserId] = useState("");
+  const [username, setUsername] = useState("");
+
+  useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (token) {
+      const base64Payload = token.split(".")[1];
+      const payload = Buffer.from(base64Payload, "base64");
+      const result = JSON.parse(payload.toString());
+      setUsername(result.sub);
+      setUserId(result.nickname);
+    } else {
+      Swal.fire({
+        icon: "error",
+        title: "로그인 실패..",
+        text: "로그인을 다시 해주세요!",
+      });
+      Router.push("/");
+    }
+  }, []);
   return (
-    <motion.div
-      whileHover={{ scale: 1.2 }}
-      whileTap={{ scale: 0.9 }}
-      onHoverStart={onHover}
-      onHoverEnd={onHover}
-      onTap={handleClickLinkCard}
-      className="hover:cursor-pointer"
-    >
-      <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 lg:max-w-lg xs:min-w-sm">
-        <div className="max-w-md mx-auto">
-          <div className="divide-y divide-gray-400/50">
-            <div className="h-1/3">
-              <img src={src} className="main-image"></img>
-            </div>
-            <div className="py-8 flex justify-center">
-              <h1
-                className="text-3xl cursor-pointer hover:font-bold"
-                id={"link" + link}
-              >
-                {text}
-              </h1>
-              <p className="font-extralight hidden" id={"description" + link}>
-                {description} 😆
-              </p>
-            </div>
-            <div className="divide-y divide-gray-400/50"></div>
-          </div>
+    <>
+      <nav
+        style={{ display: "flex", alignItems: "end" }}
+        className="flex flex-row items-center justify-between mx-5 my-3 text-center"
+      >
+        {/* <Home /> */}
+        <div className="flex flex-row items-center content-center justify-center">
+          <a href="/main">
+            <motion.img
+              whileHover={{ scale: 1.3 }}
+              src="mainpage/Home-Logo.png"
+              alt="홈 로고, 메인페이지로 이동합니다"
+              style={{ width: "40px", marginRight: "1rem", cursor: "pointer" }}
+              className="inline-block"
+            />
+          </a>
+          <span
+            className="text-xl font-semibold c-footer-social_link"
+            tabIndex="0"
+          >
+            {userId ? userId : null}님, 안녕하세요!
+          </span>
         </div>
-      </div>
-    </motion.div>
+
+        <div className="flex flex-row items-center justify-center text-center">
+          <button
+            tabIndex="0"
+            onClick={() => {
+              localStorage.clear("token");
+              Swal.fire({
+                icon: "success",
+                title: "로그아웃 성공!",
+                text: "다음에 또 오세요!",
+              });
+              Router.push("/");
+            }}
+          >
+            <motion.img
+              whileHover={{ scale: 1.3 }}
+              src="images/svg/logout.svg"
+              alt="로그아웃하기"
+              style={{ width: "40px", marginRight: "1rem", cursor: "pointer" }}
+              className="inline-block"
+            />
+          </button>
+        </div>
+      </nav>
+    </>
   );
 }

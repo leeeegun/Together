@@ -86,6 +86,7 @@ export default function Main() {
               <ProfileCard
                 text="프로필 수정"
                 link="mypage"
+                userId={username}
                 username={userId}
                 src="images/svg/profile.svg"
                 description="내 프로필을 수정할 수 있어요!"
