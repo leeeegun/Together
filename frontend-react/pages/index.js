@@ -122,7 +122,7 @@ export default function Home() {
         <img
           src="images/svg/Together.svg"
           alt="웹앱 로고, Together"
-          className="mb-5"
+          className="mb-5 w-2/4"
           tabIndex="0"
         ></img>
         <p>
