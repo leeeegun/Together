@@ -11,7 +11,7 @@ export default function customLi({ text, description, key }) {
           </li>
         </summary>
         <div className="py-3 mx-2 px-3">
-          <p>{description}</p>
+          <p tabIndex="0">{description}</p>
         </div>
       </details>
     </motion.div>

@@ -9,22 +9,13 @@ const LoginForm = () => {
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
-  // const userIdRef = useRef();
-
-  // 페이지 렌서시 아이디 입력창에 포커스
-  // useEffect(() => {
-  //   userIdRef.current.focus();
-  // }, []);
-
   // 성공 메세지 출력
   useEffect(() => {
-    console.log(successMessage);
     setSuccessMessage("");
   }, [successMessage]);
 
   // 실패 메세지 출력
   useEffect(() => {
-    console.log(errorMessage);
     setErrorMessage("");
   }, [errorMessage]);
 
@@ -43,7 +34,7 @@ const LoginForm = () => {
 
   // 로그인 POST 요청
   const submitLogin = async () => {
-    fetch("http://localhost:8443/auth/login", {
+    fetch(`https://i6a406.p.ssafy.io:8443/auth/login`, {
       method: "POST",
       body: JSON.stringify({
         userId: userId,
@@ -60,38 +51,57 @@ const LoginForm = () => {
         return response.json();
       })
       .then((data) => {
-        console.log(data);
         localStorage.setItem("token", data.accessToken);
-        Swal.fire({
+        const Toast = Swal.mixin({
+          toast: true,
           position: "top-end",
+          showConfirmButton: false,
+          timer: 1000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
           icon: "success",
           title: "로그인 성공!",
-          showConfirmButton: false,
-          timer: 1500,
         });
         setSuccessMessage("로그인 성공!");
         Router.push("/main");
       })
       .catch((error) => {
-        Swal.fire({
+        const Toast = Swal.mixin({
+          toast: true,
           position: "top-end",
-          icon: "error",
-          title: "로그인 실패",
           showConfirmButton: false,
-          timer: 1500,
+          timer: 1000,
+          timerProgressBar: true,
+          didOpen: (toast) => {
+            toast.addEventListener("mouseenter", Swal.stopTimer);
+            toast.addEventListener("mouseleave", Swal.resumeTimer);
+          },
+        });
+
+        Toast.fire({
+          icon: "error",
+          title: "로그인 실패..",
         });
         setErrorMessage(`로그인 실패 사유 : ${error}`);
       });
   };
 
   return (
-    <div className="right snap-center flex flex-col items-center justify-center w-screen h-screen">
+    <div className="flex flex-col items-center justify-center w-screen h-screen right snap-center">
       <motion.section
         className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10"
         whileHover={{ scale: 1.4 }}
         whileInView={{ scale: 1.2 }}
       >
-        <h1 className="text-center">로그인</h1>
+        <h1 className="text-center" tabIndex="0">
+          로그인
+        </h1>
         <form onSubmit={handleSubmit} className="mb-0">
           <div>
             <label

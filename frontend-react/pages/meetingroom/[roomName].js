@@ -12,7 +12,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { motion } from "framer-motion";
 
 // export const isBrowser = typeof window !== "undefined";
-const URL = "3.38.253.61:8446";
 // export const ws = isBrowser
 //   ? new WebSocket("wss://" + URL + "/groupcall")
 //   : null;
@@ -28,12 +27,10 @@ export default function Meeting({ roomName }) {
   const [isHost, setIsHost] = useState(false);
   const [description, setDescription] = useState("");
   const [uid, setUid] = useState("");
+  const [disability, setDisability] = useState(0);
 
   useEffect(() => {
-    setWs(new WebSocket("wss://" + URL + "/groupcall"));
-    window.onbeforeunload = function () {
-      return false;
-    };
+    setWs(new WebSocket("wss://" + "i6a406.p.ssafy.io:8446" + "/groupcall"));
     if (!localStorage.getItem("token")) {
       Swal.fire({
         icon: "error",
@@ -46,11 +43,21 @@ export default function Meeting({ roomName }) {
       const base64Payload = token.split(".")[1];
       const payload = Buffer.from(base64Payload, "base64");
       const result = JSON.parse(payload.toString());
-      console.log(result);
       setUserId(result.sub);
       setUid(result.uid);
+      switch (result.disability) {
+        case "해당 없음":
+          setDisability(0);
+          break;
+        case "시각 장애":
+          setDisability(1);
+          break;
+        case "청각 장애":
+          setDisability(2);
+          break;
+        default:
+          console.error("잘못된 유형: ", result.disability);}
     }
-    console.log(isHost);
   }, []);
 
   useEffect(() => {
@@ -65,7 +72,10 @@ export default function Meeting({ roomName }) {
 
   // 설명 얻어오는 함수.
   const getInformation = () => {
-    return fetch(`http://localhost:8443/conference/info/${conferenceName}`)
+    // return fetch(`http://localhost:8443/conference/info/${conferenceName}`)
+    return fetch(
+      `https://i6a406.p.ssafy.io:8443/conference/info/${conferenceName}`,
+    )
       .then((response) => {
         if (!response.ok) throw new Error(response.statusText);
         return response.json();
@@ -73,19 +83,15 @@ export default function Meeting({ roomName }) {
       .then((res) => {
         setDescription(res.description);
       })
-      .catch((error) => {
-        console.log(error);
-      });
+      .catch(() => {});
   };
 
   const joinRoom = async (e) => {
     e.preventDefault();
-    // console.log(e.target[0].value);
     // return fetch(
-    //   `http://localhost:8443/conference/join/${conferenceName}/${uid}`,
+    //   `${process.env.NEXT_PUBLIC_API_URL}/conference/join/${conferenceName}/${uid}`,
     // )
     //   .then((response) => {
-    //     console.log(response);
     //     if (!response.ok) {
     //       Swal.fire({
     //         icon: "error",
@@ -96,13 +102,10 @@ export default function Meeting({ roomName }) {
     //     return response.json();
     //   })
     //   .then((res) => {
-    //     console.log(res);
     //     setMyName(e.target[0].value);
     //     setIsJoin(false);
     //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    //   .catch(() => {});
     await setMyName(e.target[0].value);
     await setIsJoin(false);
   };
@@ -144,7 +147,7 @@ export default function Meeting({ roomName }) {
       showLoaderOnConfirm: true,
       backdrop: true,
       preConfirm: (desc) => {
-        return fetch(`http://localhost:8443/conference/update`, {
+        return fetch(`https://i6a406.p.ssafy.io:8443/conference/update`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
@@ -308,7 +311,8 @@ export default function Meeting({ roomName }) {
           ws={ws}
           userId={userId}
           isMic={isMic} // 마이크를 사용할지 prop으로 넘겨줍니다.
-          isVideo={isVideo}
+          isVideo={isVideo} // 비디오를 사용할지 prop으로 넘겨줍니다.
+          disability={disability} // 장애 유형을 prop으로 넘겨줍니다.
         ></Conference>
       )}
     </>
@@ -328,7 +332,3 @@ export async function getStaticPaths() {
     fallback: "blocking",
   };
 }
-
-// export async function getStaticProps({ params }) {
-//   console.log(params)
-// }

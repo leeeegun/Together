@@ -1,6 +1,4 @@
 import React from "react";
-import Image from "next/image";
-import svg from "../../public/images/svg/background.svg";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
 
@@ -11,13 +9,35 @@ export default function myConferenceCard({ text, src, link, username }) {
     myTag.classList.toggle("hidden");
     myDescription.classList.toggle("hidden");
   };
-
+  function copyToClipboard(textToCopy) {
+    // navigator clipboard api needs a secure context (https)
+    if (navigator.clipboard && window.isSecureContext) {
+      // navigator clipboard api method'
+      return navigator.clipboard.writeText(textToCopy);
+    } else {
+      // text area method
+      let textArea = document.createElement("textarea");
+      textArea.value = textToCopy;
+      // make the textarea out of viewport
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+      textArea.focus();
+      textArea.select();
+      return new Promise((res, rej) => {
+        // here the magic happens
+        document.execCommand("copy") ? res() : rej();
+        textArea.remove();
+      });
+    }
+  }
   const handleClickMyConference = (e) => {
     e.preventDefault();
     const encoded = new Buffer(username).toString("base64");
-    const link = `http://localhost:3000/meetingroom/${encoded}`;
+    const link = `https://ssafytogether.site/meetingroom/${encoded}`;
     // console.log(encoded);
-    navigator.clipboard.writeText(encoded);
+    copyToClipboard(encoded);
     Swal.fire({
       title: "초대링크 복사 성공!",
       html: `<p>바로 이동하기 : <a href=${link} style="text-decoration: underline">이동하기</a></p>`,
@@ -34,11 +54,11 @@ export default function myConferenceCard({ text, src, link, username }) {
       onTap={handleClickMyConference}
       className="hover:cursor-pointer"
     >
-      <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 lg:max-w-lg">
+      <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 sm:w-4/5">
         <div className="max-w-md mx-auto">
           <div className="divide-y divide-gray-400/50">
             <div className="h-1/3">
-              <Image src={svg}></Image>
+              <img src={src} className="main-image"></img>
             </div>
             <div className="py-8 flex justify-center">
               <a className="opacity-75 cursor-pointer">

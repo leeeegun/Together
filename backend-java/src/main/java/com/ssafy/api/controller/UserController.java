@@ -95,12 +95,12 @@ public class UserController {
 		SsafyUserDetails userDetails = (SsafyUserDetails)authentication.getDetails();
 		String userId = userDetails.getUsername();
 		User user = userService.getUserByUserId(userId);
-		userService.setUserInfoByUserId(user, modifyData);
-		
+
 		if(errors.hasErrors()) {
 			return ResponseEntity.status(400).body(BaseResponseBody.of(400, errors.getFieldError().getDefaultMessage()));
 		} else {
 			try {
+				userService.setUserInfoByUserId(user, modifyData);
 				return ResponseEntity.status(200).body(BaseResponseBody.of(200, "success"));
 			} catch (Exception e) {
 				return ResponseEntity.status(401).body(BaseResponseBody.of(401, "fail"));

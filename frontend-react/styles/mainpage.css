@@ -101,7 +101,8 @@
 
 #mainpage {
   background-image: url("/images/svg/background3.svg");
-  background-size: 100% 200%;
+  background-size: cover;
+  object-fit: cover;
 }
 
 /* test */
@@ -126,6 +127,23 @@
   animation: mainpage-input-expand 1s ease-out forwards;
   -webkit-animation: mainpage-input-expand 1s ease-out forwards;
   -moz-animation: mainpage-input-expand 1s ease-out forwards;
+}
+
+.main-image {
+  filter: invert(81%) sepia(7%) saturate(276%) hue-rotate(9deg) brightness(95%)
+    contrast(84%);
+  width: 380px;
+  height: 255px;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+  box-sizing: border-box;
+  min-width: 100%;
+  max-width: 100%;
+  min-height: 100%;
+  max-height: 100%;
+  margin-bottom: 10%;
 }
 
 @keyframes mainpage-input-expand {

@@ -1,9 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import svg from "../../public/images/svg/background.svg";
-import Swal from "sweetalert2";
 import Router from "next/router";
-import Link from "next/link";
 import { motion } from "framer-motion";
 
 export default function linkCard({ text, src, link, username, description }) {
@@ -27,11 +24,11 @@ export default function linkCard({ text, src, link, username, description }) {
       onTap={handleClickLinkCard}
       className="hover:cursor-pointer"
     >
-      <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 lg:max-w-lg xs:min-w-sm">
+      <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 lg:max-w-lg xs:min-w-sm sm:w-4/5">
         <div className="max-w-md mx-auto">
           <div className="divide-y divide-gray-400/50">
             <div className="h-1/3">
-              <Image src={svg}></Image>
+              <img src={src} className="main-image"></img>
             </div>
             <div className="py-8 flex justify-center">
               <h1

@@ -6,11 +6,9 @@ const PW_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$*]).{8,24}$/;
 const EMAIL_REGEX = /^(?=.*[@])(?=.*[.com]).{8,40}$/;
 
 const SignupForm = () => {
-  // const userIdRef = useRef();
-  // const userNameRef = useRef();
-  // const userNickNameRef = useRef();
   const userEmailRef = useRef();
   const userStatusRef = useRef();
+  const signupRef = useRef();
 
   const [userId, setUserId] = useState("");
   const [validUserId, setValidUserId] = useState(false);
@@ -35,8 +33,8 @@ const SignupForm = () => {
   // 아이디 중복확인
   const handleIdCheck = async (e) => {
     e.preventDefault();
-    console.log(userId);
-    fetch(`http://localhost:8443/users/${userId}/exists`)
+
+    fetch(`https://i6a406.p.ssafy.io:8443/users/${userId}/exists`)
       .then((response) => response.json())
       .then((data) => {
         setConfirmedUserId(data);
@@ -46,14 +44,13 @@ const SignupForm = () => {
   // 회원가입 버튼 눌렀을때 로직
   const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(userId, userPassword, userName, userNickName, userEmail, userStatus);
     submitRegistration();
     initializeData();
   };
 
   // 회원가입 POST 요청
   const submitRegistration = async () => {
-    fetch("http://localhost:8443/users", {
+    fetch(`https://i6a406.p.ssafy.io:8443/users`, {
       method: "POST",
       body: JSON.stringify({
         userId: userId,
@@ -75,13 +72,13 @@ const SignupForm = () => {
       })
       .then((data) => {
         setSuccessMessage(data);
-        return fetch(`http://localhost:8443/conference/create/${userId}`)
+        return fetch(
+          `https://i6a406.p.ssafy.io:8443/conference/create/${userId}`,
+        )
           .then((response) => {
             if (!response.ok) throw new Error(response.statusText);
           })
-          .catch((err) => {
-            console.log(err);
-          });
+          .catch(() => {});
       })
       .catch((error) => {
         setErrorMessage(error);
@@ -113,7 +110,7 @@ const SignupForm = () => {
 
   useEffect(() => {
     if (validUserId && userId) {
-      fetch(`http://localhost:8443/users/${userId}/exists`)
+      fetch(`https://i6a406.p.ssafy.io:8443/users/${userId}/exists`)
         .then((response) => response.json())
         .then((data) => {
           setConfirmedUserId(data);
@@ -187,7 +184,6 @@ const SignupForm = () => {
 
   //나중에 코드 201로 바꿔야함
   useEffect(() => {
-    console.log(successMessage);
     if (successMessage.statusCode === 201) {
       Swal.fire({
         title: "<strong>회원가입 완료!</strong>",
@@ -207,16 +203,21 @@ const SignupForm = () => {
 
   // 회원가입 실패 메세지 반환
   useEffect(() => {
-    console.log(errorMessage);
     setErrorMessage("");
   }, [errorMessage]);
 
   return (
-    <div className="right snap-center flex flex-col items-center justify-center w-screen h-screen">
-      <section className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10 w-5/12">
-        <h1 className="text-center">회원가입</h1>
+    <div className="flex flex-col items-center justify-center w-screen h-screen right snap-center">
+      <section className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10 lg:max-w-sm w-4/12 xs:min-w-max">
+        <h1 className="text-center" tabIndex="0" ref={signupRef}>
+          회원가입
+        </h1>
 
-        <form className="mb-0 " onSubmit={handleIdCheck}>
+        <form
+          className="mb-0 "
+          onSubmit={handleIdCheck}
+          className="lg:max-w-xs"
+        >
           <label
             htmlFor="userId"
             className="relative block mt-10 text-sm font-medium 10"
@@ -227,7 +228,7 @@ const SignupForm = () => {
               &#9746; 대소문자와 숫자를 혼합하여 3~20내로 작명해주세요!
             </span>
           </label>
-          <div className="container">
+          <div className="container w-">
             <div>
               <input
                 type="text"
@@ -238,12 +239,15 @@ const SignupForm = () => {
                 value={userId}
                 required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
+                aria-labelledby="idInfo"
               />
             </div>
             <div className="mx-auto">
               <span
                 className={confirmedUserId ? "valid" : "hide"}
                 id="id-navigator"
+                role="note"
+                tabIndex="0"
               >
                 사용 가능한 아이디입니다!
                 <p>
@@ -251,12 +255,16 @@ const SignupForm = () => {
                   <span
                     onClick={(e) => userConfirmedId(e)}
                     className="hover:cursor-pointer"
+                    tabIndex="0"
+                    role="button"
                   >
                     사용하기
                   </span>
                 </p>
               </span>
               <span
+                tabIndex="0"
+                role="note"
                 className={!confirmedUserId && validUserId ? "valid" : "hide"}
               >
                 이미 사용중인 아이디입니다.
@@ -284,6 +292,10 @@ const SignupForm = () => {
                 <br />
                 8~24내로 작성해주세요!
               </span>
+              <span id="pwInfo" role="note" hidden>
+                비밀번호, 대소문자 숫자 특수문자 !@#$* 를 혼합하여 8글자에서
+                24글자 내로 작성해주세요
+              </span>
             </label>
             <div className="mt-1">
               <input
@@ -293,8 +305,18 @@ const SignupForm = () => {
                 value={userPassword}
                 required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
+                aria-labelledby="pwInfo"
               />
             </div>
+            <span
+              role="note"
+              tabIndex="0"
+              className={userPassword ? "valid" : "hide"}
+            >
+              {validUserPassword
+                ? "사용가능한 비밀번호"
+                : "사용불가능한 비밀번호"}
+            </span>
           </div>
 
           <div>
@@ -315,7 +337,7 @@ const SignupForm = () => {
                   validMatchPassword || !matchPassword ? "hide" : "invalid"
                 }
               >
-                &#9746; 비밀번호가 일치하지 않습니다!
+                &#9746;
               </span>
             </label>
             <div style={{ marginTop: 0 }}>
@@ -329,6 +351,13 @@ const SignupForm = () => {
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
               />
             </div>
+            <span
+              role="note"
+              tabIndex="0"
+              className={matchPassword ? "valid" : "hide"}
+            >
+              {validMatchPassword ? "비밀번호 일치" : "비밀번호 불일치"}
+            </span>
           </div>
 
           <div>
@@ -346,9 +375,13 @@ const SignupForm = () => {
                 required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
                 placeholder="홍길동(3~5글자)"
-                maxlength="5"
+                maxLength="5"
+                aria-labelledby="nameInfo"
               />
             </div>
+            <span role="note" id="nameInfo" hidden>
+              이름, 3글자에서 5글자로 작성해주세요
+            </span>
           </div>
 
           <div>
@@ -372,7 +405,10 @@ const SignupForm = () => {
           <div>
             <label htmlFor="userEmail" className="block text-sm font-medium">
               이메일
-              <span className={!validUserEmail && userEmail ? "valid" : "hide"}>
+              <span
+                id="emailInfo"
+                className={!validUserEmail && userEmail ? "valid" : "hide"}
+              >
                 이메일 형식으로 작성 해주세요! (예: xxx@xxx.com)
               </span>
             </label>
@@ -392,7 +428,7 @@ const SignupForm = () => {
 
           <div className="container flex justify-evenly">
             <label htmlFor="userStatus" className="my-auto text-sm font-medium">
-              신체 조건 :
+              장애 유형 :
             </label>
             <select
               id="userStatus"

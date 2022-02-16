@@ -30,35 +30,31 @@ export default function Navbar() {
     <>
       <nav
         style={{ display: "flex", alignItems: "end" }}
-        className="mx-5 flex flex-row justify-between items-center text-center my-3"
+        className="flex flex-row items-center justify-between mx-5 my-3 text-center"
       >
         {/* <Home /> */}
-        <div className="flex flex-row justify-center content-center items-center">
-          <Link href="/main">
+        <div className="flex flex-row items-center content-center justify-center">
+          <a href="/main">
             <motion.img
               whileHover={{ scale: 1.3 }}
               src="mainpage/Home-Logo.png"
-              alt="home logo"
+              alt="홈 로고, 메인페이지로 이동합니다"
               style={{ width: "40px", marginRight: "1rem", cursor: "pointer" }}
               className="inline-block"
             />
-          </Link>
-          <span className="text-xl font-semibold c-footer-social_link">
+          </a>
+          <span
+            className="text-xl font-semibold c-footer-social_link"
+            tabIndex="0"
+          >
             {userId ? userId : null}님, 안녕하세요!
           </span>
         </div>
 
-        <div className="flex flex-row justify-center items-center text-center">
-          <span className="text-xl font-semibold c-footer-social_link mx-3">
-            로그아웃
-          </span>
-          <motion.img
-            whileHover={{ scale: 1.3 }}
-            src="images/svg/logout.svg"
-            alt="home logo"
-            style={{ width: "40px", marginRight: "1rem", cursor: "pointer" }}
-            className="inline-block"
-            onTap={() => {
+        <div className="flex flex-row items-center justify-center text-center">
+          <button
+            tabIndex="0"
+            onClick={() => {
               localStorage.clear("token");
               Swal.fire({
                 icon: "success",
@@ -67,7 +63,15 @@ export default function Navbar() {
               });
               Router.push("/");
             }}
-          />
+          >
+            <motion.img
+              whileHover={{ scale: 1.3 }}
+              src="images/svg/logout.svg"
+              alt="로그아웃하기"
+              style={{ width: "40px", marginRight: "1rem", cursor: "pointer" }}
+              className="inline-block"
+            />
+          </button>
         </div>
       </nav>
     </>
