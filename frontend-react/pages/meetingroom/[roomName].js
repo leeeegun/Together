@@ -205,7 +205,7 @@ export default function Meeting({ roomName }) {
           }}
         >
           <div className="flex flex-row w-full max-w-4xl bg-white border shadow-xl rounded-2xl h-3/6">
-            <div className="flex flex-col items-start justify-center content-center p-10 w-6/12 bg-[#ece6cc] rounded-l-2xl">
+            <div role="article" tabIndex="0" className="flex flex-col items-start justify-center content-center p-10 w-6/12 bg-[#ece6cc] rounded-l-2xl">
               <h1 className="mb-10 text-2xl font-semibold text-gray-500 subject">
                 {conferenceName}님의 회의실
               </h1>
