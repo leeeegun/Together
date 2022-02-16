@@ -189,6 +189,7 @@ const SignupForm = ({signUpComplete}) => {
         title: "<strong>회원가입 완료!</strong>",
         html: "이제부터 모든 기능을 사용할 수 있어요!",
         icon: "success",
+        confirmButtonAriaLabel: "확인"
       });
       signUpComplete();
     }
@@ -197,6 +198,7 @@ const SignupForm = ({signUpComplete}) => {
         title: "<strong>회원가입 실패!</strong>",
         html: "오류가 발생했어요 😅",
         icon: "error",
+        confirmButtonAriaLabel: "확인"
       });
     }
     setSuccessMessage("");

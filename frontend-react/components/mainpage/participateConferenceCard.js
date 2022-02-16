@@ -41,22 +41,22 @@ export default function participateConferenceCard({
     <motion.div
       whileHover={{ scale: 1.2 }}
       whileTap={{ scale: 0.8 }}
-      onTap={handleClickParticipateConference}
       onHoverStart={onHover}
       onHoverEnd={onHover}
       className="hover:cursor-pointer"
     >
-      <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 sm:w-4/5">
+      <button onClick={handleClickParticipateConference} className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 sm:w-4/5">
         <div className="max-w-md mx-auto">
           <div className="divide-y divide-gray-400/50">
             <div className="h-1/3">
-              <img src={src} className="main-image"></img>
+              <img aria-hidden src={src} className="main-image"></img>
             </div>
-            <div className="py-8 flex justify-center">
+            <div className="flex justify-center py-8">
               <a className="opacity-75 cursor-pointer">
-                <p className="text-3xl" id={"link" + link}>
+                <p aria-labelledby="enterConfInfo" className="text-3xl" id={"link" + link}>
                   {text}
                 </p>
+                <span hidden id="enterConfInfo">회의 참가, 회의에 참가해 사람들과 소통해보세요!</span>
                 <p id={"description" + link} className="hidden">
                   회의에 참가해 사람들과 소통해보세요! 😆
                 </p>
@@ -65,7 +65,7 @@ export default function participateConferenceCard({
             <div className="divide-y divide-gray-400/50"></div>
           </div>
         </div>
-      </div>
+      </button>
     </motion.div>
   );
 }

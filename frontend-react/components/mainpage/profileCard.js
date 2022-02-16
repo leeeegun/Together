@@ -21,9 +21,9 @@ export default function profileCard({
   const handleClickProfile = (e) => {
     e.preventDefault();
     Swal.fire({
+      title: "비밀번호를 입력해주세요",
       text: "",
-      html: `비밀번호를 입력해주세요
-            <input type="password" id="password" class="swal2-input" placeholder="비밀번호">`,
+      html: `<input type="password" id="password" class="swal2-input" placeholder="비밀번호">`,
       confirmButtonText: "확인",
       showCancelButton: true,
       cancelButtonText: "취소",
@@ -53,6 +53,7 @@ export default function profileCard({
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
+          title: `<h2 hidden role="note" aria-label="닉네임과 장애 유형 수정이 가능합니다. 원하시는 닉네임을 입력하거나 장애 유형을 선택해주세요."></h2>`,
           html:
             `<label for="swal-input1">닉네임</label><input id="swal-input1" class="swal2-input" value=${username} placeholder="3-5글자">` +
             `<br></br>` +
@@ -89,7 +90,9 @@ export default function profileCard({
               .then((res) => {
                 Swal.fire({
                   icon: "success",
+                  title: `<span role="note" hidden aria-label="변경이 완료되었습니다"></span>`,
                   text: "변경이 완료되었습니다! 😄",
+                  confirmButtonAriaLabel: "확인"
                 });
               })
               .catch((error) => {
@@ -106,16 +109,15 @@ export default function profileCard({
       whileTap={{ scale: 0.8 }}
       onHoverStart={onHover}
       onHoverEnd={onHover}
-      onTap={handleClickProfile}
       className="hover:cursor-pointer"
     >
-      <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 sm:w-4/5">
+      <button onClick={handleClickProfile} className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 sm:w-4/5">
         <div className="max-w-md mx-auto">
           <div className="divide-y divide-gray-400/50">
             <div className="h-1/3">
-              <img src={src} className="main-image"></img>
+              <img aria-hidden src={src} className="main-image"></img>
             </div>
-            <div className="py-8 flex justify-center">
+            <div className="flex justify-center py-8">
               <a className="opacity-75 cursor-pointer">
                 <p className="text-3xl" id={"link" + link}>
                   {text}
@@ -128,7 +130,7 @@ export default function profileCard({
             <div className="divide-y divide-gray-400/50"></div>
           </div>
         </div>
-      </div>
+      </button>
     </motion.div>
   );
 }
