@@ -5,7 +5,7 @@ const ID_REGEX = /^[a-zA-z][a-zA-Z0-9]{3,20}$/;
 const PW_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$*]).{8,24}$/;
 const EMAIL_REGEX = /^(?=.*[@])(?=.*[.com]).{8,40}$/;
 
-const SignupForm = () => {
+const SignupForm = ({signUpComplete}) => {
   const userEmailRef = useRef();
   const userStatusRef = useRef();
   const signupRef = useRef();
@@ -190,6 +190,7 @@ const SignupForm = () => {
         html: "이제부터 모든 기능을 사용할 수 있어요!",
         icon: "success",
       });
+      signUpComplete();
     }
     if (successMessage.statusCode === 400) {
       Swal.fire({
@@ -208,8 +209,12 @@ const SignupForm = () => {
 
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen right snap-center">
-      <section className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10 lg:max-w-sm w-4/12 xs:min-w-max">
-        <h1 className="text-center" tabIndex="0" ref={signupRef}>
+      <section className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10 lg:max-w-sm w-4/12 xs:min-w-max"
+       role="form"
+       aria-label="회원가입 창" 
+       tabIndex="0"
+      >
+        <h1 className="text-center">
           회원가입
         </h1>
 
@@ -233,14 +238,15 @@ const SignupForm = () => {
               <input
                 type="text"
                 id="userId"
-                // ref={userIdRef}
                 onChange={(e) => setUserId(e.target.value)}
                 autoComplete="off"
                 value={userId}
                 required
+                aria-required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
                 aria-labelledby="idInfo"
               />
+              <span hidden id="idInfo" role="">아이디, 대소문자와 숫자를 혼합하여 3글자에서 20글자 내로 작명해주세요</span>
             </div>
             <div className="mx-auto">
               <span
@@ -252,14 +258,12 @@ const SignupForm = () => {
                 사용 가능한 아이디입니다!
                 <p>
                   사용하시겠습니까?{" "}
-                  <span
+                  <button
                     onClick={(e) => userConfirmedId(e)}
                     className="hover:cursor-pointer"
-                    tabIndex="0"
-                    role="button"
                   >
                     사용하기
-                  </span>
+                  </button>
                 </p>
               </span>
               <span
@@ -304,6 +308,7 @@ const SignupForm = () => {
                 onChange={(e) => setUserPassword(e.target.value)}
                 value={userPassword}
                 required
+                aria-required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
                 aria-labelledby="pwInfo"
               />
@@ -323,6 +328,7 @@ const SignupForm = () => {
             <label
               htmlFor="userMatchPassword"
               className="block text-sm font-medium"
+              id="pwConfInfo"
             >
               비밀번호 확인
               <span
@@ -348,7 +354,9 @@ const SignupForm = () => {
                 value={matchPassword}
                 disabled={!validUserPassword}
                 required
+                aria-required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
+                aria-labelledby="pwConfInfo"
               />
             </div>
             <span
@@ -373,14 +381,15 @@ const SignupForm = () => {
                 autoComplete="off"
                 value={userName}
                 required
+                aria-required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
-                placeholder="홍길동(3~5글자)"
+                placeholder="예: 홍길동"
                 maxLength="5"
                 aria-labelledby="nameInfo"
               />
             </div>
             <span role="note" id="nameInfo" hidden>
-              이름, 3글자에서 5글자로 작성해주세요
+              이름, 3글자에서 5글자로 작성해주세요.
             </span>
           </div>
 
@@ -397,6 +406,7 @@ const SignupForm = () => {
                 autoComplete="off"
                 value={userNickName}
                 required
+                aria-required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
               />
             </div>
@@ -409,7 +419,7 @@ const SignupForm = () => {
                 id="emailInfo"
                 className={!validUserEmail && userEmail ? "valid" : "hide"}
               >
-                이메일 형식으로 작성 해주세요! (예: xxx@xxx.com)
+                이메일, 이메일 형식으로 작성 해주세요! (예: xxx@xxx.com)
               </span>
             </label>
             <div className="mt-1">
@@ -421,7 +431,9 @@ const SignupForm = () => {
                 autoComplete="off"
                 value={userEmail}
                 required
+                aria-required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
+                aria-labelledby="emailInfo"
               />
             </div>
           </div>
@@ -436,6 +448,7 @@ const SignupForm = () => {
               value={userStatus}
               ref={userStatusRef}
               required
+              aria-required
               className="border border-[#F1EDE3] rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
             >
               <option value="해당 없음">해당 없음</option>
