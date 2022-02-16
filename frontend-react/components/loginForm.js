@@ -4,16 +4,12 @@ import Swal from "sweetalert2";
 import { motion } from "framer-motion";
 
 const LoginForm = () => {
-  const loginRef = useRef();
   const [userId, setUserId] = useState("");
   const [userPassword, setUserPassword] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
 
   // 성공 메세지 출력
-  // useEffect(() => {
-  //   loginRef.current.focus();
-  // }, []); // 로그인 클릭 시 로그인 컴포넌트에 포커스
   useEffect(() => {
     setSuccessMessage("");
   }, [successMessage]);
