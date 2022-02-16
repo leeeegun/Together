@@ -26,7 +26,7 @@ export default function createConferenceCard({ text, src, link, username }) {
     }).then(() => {});
   };
   return (
-    <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 lg:max-w-lg ">
+    <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 lg:max-w-lg">
       <div className="max-w-md mx-auto">
         <div className="divide-y divide-gray-400/50">
           <div className="h-1/3">
