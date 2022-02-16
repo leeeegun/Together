@@ -102,8 +102,11 @@ const LoginForm = () => {
         className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10"
         whileHover={{ scale: 1.4 }}
         whileInView={{ scale: 1.2 }}
+        role="form"
+        aria-label="로그인 창"
+        tabIndex="0"
       >
-        <h1 className="text-center" tabIndex="0" ref={loginRef}>
+        <h1 className="text-center">
           로그인
         </h1>
         <form onSubmit={handleSubmit} className="mb-0">
@@ -123,6 +126,7 @@ const LoginForm = () => {
                 // autoComplete="off"
                 value={userId} // 이게 무슨 역할을 하는거지
                 required
+                aria-required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
               />
             </div>
@@ -142,6 +146,7 @@ const LoginForm = () => {
                 onChange={(e) => setUserPassword(e.target.value)}
                 value={userPassword}
                 required
+                aria-required
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1]"
               />
             </div>
