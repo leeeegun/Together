@@ -46,7 +46,7 @@ export default function participateConferenceCard({
       onHoverEnd={onHover}
       className="hover:cursor-pointer"
     >
-      <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 lg:max-w-lg">
+      <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 sm:w-4/5">
         <div className="max-w-md mx-auto">
           <div className="divide-y divide-gray-400/50">
             <div className="h-1/3">
