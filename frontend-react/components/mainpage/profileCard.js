@@ -81,6 +81,7 @@ export default function profileCard({
                 Accept: "application/json",
                 Authorization: `Bearer ${token}`,
               },
+              credentials: "include",
             })
               .then((response) => {
                 console.log(response);
