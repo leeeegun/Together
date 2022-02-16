@@ -80,7 +80,7 @@ function guide() {
             참여자가 하는 음성을 말풍선 형태의 자막으로 제공받으실 수 있습니다.
           </p>
 
-          <ul className="mx-5 my-5">
+          <ul className="mx-5 my-5" aria-expanded="false">
             <CustomLi
               text="STT(음성인식 자막) 기능을 사용하려면 어떻게 해야 하죠?"
               description="음성인식 자막 기능은 Together에서 기본으로 제공하는 기능입니다. 화상 회의 내에 자동으로 생성되는 말풍선으로 자막이 제공되며, 말풍선 기능의 사용이 필요하지 않은 경우, 토글 버튼을 통해 자막 기능을 끌 수 있습니다."
