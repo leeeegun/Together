@@ -43,8 +43,7 @@
   <!-- 소리를 텍스트로 바꿔 채팅으로 제공.gif -->
 
 ### 🧑 팀원 소개
-_Click!_
-<details><summary><strong>유재룡</strong> [ BE ]</summary>
+<details><summary><strong>유재룡</strong> [ BE ]&nbsp;&nbsp;&nbsp;<em>Click!</em></summary>
 
  * **팀장**
  * Database
