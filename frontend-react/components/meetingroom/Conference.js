@@ -25,6 +25,7 @@ export default function Conference({
   isMic,
   isVideo,
   userId,
+  disability // 장애 유형을 입력받습니다.
 }) {
   // 받아오는 myName이 자신의 닉네임이고 userId가 아이디입니다!
   // participant 객체의 name은 해당 사용자의 아이디이고 nickname은 닉네임입니다!
@@ -35,6 +36,7 @@ export default function Conference({
   const [chats, setChats] = useState([]); // 채팅기록을 저장합니다.
   const [isChatEnabled, setIsChatEnabled] = useState(false); // 채팅창을 표시할지 토글합니다.
   const [isNoti, setIsNoti] = useState(false); // 메시지 알람을 활성화할지 토글합니다.
+  const [isTTSEnabled, setIsTTSEnabled] = useState(true) // TTS 활성화 여부를 토글합니다.
   const messageInput = useRef();
   const meetingroomMessage = useRef();
 
@@ -45,7 +47,8 @@ export default function Conference({
   useEffect(() => {
     const message = {
       id: "joinRoom",
-      name: userId, // 가입할 때 쓴 userId
+      // name: userId, // 가입할 때 쓴 userId
+      name: userId,
       room: myRoom,
       nickname: myName, // ㄹㅇ 닉네임
     };
@@ -61,6 +64,7 @@ export default function Conference({
       window.addEventListener("beforeunload", alertUser);
     };
   }, []); // 기본 코드의 register 과정입니다.
+
 
   ws.onmessage = function (message) {
     const parsedMessage = JSON.parse(message.data);
@@ -106,6 +110,7 @@ export default function Conference({
   // 대박 STT 부분
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+  // STT 생성 로직
   const createStt = () => {
     window.SpeechRecognition =
       window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -131,8 +136,10 @@ export default function Conference({
     recognition.addEventListener("end", (event) => {
       recognition.start(); // 음성인식 기능이 꺼지면 다시 켜지게
     });
-  }; // STT 생성 로직
+  };
 
+
+  // 생성된 STT 백서버로 전달
   const sendStt = (stt) => {
     const msg = {
       id: "chatMsg",
@@ -143,18 +150,72 @@ export default function Conference({
     };
     console.log(`sending STT message : ${stt}`);
     sendMessage(msg);
-  }; // 생성된 STT 백서버로 전달
+  };
 
+
+  // TTS 함수. 발화자와 텍스트 두 개를 인수로 받습니다.
+  const speak = (speaker, text) => {
+    if (
+      typeof SpeechSynthesisUtterance === "undefined" ||
+      typeof window.speechSynthesis === "undefined"
+    ) {
+      Swal.fire({
+        icon: "error",
+        title: "브라우저 미지원",
+        text: "이 브라우저는 TTS를 지원하지 않습니다. 다른 브라우저를 이용해 주세요...!",
+      });
+      return "error";
+    }
+  
+    // window.speechSynthesis.cancel(); // 현재 읽고있다면 초기화
+  
+    const speechMsg = new SpeechSynthesisUtterance();
+    speechMsg.rate = 0.8; // 속도: 0.1 ~ 10
+    speechMsg.pitch = 0.8; // 음높이: 0 ~ 2
+    speechMsg.lang = "ko-KR";
+    speechMsg.text = `${speaker}로부터. ${text}`;
+  
+    // SpeechSynthesisUtterance에 저장된 내용을 바탕으로 음성합성 실행
+    window.speechSynthesis.speak(speechMsg);
+  }
+
+
+  // 미디어서버로부터 메시지를 받은 경우. STT일 수도, 일반 채팅일 수도 있습니다!
   const receiveStt = (parsedMessage) => {
     const participant = participants[parsedMessage.owner];
+    if (participant) {
+      return
+    }
+
     // STT 메시지를 받은 경우. 채팅창에 따로 기록되지 않습니다!
-    if (participant && parsedMessage.content[0] === "b") {
+    if (parsedMessage.content[0] === "b") {
       const sttMsg = participant.getSttElement();
       sttMsg.innerText = parsedMessage.content.slice(1);
       setTimeout(function () {
         sttMsg.innerText = "";
       }, 3000);
-    } else if (participant && parsedMessage.content[0] === "a") {
+    
+    // 채팅 메시지를 받은 경우.
+    } else if (parsedMessage.content[0] === "a") {
+      const chatMsg = parsedMessage.content.slice(1);
+      const now = new Date();
+      const nickname = participants[parsedMessage.owner].nickname;
+      const newChats = [
+        ...chats,
+        [nickname, now.toTimeString().slice(0, 5), chatMsg],
+      ];
+      setChats(newChats);
+      !isChatEnabled && setIsNoti(true);
+      if (disability === 1 && isTTSEnabled) {
+        speak(nickname, chatMsg)
+      }
+      meetingroomMessage.current.scrollTo(
+        0,
+        meetingroomMessage.current.scrollHeight,
+      );
+    
+    // 청각장애인 채팅의 경우 읽어줍니다. DRY에 어긋나는 코드이지만,,,
+    } else if (parsedMessage.content[0] === "c") {
       const chatMsg = parsedMessage.content.slice(1);
       const now = new Date();
       const nickname = participants[parsedMessage.owner].nickname;
@@ -168,10 +229,14 @@ export default function Conference({
         0,
         meetingroomMessage.current.scrollHeight,
       );
+      const sttMsg = participant.getSttElement();
+      sttMsg.innerText = chatMsg;
+      setTimeout(function () {
+        sttMsg.innerText = "";
+      }, 3000);
+      isTTSEnabled && speak(nickname, chatMsg) // TTS 기능이 활성화되어 있다면 채팅을 읽어줍니다.
     }
-    // setReceiveSttMsg(parsedMessage.content);
-    // setSttSender(parsedMessage.owner);
-  }; // 백서버로부터 받은 STT를 상태값에 저장
+  };
 
   ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -485,15 +550,25 @@ export default function Conference({
   const sendChatMsg = (event) => {
     event.preventDefault();
     const content = event.target[0].value;
+    if (!content) {
+      return
+    }
     const msg = {
       id: "chatMsg",
       name: userId,
       room: myRoom,
       content: `a${content}`, // STT 메시지일 때는 앞에 "b"를 덧붙입니다!
     };
+    if (disability === 2) { // 청각장애인의 채팅일 경우 앞에 "c"를 붙입니다.
+      msg.content = `c${content}`;
+    }
     sendMessage(msg);
     messageInput.current.value = "";
   };
+
+  const toggleTTS = () => {
+    setIsTTSEnabled((isTTSEnabled) => !isTTSEnabled)
+  }
 
   return (
     <section
@@ -509,7 +584,8 @@ export default function Conference({
         <div
           className="grid grid-cols-2 gap-5 mx-auto text-center"
           id="meetingroom-participants"
-        ></div>
+        >
+        </div>
         <div id="meetingroom-toolbar">
           {isMicEnabled ? (
             <button
@@ -551,7 +627,7 @@ export default function Conference({
             </button>
           )}
 
-          {isSharingEnabled ? (
+          {/* {isSharingEnabled ? (
             <button
               aria-label="화면 공유 끄기"
               title="화면 공유를 중단합니다."
@@ -569,7 +645,7 @@ export default function Conference({
             >
               <FontAwesomeIcon icon={faDesktop} size="1x" />
             </button>
-          )}
+          )} */}
 
           <button
             aria-label="연결 종료하고 회의실 나가기"
@@ -581,7 +657,7 @@ export default function Conference({
           </button>
         </div>
       </div>
-      <div style={{ overflow: "hidden" }}>
+      <div style={{ overflow: "hidden"}}>
         {/* 채팅창 */}
         <motion.div
           id="meetingroom-chats"
@@ -594,6 +670,16 @@ export default function Conference({
           transition={{ duration: 0.5 }}
         >
           {/* 메시지 칸 */}
+          <div className="flex content-start">
+            <label className="meetingroom-switch-button"> 
+              <input id="toggle-tts" onChange={toggleTTS} type="checkbox" checked={isTTSEnabled}/> 
+              <span className="meetingroom-onoff-switch"></span> 
+            </label>
+            <label className="ml-3" htmlFor="toggle-tts">{isTTSEnabled?
+              "TTS 활성화됨":
+              "TTS 비활성화됨"}
+            </label>
+          </div>
           <div id="meetingroom-messages" ref={meetingroomMessage}>
             {chats.map((chat, key) => (
               <Chat chat={chat} key={key}></Chat>
@@ -603,7 +689,7 @@ export default function Conference({
             onSubmit={sendChatMsg}
             style={{
               display: "flex",
-              justifyContent: "space-between",
+              justifyContent: "end",
               flexWrap: "wrap",
             }}
           >
@@ -614,7 +700,7 @@ export default function Conference({
               placeholder="채팅을 입력하세요"
               ref={messageInput}
             ></input>
-            <button className="w-2/12 min-w-fit mt-2 bg-[#009e747a] hover:bg-[#009e7494] text-white font-bold py-1 px-2 rounded">
+            <button className="w-2/12 min-w-fit mt-2 bg-[#009e747a] hover:bg-[#009e7494] text-white font-bold py-1 px-2 rounded ml-2">
               <FontAwesomeIcon icon={faPaperPlane} size="1x" />
             </button>
           </form>

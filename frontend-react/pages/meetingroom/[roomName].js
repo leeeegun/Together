@@ -27,6 +27,7 @@ export default function Meeting({ roomName }) {
   const [isHost, setIsHost] = useState(false);
   const [description, setDescription] = useState("");
   const [uid, setUid] = useState("");
+  const [disability, setDisability] = useState(0);
 
   useEffect(() => {
     setWs(new WebSocket("wss://" + "i6a406.p.ssafy.io:8446" + "/groupcall"));
@@ -44,6 +45,18 @@ export default function Meeting({ roomName }) {
       const result = JSON.parse(payload.toString());
       setUserId(result.sub);
       setUid(result.uid);
+      switch (result.disability) {
+        case "해당 없음":
+          setDisability(0);
+          break;
+        case "시각 장애":
+          setDisability(1);
+          break;
+        case "청각 장애":
+          setDisability(2);
+          break;
+        default:
+          console.error("잘못된 유형: ", result.disability);}
     }
   }, []);
 
@@ -298,7 +311,8 @@ export default function Meeting({ roomName }) {
           ws={ws}
           userId={userId}
           isMic={isMic} // 마이크를 사용할지 prop으로 넘겨줍니다.
-          isVideo={isVideo}
+          isVideo={isVideo} // 비디오를 사용할지 prop으로 넘겨줍니다.
+          disability={disability} // 장애 유형을 prop으로 넘겨줍니다.
         ></Conference>
       )}
     </>

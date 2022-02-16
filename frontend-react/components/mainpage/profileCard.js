@@ -56,9 +56,9 @@ export default function profileCard({
           html:
             `<label for="swal-input1">닉네임</label><input id="swal-input1" class="swal2-input" value=${username} placeholder="3-5글자">` +
             `<br></br>` +
-            `<input type="radio" id="a" name="chk_info" value=" 해당 없음" checked="checked"><label for="a">해당 없음</label>
-            <input type="radio" id="b" name="chk_info" value=" 시각 장애" ><label for="b">시각 장애</label>
-            <input type="radio" id="c" name="chk_info" value=" 청각 장애"><label for="c">청각 장애</label>` +
+            `<input type="radio" id="a" name="chk_info" value="해당 없음" checked="checked"><label for="a">해당 없음</label>
+            <input type="radio" id="b" name="chk_info" value="시각 장애" ><label for="b">시각 장애</label>
+            <input type="radio" id="c" name="chk_info" value="청각 장애"><label for="c">청각 장애</label>` +
             `<br></br>`,
           confirmButtonText: "확인",
           showCancelButton: true,
@@ -81,12 +81,16 @@ export default function profileCard({
                 Accept: "application/json",
                 Authorization: `Bearer ${token}`,
               },
-              credentials: "include",
             })
               .then((response) => {
-                console.log(response);
-                if (!response.ok) throw new Error(response.status);
+                if (!response.ok) throw new Error(response);
                 return response.json();
+              })
+              .then((res) => {
+                Swal.fire({
+                  icon: "success",
+                  text: "변경이 완료되었습니다! 😄",
+                });
               })
               .catch((error) => {
                 Swal.showValidationMessage(`오류가 발생했습니다.`);
@@ -105,7 +109,7 @@ export default function profileCard({
       onTap={handleClickProfile}
       className="hover:cursor-pointer"
     >
-      <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 lg:max-w-lg">
+      <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 sm:w-4/5">
         <div className="max-w-md mx-auto">
           <div className="divide-y divide-gray-400/50">
             <div className="h-1/3">
