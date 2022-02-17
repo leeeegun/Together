@@ -256,6 +256,8 @@ export default function Conference({
     setParticipants((participants) => {
       return { ...participants, [sender]: participant };
     }); // 비동기처리를 위한 콜백 setState
+    participants[userId].rtcPeer.videoEnabled = isVideoEnabled
+    participants[userId].rtcPeer.audioEnabled = isMicEnabled
 
     const video = participant.getVideoElement();
 
@@ -322,8 +324,8 @@ export default function Conference({
         if (error) return console.error(error);
       },
     );
-    participants[userId].rtcPeer.videoEnabled = isVideo; // 받아온 prop으로부터 시작할 때 비디오 on/off를 결정합니다.
-    participants[userId].rtcPeer.audioEnabled = isMic;
+    participants[userId].rtcPeer.videoEnabled = isVideoEnabled; // 받아온 prop으로부터 시작할 때 비디오 on/off를 결정합니다.
+    participants[userId].rtcPeer.audioEnabled = isMicEnabled;
   }
 
   function callResponse(message) {
