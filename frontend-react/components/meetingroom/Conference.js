@@ -17,6 +17,7 @@ import Chat from "./Chat";
 
 const PARTICIPANT_MAIN_CLASS = "participant main";
 const PARTICIPANT_CLASS = "participant";
+const isSTTEnabled = [true, false]; // 
 
 export default function Conference({
   myName,
@@ -25,7 +26,7 @@ export default function Conference({
   isMic,
   isVideo,
   userId,
-  disability // 장애 유형을 입력받습니다.
+  disability, // 장애 유형을 입력받습니다.
 }) {
   // 받아오는 myName이 자신의 닉네임이고 userId가 아이디입니다!
   // participant 객체의 name은 해당 사용자의 아이디이고 nickname은 닉네임입니다!
@@ -52,8 +53,8 @@ export default function Conference({
       room: myRoom,
       nickname: myName, // ㄹㅇ 닉네임
     };
+    test[0] = isMicEnabled
     sendMessage(message);
-    console.log("설마 웹소켓이?", ws);
     createStt(); // 페이지 렌더 시 바로 STT 기능 활성화
     window.screen.orientation.lock("portrait").then(
       (success) => console.log(success),
@@ -141,6 +142,9 @@ export default function Conference({
 
   // 생성된 STT 백서버로 전달
   const sendStt = (stt) => {
+    if (!test[0]) {
+      return
+    }
     const msg = {
       id: "chatMsg",
       name: userId,
@@ -148,7 +152,7 @@ export default function Conference({
       // content: sendSttMsg,
       content: `b${stt}`, // STT 메시지일 때는 앞에 "b"를 덧붙입니다!
     };
-    console.log(`sending STT message : ${stt}`);
+    // console.log(`sending STT message : ${stt}`);
     sendMessage(msg);
   };
 
@@ -183,7 +187,7 @@ export default function Conference({
   // 미디어서버로부터 메시지를 받은 경우. STT일 수도, 일반 채팅일 수도 있습니다!
   const receiveStt = (parsedMessage) => {
     const participant = participants[parsedMessage.owner];
-    if (participant) {
+    if (!participant) {
       return
     }
 
@@ -207,7 +211,9 @@ export default function Conference({
       setChats(newChats);
       !isChatEnabled && setIsNoti(true);
       if (disability === 1 && isTTSEnabled) {
-        speak(nickname, chatMsg)
+        if (parsedMessage.owner !== userId) {
+          speak(nickname, chatMsg)
+        }
       }
       meetingroomMessage.current.scrollTo(
         0,
@@ -256,7 +262,6 @@ export default function Conference({
       remoteVideo: video,
       onicecandidate: participant.onIceCandidate.bind(participant),
     };
-    console.log("video 태그: ", video);
     participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
       options,
       function (error) {
@@ -281,14 +286,12 @@ export default function Conference({
         },
       },
     };
-    console.log(msg);
     const participant = new Participant(userId, myName); // 처리 대상 유저 객체
     // participant.nickname = myName
     setParticipants((participants) => {
       return { ...participants, [userId]: participant };
     }); // 비동기처리를 위한 콜백 setState
     const video = participant.getVideoElement();
-    console.log("내 비디오:", video);
     const options = {
       localVideo: video,
       mediaConstraints: constraints,
@@ -399,7 +402,7 @@ export default function Conference({
 
     this.offerToReceiveVideo = function (error, offerSdp, wp) {
       if (error) return console.error("sdp offer error");
-      console.log("Invoking SDP offer callback function");
+      // console.log("Invoking SDP offer callback function");
       const msg = {
         id: "receiveVideoFrom",
         sender: name,
@@ -410,7 +413,7 @@ export default function Conference({
     };
 
     this.onIceCandidate = function (candidate, wp) {
-      console.log("Local candidate" + JSON.stringify(candidate));
+      // console.log("Local candidate" + JSON.stringify(candidate));
 
       const message = {
         id: "onIceCandidate",
@@ -423,7 +426,7 @@ export default function Conference({
     Object.defineProperty(this, "rtcPeer", { writable: true });
 
     this.dispose = function () {
-      console.log("Disposing participant " + this.name);
+      // console.log("Disposing participant " + this.name);
       this.rtcPeer.dispose();
       container.parentNode.removeChild(container);
     };
@@ -447,7 +450,7 @@ export default function Conference({
 
   function sendMessage(message) {
     const jsonMessage = JSON.stringify(message);
-    console.log("Sending message: " + jsonMessage);
+    // console.log("Sending message: " + jsonMessage);
     ws.send(jsonMessage);
   }
 
@@ -469,7 +472,6 @@ export default function Conference({
   }
 
   const toggleVideo = () => {
-    console.log("비디오 토글:", participants);
     participants[userId].rtcPeer.videoEnabled =
       !participants[userId].rtcPeer.videoEnabled;
     setIsVideoEnabled(!isVideoEnabled);

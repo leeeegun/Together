@@ -14,14 +14,19 @@
   gap: 1rem;
   margin-top: 2vh;
   width: 100%;
-  height: 84vh;
+  height: 88vh;
   overflow-y: auto;
   transition: all ease-out 0.5s;
 }
 
+#meetingroom-participants > div {
+  position:relative;
+  height: 40vh;
+}
+
 .meetingroom-frame {
   width: 100%;
-  height: 37vh;
+  height: 38vh;
   /* overflow: hidden; */
 }
 
@@ -35,25 +40,28 @@
   display: block;
   margin: auto;
   width: 50%;
-  position: relative;
+  left: 25%;
+  bottom: 2rem;
+  position: absolute;
   padding: 0.5rem;
   background-color: rgba(128, 128, 128, 0.3);
   color: white;
-  transform: translateY(-3rem);
 }
 
 #meetingroom-participants blockquote {
-  position: relative;
+  position: absolute;
+  bottom: -4px;
+  left: 10%;
   border-radius: .4em;
-  color: #FFFFFF;
+  color: black;
   background-color: #BEBBB1;
-  border-bottom-color: #BEBBB1;
+  /* border-bottom-color: #BEBBB1; */
   /* border: 24px solid transparent; */
   border-top: 0;
   border-right: 0;
-  width: 50%;
+  width: 80%;
   margin: auto;
-  margin-top: -1rem;
+  font-size: 1.5rem;
 }
 
 

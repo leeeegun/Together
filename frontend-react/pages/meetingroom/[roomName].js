@@ -86,7 +86,7 @@ export default function Meeting({ roomName }) {
       .catch(() => {});
   };
 
-  const joinRoom = async (e) => {
+  const joinRoom = (e) => {
     e.preventDefault();
     // return fetch(
     //   `${process.env.NEXT_PUBLIC_API_URL}/conference/join/${conferenceName}/${uid}`,
@@ -106,8 +106,8 @@ export default function Meeting({ roomName }) {
     //     setIsJoin(false);
     //   })
     //   .catch(() => {});
-    await setMyName(e.target[0].value);
-    await setIsJoin(false);
+    setMyName(e.target[0].value);
+    setIsJoin(false);
   };
 
   // 초기에 비디오를 사용할지 토글하는 함수입니다.
@@ -313,6 +313,7 @@ export default function Meeting({ roomName }) {
           isMic={isMic} // 마이크를 사용할지 prop으로 넘겨줍니다.
           isVideo={isVideo} // 비디오를 사용할지 prop으로 넘겨줍니다.
           disability={disability} // 장애 유형을 prop으로 넘겨줍니다.
+          setIsMic={setIsMic}
         ></Conference>
       )}
     </>
