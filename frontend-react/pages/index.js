@@ -162,17 +162,18 @@ export default function Home() {
             </a>
           </Link>
         </p>
-        <p className="text-xs lg:text-sm">
+        <span tabIndex="0" className="text-xs lg:text-sm">
           이미 만들어진 회의에 참여하고 싶으세요?
-          <span className="text-red-500">
-            <a
-              className="block text-center hover:text-red-600 hover:font-semibold"
-              aria-label="생성된 회의에 참여하기"
-            >
-              회의 참여하기
-            </a>
+        </span>
+        <span className="text-red-500">
+            <button tabIndex="0" onClick={loginClick}>
+              <a
+                className="block text-center hover:text-red-600 hover:font-semibold"
+              >
+                회의 참여하기
+              </a>
+            </button>
           </span>
-        </p>
       </div>
       <div className="w-screen h-screen overflow-scroll snap-y snap-mandatory scroll-smooth">
         <LandingParagraph
