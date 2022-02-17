@@ -37,7 +37,7 @@ a {
 /* 말풍선  */
 
 
-.speech-bubble:after {
+/* .speech-bubble:after {
 	content: '';
   color: #FFFFFF;
   border-radius: .4em;
@@ -52,4 +52,4 @@ a {
 	border-right: 0;
 	margin-left: -150px;
 	margin-top: -24px;
-}
+} */
