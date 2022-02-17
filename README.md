@@ -13,7 +13,7 @@
 <img alt="Tailwind CSS" src ="https://img.shields.io/badge/Tailwind CSS-06B6D4.svg?&style=for-the-badge&logo=Tailwind CSS&logoColor=white"/>
 <img alt="CSS3" src ="https://img.shields.io/badge/CSS3-1572B6.svg?&style=for-the-badge&logo=CSS3&logoColor=white"/>
 <img alt="Babel" src ="https://img.shields.io/badge/Babel-F9DC3E.svg?&style=for-the-badge&logo=Babel&logoColor=white"/>
-<img alt="Netlify" src ="https://img.shields.io/badge/Netlify-00C7B7.svg?&style=for-the-badge&logo=Netlify&logoColor=white"/>
+
 
 #### BackEnd
 <img alt="Spring Boot" src ="https://img.shields.io/badge/Spring Boot-6DB33F.svg?&style=for-the-badge&logo=Spring Boot&logoColor=white"/>
@@ -24,7 +24,19 @@
 <img alt="Coturn" src ="https://img.shields.io/badge/Coturn-EB680B.svg?&style=for-the-badge&logo=Apache Maven&logoColor=EB680B"/>
 <img alt="MySQL" src ="https://img.shields.io/badge/MySQL-4479A1.svg?&style=for-the-badge&logo=MySQL&logoColor=white"/>
 <img alt="OpenSSL" src ="https://img.shields.io/badge/OpenSSL-721412.svg?&style=for-the-badge&logo=OpenSSL&logoColor=white"/>
+
+
+### DevOps
 <img alt="Amazon AWS" src ="https://img.shields.io/badge/Amazon AWS-232F3E.svg?&style=for-the-badge&logo=Amazon AWS&logoColor=white"/>
+<img alt="Netlify" src ="https://img.shields.io/badge/Netlify-00C7B7.svg?&style=for-the-badge&logo=Netlify&logoColor=white"/>
+<img alt="Docker" src ="https://img.shields.io/badge/Docker-2496ED.svg?&style=for-the-badge&logo=Docker&logoColor=white"/>
+
+### Co-tool
+<img alt="Jira" src ="https://img.shields.io/badge/Jira-0052CC.svg?&style=for-the-badge&logo=Jira&logoColor=white"/>
+<img alt="GitLab" src ="https://img.shields.io/badge/GitLab-FCA121.svg?&style=for-the-badge&logo=GitLab&logoColor=white"/>
+
+### 시스템 구상도
+![image](/uploads/de87c10ac334d19914d736ad03addd82/image.png)
 
 ### 📌 주요 기능
 * **회원 관리**
@@ -47,46 +59,50 @@
 
  * **팀장**
  * Database
- * Login API
+ * Login API / JWT
  * 동영상 제작
 </details>
 <details><summary><strong>이　건</strong> [ BE ]</summary>
 
-  * Kurrento, Socket
-  * User API
-  * 문서 작성
-  * Http
+  * Kurrento 코드 포팅/수정
+  * 시그널링 서버 구축
+  * User API 
 </details>
 <details><summary><strong>이호성</strong> [ BE ]</summary>
 
-  * Kurrento, Socket
+  * Kurrento 코드 포팅/수정
+  * 시그널링 서버 구축
   * Conference API
-  * 문서 작성
-  * Http
 </details>
 <details><summary><strong>강민수</strong> [ FE ]</summary>
 
-  * Kurrento, Socket
-  * Conference API
-  * 문서 작성
-  * Http
+  * STT, TTS 서버 구축
+  * 랜딩, 메인, 가이드 페이지 레이아웃
+  * 로그인, 회원가입 컴포넌트 연결
+  * 회원 정보 수정 폼
+  * 배포 및 도메인 연결
 </details>
 <details><summary><strong>김태훈</strong> [ FE ]</summary>
 
-  * Kurrento, Socket
-  * Conference API
-  * 문서 작성
-  * Http
+  * 로그인, 회원가입 컴포넌트 제작
+  * 사이트 레이아웃 수정
+  * 웹 접근성 WAI-ARIA 담당
 </details>
 <details><summary><strong>진민규</strong> [ FE ]</summary>
 
-  * Kurrento, Socket
-  * Conference API
-  * 문서 작성
-  * Http
+  * 채팅방 구현
+  * 화상회의 구현
+  * STT, TTS 화상회의 연결
 </details>
-<br>
-<br>
 
-## 목차
+### :penguin: 빌드 및 배포
+* [보러가기✔]()
 
+### :triangular_flag_on_post: 버전 정보
+* [보러가기✔]()
+
+### :beginner: DB 정보
+* [보러가기✔]()
+
+### :ticket: 외부 서비스
+* [보러가기✔]()
