@@ -164,10 +164,10 @@ export default function Home() {
             </a>
           </Link>
         </p>
-        <p className="text-xs lg:text-sm flex flex-col">
+        <p className="flex flex-col text-xs lg:text-sm">
           이미 만들어진 회의에 참여하고 싶으세요?
           <button
-            className="text-red-500 block"
+            className="block text-red-500"
             tabIndex="0"
             onClick={loginClickJoin}
           >
