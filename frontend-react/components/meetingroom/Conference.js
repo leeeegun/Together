@@ -163,6 +163,7 @@ export default function Conference({
         icon: "error",
         title: "브라우저 미지원",
         text: "이 브라우저는 TTS를 지원하지 않습니다. 다른 브라우저를 이용해 주세요...!",
+        confirmButtonAriaLabel: "확인"
       });
       return "error";
     }

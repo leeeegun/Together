@@ -89,7 +89,7 @@ public class Room implements Closeable {
     final JsonObject newParticipantMsg = new JsonObject();
     newParticipantMsg.addProperty("id", "newParticipantArrived");
     newParticipantMsg.addProperty("name", newParticipant.getName());
-    newParticipantMsg.addProperty("nickname", newParticipant.getName());
+    newParticipantMsg.addProperty("nickname", newParticipant.getNickname());
 
     final List<String> participantsList = new ArrayList<>(participants.values().size());
     log.info("ROOM {}: notifying other participants of new participant {} (nickname : {})", name,
