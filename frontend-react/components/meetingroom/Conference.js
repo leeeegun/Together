@@ -701,7 +701,7 @@ export default function Conference({
               placeholder="채팅을 입력하세요"
               ref={messageInput}
             ></input>
-            <button className="w-2/12 min-w-fit mt-2 bg-[#009e747a] hover:bg-[#009e7494] text-white font-bold py-1 px-2 rounded ml-2">
+            <button aria-label="전송" className="w-2/12 min-w-fit mt-2 bg-[#009e747a] hover:bg-[#009e7494] text-white font-bold py-1 px-2 rounded ml-2">
               <FontAwesomeIcon icon={faPaperPlane} size="1x" />
             </button>
           </form>
