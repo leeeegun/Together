@@ -205,14 +205,15 @@ export default function Meeting({ roomName }) {
           }}
         >
           <div className="flex flex-row w-full max-w-4xl bg-white border shadow-xl rounded-2xl h-3/6">
-            <div role="article" tabIndex="0" className="flex flex-col items-start justify-center content-center p-10 w-6/12 bg-[#ece6cc] rounded-l-2xl">
-              <h1 className="mb-10 text-2xl font-semibold text-gray-500 subject">
+            <div aria-labelledby="waitRoomInfo" role="article" tabIndex="0" className="flex flex-col items-start justify-center content-center p-10 w-6/12 bg-[#ece6cc] rounded-l-2xl">
+              <h1 tabIndex="0" className="mb-10 text-2xl font-semibold text-gray-500 subject">
                 {conferenceName}님의 회의실
               </h1>
               <br></br>
-              <p>{description ? description : "설명이 없습니다"}</p>
+              <p tabIndex="0" role="note">{description ? description : "설명이 없습니다"}</p>
+              <span id="waitRoomInfo">대기실, 회의실에 입장하기 전 닉네임 마이크 카메라 설정이 가능합니다.</span>
             </div>
-            <div className="flex flex-col items-center content-center justify-center w-6/12 p-10 space-y-4">
+            <div role="heading" tabIndex="0" className="flex flex-col items-center content-center justify-center w-6/12 p-10 space-y-4">
               <strong className="z-10 w-4/6 text-2xl font-bold text-center text-gray-700 waiting">
                 대기실
               </strong>
