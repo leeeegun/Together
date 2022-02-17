@@ -52,7 +52,7 @@ export default function Home() {
       toast: true,
       position: "top-end",
       showConfirmButton: false,
-      timer: 1000,
+      timer: 3000,
       timerProgressBar: true,
       didOpen: (toast) => {
         toast.addEventListener("mouseenter", Swal.stopTimer);
@@ -60,10 +60,12 @@ export default function Home() {
       },
     });
 
-    Toast.fire({
-      icon: "question",
-      title: "로그인이 필요합니다.",
-    });
+    if (!showLoginForm) {
+      Toast.fire({
+        icon: "question",
+        title: "로그인이 필요합니다.",
+      });
+    }
     setShowLoginForm(!showLoginForm);
 
     const loginButton = document.querySelector("#login-button");
@@ -122,7 +124,7 @@ export default function Home() {
         <img
           src="images/svg/Together.svg"
           alt="웹앱 로고, Together"
-          className="mb-5 w-2/4"
+          className="mb-5"
           tabIndex="0"
         ></img>
         <p>
@@ -156,29 +158,35 @@ export default function Home() {
             </a>
           </Link>
         </p>
-        <p className="text-xs lg:text-sm">
+        <p className="text-xs lg:text-sm flex flex-col">
           이미 만들어진 회의에 참여하고 싶으세요?
-          <span className="text-red-500">
-            <a
-              className="block text-center hover:text-red-600 hover:font-semibold"
-              aria-label="생성된 회의에 참여하기"
-            >
+          <button
+            className="text-red-500 block"
+            tabIndex="0"
+            onClick={loginClickJoin}
+          >
+            <a className="block text-center hover:text-red-600 hover:font-semibold hover:cursor-pointer">
               회의 참여하기
             </a>
-          </span>
+          </button>
         </p>
       </div>
       <div className="w-screen h-screen overflow-scroll snap-y snap-mandatory scroll-smooth">
         <LandingParagraph
-          src={LandingImage01}
-          text="화상회의 플랫폼 Together와 함께 재미있는 시간을 보내봐요!"
+          src="images/LandingImage01.jpg"
+          text="Together는 색각 이상자를 위한 각각의 구별되는 컬러톤을 사용하여
+            시각적 효과를 증진하였습니다. 또한, 시각적 효과를 부각하기 위해
+            애니메이션 효과로 사용자가 어떤 창에 포커스 하고있는지를 즉각적으로
+            보여지게 구현되었습니다. Together는 이런 효과적인 접근성을 바탕으로
+            사용자로 하여금 최고의 경험을 선사합니다."
         />
         <LandingParagraph
-          src={LandingImage01}
-          text="화상회의 플랫폼 Together와 함께 재미있는 시간을 보내봐요!"
+          src="images/LandingImage01.jpg"
+          text="청각 장애인의 경우, Together가 제공하는 STT기능을 사용하여 다른 회의
+            참여자가 하는 음성을 말풍선 형태의 자막으로 제공받으실 수 있습니다."
         />
         <LandingParagraph
-          src={LandingImage01}
+          src="images/LandingImage01.jpg"
           text="화상회의 플랫폼 Together와 함께 재미있는 시간을 보내봐요!"
         />
         {showSignUpForm ? <SignUpForm /> : null}

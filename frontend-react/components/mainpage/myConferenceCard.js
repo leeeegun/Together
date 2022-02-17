@@ -40,9 +40,10 @@ export default function myConferenceCard({ text, src, link, username }) {
     copyToClipboard(encoded);
     Swal.fire({
       title: "초대링크 복사 성공!",
-      html: `<p>바로 이동하기 : <a href=${link} style="text-decoration: underline">이동하기</a></p>`,
+      html: `<p>바로 이동하기 : <a href=${link} style="text-decoration: underline">회의실로 이동하기</a></p>`,
       timer: 1000000,
       icon: "success",
+      confirmButtonAriaLabel: "확인",
     });
   };
   return (
@@ -51,20 +52,29 @@ export default function myConferenceCard({ text, src, link, username }) {
       whileTap={{ scale: 0.8 }}
       onHoverStart={onHover}
       onHoverEnd={onHover}
-      onTap={handleClickMyConference}
       className="hover:cursor-pointer"
     >
-      <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 sm:w-4/5">
+      <button
+        onClick={handleClickMyConference}
+        className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 sm:w-4/5"
+      >
         <div className="max-w-md mx-auto">
           <div className="divide-y divide-gray-400/50">
             <div className="h-1/3">
-              <img src={src} className="main-image"></img>
+              <img aria-hidden src={src} className="main-image"></img>
             </div>
             <div className="py-8 flex justify-center">
               <a className="opacity-75 cursor-pointer">
-                <p className="text-3xl" id={"link" + link}>
+                <p
+                  aria-labelledby="newConfInfo"
+                  className="text-3xl"
+                  id={"link" + link}
+                >
                   {text}
                 </p>
+                <span id="newConfInfo" hidden>
+                  내 회의실, 회의를 열어 사람들과 소통해보세요
+                </span>
                 <p id={"description" + link} className="hidden">
                   회의를 열어 사람들과 소통해보세요! 😆
                 </p>
@@ -73,7 +83,7 @@ export default function myConferenceCard({ text, src, link, username }) {
             <div className="divide-y divide-gray-400/50"></div>
           </div>
         </div>
-      </div>
+      </button>
     </motion.div>
   );
 }

@@ -1,5 +1,4 @@
 import React from "react";
-import Image from "next/image";
 import Router from "next/router";
 import { motion } from "framer-motion";
 
@@ -18,17 +17,19 @@ export default function linkCard({ text, src, link, username, description }) {
   return (
     <motion.div
       whileHover={{ scale: 1.2 }}
-      whileTap={{ scale: 0.9 }}
+      whileTap={{ scale: 0.8 }}
       onHoverStart={onHover}
       onHoverEnd={onHover}
-      onTap={handleClickLinkCard}
       className="hover:cursor-pointer"
     >
-      <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 lg:max-w-lg xs:min-w-sm sm:w-4/5">
+      <button
+        onClick={handleClickLinkCard}
+        className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 lg:max-w-lg xs:min-w-sm sm:w-4/5"
+      >
         <div className="max-w-md mx-auto">
           <div className="divide-y divide-gray-400/50">
             <div className="h-1/3">
-              <img src={src} className="main-image"></img>
+              <img aria-hidden src={src} className="main-image"></img>
             </div>
             <div className="py-8 flex justify-center">
               <h1
@@ -44,7 +45,7 @@ export default function linkCard({ text, src, link, username, description }) {
             <div className="divide-y divide-gray-400/50"></div>
           </div>
         </div>
-      </div>
+      </button>
     </motion.div>
   );
 }

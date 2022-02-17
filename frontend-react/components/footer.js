@@ -3,7 +3,7 @@ import { motion } from "framer-motion";
 
 export default function footer() {
   return (
-    <footer className="flex flex-col text-center justify-center sticky bg-[#bebbb1] py-10">
+    <footer className="flex flex-col text-center justify-center sticky bg-[#bebbb1] py-10 mt-96">
       <img
         src="images/svg/Together.svg"
         alt="Together 로고"

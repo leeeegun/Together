@@ -1,7 +1,5 @@
 import React from "react";
 import Footer from "../components/footer.js";
-import Image from "next/image";
-import RandomImage from "../public/images/RandomImage.jpg";
 import Link from "next/link";
 import { motion } from "framer-motion";
 import CustomLi from "../components/guide/customLi";
@@ -41,11 +39,11 @@ function guide() {
             <strong className="text-3xl">📖 가이드</strong>
           </p>
           <p className="flex flex-col my-10">
-            <Image
-              src={RandomImage}
+            <img
+              src="images/RandomImage.jpg"
               alt="이미지"
               className="mx-auto rounded-3xl"
-            ></Image>
+            ></img>
           </p>
           <p tabIndex="0" className="mt-5">
             Together는 시각 및 청각 장애인들을 위한 화상회의 플랫폼입니다.
@@ -70,8 +68,8 @@ function guide() {
             <strong className="hover:text-slate-700 ">
               전맹 시각 장애인의 경우, 기존에 사용하는 TTS 리더를 사용하시거나,
               Together에서 제공하는 TTS 기능을 사용하실 수 있습니다. TTS 리더에
-              대한 자세한 정보는 이 단락을 클릭하거나, 아래 TTS 리더 다운로드를
-              통해 사용하시기 바랍니다.
+              대한 자세한 정보는 아래 TTS 리더 다운로드를 참고하여 사용하시기
+              바랍니다.
             </strong>
           </div>
           <br></br>
@@ -80,10 +78,10 @@ function guide() {
             참여자가 하는 음성을 말풍선 형태의 자막으로 제공받으실 수 있습니다.
           </p>
 
-          <ul className="mx-5 my-5">
+          <ul className="mx-5 my-5" aria-expanded="false">
             <CustomLi
               text="STT(음성인식 자막) 기능을 사용하려면 어떻게 해야 하죠?"
-              description="음성인식 자막 기능은 Together에서 기본으로 제공하는 기능입니다. 화상 회의 내에 자동으로 생성되는 말풍선으로 자막이 제공되며, 말풍선 기능의 사용이 필요하지 않은 경우, 토글 버튼을 통해 자막 기능을 끌 수 있습니다."
+              description="음성인식 자막 기능은 Together에서 기본으로 제공하는 기능입니다. 화상 회의 내에 자동으로 생성되는 말풍선으로 자막이 제공되며, 시각 장애인의 원활한 소통을 위해 채팅 내용이 음성으로 자동 변환될 수 있습니다."
               key="1"
             ></CustomLi>
             <CustomLi

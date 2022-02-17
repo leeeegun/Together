@@ -2,6 +2,7 @@ import React from "react";
 import Swal from "sweetalert2";
 import { motion } from "framer-motion";
 import { useState } from "react";
+import Router from "next/router";
 
 export default function profileCard({
   text,
@@ -21,9 +22,8 @@ export default function profileCard({
   const handleClickProfile = (e) => {
     e.preventDefault();
     Swal.fire({
-      text: "",
-      html: `비밀번호를 입력해주세요
-            <input type="password" id="password" class="swal2-input" placeholder="비밀번호">`,
+      title: "비밀번호를 입력해주세요",
+      html: `<input type="password" id="password" class="swal2-input" placeholder="비밀번호">`,
       confirmButtonText: "확인",
       showCancelButton: true,
       cancelButtonText: "취소",
@@ -53,6 +53,7 @@ export default function profileCard({
     }).then((result) => {
       if (result.isConfirmed) {
         Swal.fire({
+          title: `<h2 hidden role="note" aria-label="닉네임과 장애 유형 수정이 가능합니다. 원하시는 닉네임을 입력하거나 장애 유형을 선택해주세요."></h2>`,
           html:
             `<label for="swal-input1">닉네임</label><input id="swal-input1" class="swal2-input" value=${username} placeholder="3-5글자">` +
             `<br></br>` +
@@ -89,8 +90,12 @@ export default function profileCard({
               .then((res) => {
                 Swal.fire({
                   icon: "success",
-                  text: "변경이 완료되었습니다! 😄",
+                  title: `<span role="note" hidden aria-label="변경이 완료되었습니다"></span>`,
+                  text: "변경이 완료되었습니다! 😄 다시 로그인 해주세요!",
+                  confirmButtonAriaLabel: "확인",
                 });
+                localStorage.removeItem("token");
+                Router.push("/");
               })
               .catch((error) => {
                 Swal.showValidationMessage(`오류가 발생했습니다.`);
@@ -106,14 +111,16 @@ export default function profileCard({
       whileTap={{ scale: 0.8 }}
       onHoverStart={onHover}
       onHoverEnd={onHover}
-      onTap={handleClickProfile}
       className="hover:cursor-pointer"
     >
-      <div className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 sm:w-4/5">
+      <button
+        onClick={handleClickProfile}
+        className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 sm:w-4/5"
+      >
         <div className="max-w-md mx-auto">
           <div className="divide-y divide-gray-400/50">
             <div className="h-1/3">
-              <img src={src} className="main-image"></img>
+              <img aria-hidden src={src} className="main-image"></img>
             </div>
             <div className="py-8 flex justify-center">
               <a className="opacity-75 cursor-pointer">
@@ -128,7 +135,7 @@ export default function profileCard({
             <div className="divide-y divide-gray-400/50"></div>
           </div>
         </div>
-      </div>
+      </button>
     </motion.div>
   );
 }

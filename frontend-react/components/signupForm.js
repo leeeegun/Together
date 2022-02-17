@@ -196,6 +196,7 @@ const SignupForm = () => {
         title: "<strong>회원가입 실패!</strong>",
         html: "오류가 발생했어요 😅",
         icon: "error",
+        confirmButtonAriaLabel: "확인",
       });
     }
     setSuccessMessage("");
