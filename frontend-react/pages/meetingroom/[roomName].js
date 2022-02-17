@@ -36,6 +36,7 @@ export default function Meeting({ roomName }) {
         icon: "error",
         title: "로그인 실패..",
         text: "로그인을 다시 해주세요!",
+        confirmButtonAriaLabel: "확인"
       });
       Router.push("/");
     } else {
@@ -117,6 +118,7 @@ export default function Meeting({ roomName }) {
     Swal.fire({
       title: message,
       icon: "success",
+      confirmButtonAriaLabel: "확인"
     });
     setIsVideo(!isVideo);
   };
@@ -128,6 +130,7 @@ export default function Meeting({ roomName }) {
     Swal.fire({
       title: message,
       icon: "success",
+      confirmButtonAriaLabel: "확인"
     });
     setIsMic(!isMic);
   };
@@ -174,6 +177,7 @@ export default function Meeting({ roomName }) {
         Swal.fire({
           icon: "success",
           title: "수정 완료!",
+          confirmButtonAriaLabel: "확인"
         });
       }
     });
@@ -200,20 +204,21 @@ export default function Meeting({ roomName }) {
             },
           }}
         >
-          <div className="bg-white rounded-2xl border shadow-xl max-w-4xl flex flex-row w-full h-3/6">
-            <div className="flex flex-col items-start justify-center content-center p-10 w-6/12 bg-[#ece6cc] rounded-l-2xl">
-              <h1 className="font-semibold text-2xl text-gray-500 mb-10 subject">
+          <div className="flex flex-row w-full max-w-4xl bg-white border shadow-xl rounded-2xl h-3/6">
+            <div aria-labelledby="waitRoomInfo" role="article" tabIndex="0" className="flex flex-col items-start justify-center content-center p-10 w-6/12 bg-[#ece6cc] rounded-l-2xl">
+              <h1 tabIndex="0" className="mb-10 text-2xl font-semibold text-gray-500 subject">
                 {conferenceName}님의 회의실
               </h1>
               <br></br>
-              <p>{description ? description : "설명이 없습니다"}</p>
+              <p tabIndex="0" role="note">{description ? description : "설명이 없습니다"}</p>
+              <span id="waitRoomInfo">대기실, 회의실에 입장하기 전 닉네임 마이크 카메라 설정이 가능합니다.</span>
             </div>
-            <div className="flex flex-col items-center justify-center content-center p-10 space-y-4 w-6/12">
-              <strong className="font-bold text-2xl text-gray-700 w-4/6 text-center waiting z-10">
+            <div role="heading" tabIndex="0" className="flex flex-col items-center content-center justify-center w-6/12 p-10 space-y-4">
+              <strong className="z-10 w-4/6 text-2xl font-bold text-center text-gray-700 waiting">
                 대기실
               </strong>
               <form
-                className="flex flex-col gap-10 text-center items-center"
+                className="flex flex-col items-center gap-10 text-center"
                 onSubmit={joinRoom}
                 acceptCharset="UTF-8"
               >
@@ -236,7 +241,7 @@ export default function Meeting({ roomName }) {
                     aria-label="본인 마이크 끄기"
                     title="누르시면 마이크를 끈 채로 시작합니다"
                     onClick={toggleMic}
-                    className="meetingroom-red inline"
+                    className="inline meetingroom-red"
                     whileHover={{ scale: 1.2 }}
                   >
                     <FontAwesomeIcon
@@ -250,7 +255,7 @@ export default function Meeting({ roomName }) {
                     aria-label="본인 마이크 켜기"
                     title="누르시면 마이크를 켠 채로 시작합니다"
                     onClick={toggleMic}
-                    className="meetingroom-grey inline"
+                    className="inline meetingroom-grey"
                     whileHover={{ scale: 1.2 }}
                   >
                     <FontAwesomeIcon
@@ -266,7 +271,7 @@ export default function Meeting({ roomName }) {
                     aria-label="본인 비디오 끄기"
                     title="누르시면 비디오를 끈 채로 시작합니다"
                     onClick={toggleVideo}
-                    className="meetingroom-red inline mx-3"
+                    className="inline mx-3 meetingroom-red"
                     whileHover={{ scale: 1.2 }}
                   >
                     <FontAwesomeIcon
@@ -280,7 +285,7 @@ export default function Meeting({ roomName }) {
                     aria-label="본인 비디오 켜기"
                     title="누르시면 비디오를 켠 채로 시작합니다"
                     onClick={toggleVideo}
-                    className="meetingroom-grey inline mx-3"
+                    className="inline mx-3 meetingroom-grey"
                     whileHover={{ scale: 1.2 }}
                   >
                     <FontAwesomeIcon
@@ -293,7 +298,7 @@ export default function Meeting({ roomName }) {
               </div>
               {isHost ? (
                 <button
-                  className="hover:font-semibold inline"
+                  className="inline hover:font-semibold"
                   onClick={changeConference}
                 >
                   호스트시네요? 방 정보 수정하기

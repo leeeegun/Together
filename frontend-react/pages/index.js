@@ -36,6 +36,12 @@ export default function Home() {
     }
   };
 
+  //signup completed
+  const signUpComplete = () => {
+    setShowSignUpForm(false);
+    setShowLoginForm(true);
+  };
+
   const loginClick = () => {
     setShowLoginForm(!showLoginForm);
     const loginButton = document.querySelector("#login-button");
@@ -181,7 +187,7 @@ export default function Home() {
           src={LandingImage01}
           text="화상회의 플랫폼 Together와 함께 재미있는 시간을 보내봐요!"
         />
-        {showSignUpForm ? <SignUpForm /> : null}
+        {showSignUpForm ? <SignUpForm signUpComplete={signUpComplete} /> : null}
         {showLoginForm ? <LoginForm /> : null}
       </div>
       <button
