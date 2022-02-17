@@ -211,7 +211,7 @@ export default function Meeting({ roomName }) {
               </h1>
               <br></br>
               <p tabIndex="0" role="note">{description ? description : "설명이 없습니다"}</p>
-              <span id="waitRoomInfo">대기실, 회의실에 입장하기 전 닉네임 마이크 카메라 설정이 가능합니다.</span>
+              <span hidden id="waitRoomInfo">대기실, 회의실에 입장하기 전 닉네임 마이크 카메라 설정이 가능합니다.</span>
             </div>
             <div role="heading" tabIndex="0" className="flex flex-col items-center content-center justify-center w-6/12 p-10 space-y-4">
               <strong className="z-10 w-4/6 text-2xl font-bold text-center text-gray-700 waiting">
