@@ -210,30 +210,16 @@ export default function Meeting({ roomName }) {
             },
           }}
         >
-          <div className="bg-white rounded-2xl border shadow-xl max-w-4xl flex flex-row w-full h-3/6">
+          <div className="flex flex-row w-full max-w-4xl bg-white border shadow-xl rounded-2xl h-3/6">
             <div
               aria-labelledby="waitRoomInfo"
               role="article"
               tabIndex="0"
               className="flex flex-col items-start justify-center content-center p-10 w-6/12 bg-[#ece6cc] rounded-l-2xl"
             >
-              <button onClick={() => Router.push("/main")}>
-                <motion.img
-                  whileHover={{ scale: 1.3 }}
-                  src="/mainpage/Home-Logo.png"
-                  alt="홈 로고, 메인페이지로 이동합니다"
-                  style={{
-                    width: "40px",
-                    marginRight: "1rem",
-                    cursor: "pointer",
-                  }}
-                  className=""
-                />
-              </button>
-              <br></br>
               <h1
                 tabIndex="0"
-                className="font-semibold text-2xl text-gray-500 mb-10 subject"
+                className="mb-10 text-2xl font-semibold text-gray-500 subject"
               >
                 {conferenceName}님의 회의실
               </h1>
@@ -241,12 +227,16 @@ export default function Meeting({ roomName }) {
               <p tabIndex="0" role="note">
                 {description ? description : "설명이 없습니다"}
               </p>
-              <span hidden id="waitRoomInfo">
+              <span id="waitRoomInfo">
                 대기실, 회의실에 입장하기 전 닉네임 마이크 카메라 설정이
                 가능합니다.
               </span>
             </div>
-            <div className="flex flex-col items-center content-center justify-center w-6/12 p-10 space-y-4">
+            <div
+              role="heading"
+              tabIndex="0"
+              className="flex flex-col items-center content-center justify-center w-6/12 p-10 space-y-4"
+            >
               <strong className="z-10 w-4/6 text-2xl font-bold text-center text-gray-700 waiting">
                 대기실
               </strong>
@@ -353,7 +343,6 @@ export default function Meeting({ roomName }) {
           isMic={isMic} // 마이크를 사용할지 prop으로 넘겨줍니다.
           isVideo={isVideo} // 비디오를 사용할지 prop으로 넘겨줍니다.
           disability={disability} // 장애 유형을 prop으로 넘겨줍니다.
-          nickname={nickname}
           setIsMic={setIsMic}
         ></Conference>
       )}

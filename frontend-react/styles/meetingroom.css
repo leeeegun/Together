@@ -55,13 +55,13 @@
   border-radius: 0.4em;
   color: black;
   background-color: #bebbb1;
-  /* border-bottom-color: #BEBBB1; */
   /* border: 24px solid transparent; */
   font-size: 1.5rem;
   border-top: 0;
   border-right: 0;
   width: 80%;
   margin: auto;
+  font-size: 1.5rem;
 }
 
 #meetingroom-toolbar {

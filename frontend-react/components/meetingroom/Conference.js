@@ -17,7 +17,7 @@ import Chat from "./Chat";
 
 const PARTICIPANT_MAIN_CLASS = "participant main";
 const PARTICIPANT_CLASS = "participant";
-const test = [true, false];
+const test = [true, false]; //
 
 export default function Conference({
   myName,
@@ -27,7 +27,6 @@ export default function Conference({
   isVideo,
   userId,
   disability, // 장애 유형을 입력받습니다.
-  setIsMic,
 }) {
   // 받아오는 myName이 자신의 닉네임이고 userId가 아이디입니다!
   // participant 객체의 name은 해당 사용자의 아이디이고 nickname은 닉네임입니다!
@@ -56,7 +55,6 @@ export default function Conference({
     };
     test[0] = isMicEnabled;
     sendMessage(message);
-    // console.log("설마 웹소켓이?", ws);
     createStt(); // 페이지 렌더 시 바로 STT 기능 활성화
     window.screen.orientation
       .lock("portrait")
@@ -260,6 +258,8 @@ export default function Conference({
     setParticipants((participants) => {
       return { ...participants, [sender]: participant };
     }); // 비동기처리를 위한 콜백 setState
+    participants[userId].rtcPeer.videoEnabled = isVideoEnabled;
+    participants[userId].rtcPeer.audioEnabled = isMicEnabled;
 
     const video = participant.getVideoElement();
 
@@ -267,7 +267,6 @@ export default function Conference({
       remoteVideo: video,
       onicecandidate: participant.onIceCandidate.bind(participant),
     };
-    // console.log("video 태그: ", video);
     participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(
       options,
       function (error) {
@@ -292,14 +291,12 @@ export default function Conference({
         },
       },
     };
-    // console.log(msg);
     const participant = new Participant(userId, myName); // 처리 대상 유저 객체
     // participant.nickname = myName
     setParticipants((participants) => {
       return { ...participants, [userId]: participant };
     }); // 비동기처리를 위한 콜백 setState
     const video = participant.getVideoElement();
-    // console.log("내 비디오:", video);
     const options = {
       localVideo: video,
       mediaConstraints: constraints,
@@ -480,7 +477,6 @@ export default function Conference({
   }
 
   const toggleVideo = () => {
-    // console.log("비디오 토글:", participants);
     participants[userId].rtcPeer.videoEnabled =
       !participants[userId].rtcPeer.videoEnabled;
     setIsVideoEnabled(!isVideoEnabled);
