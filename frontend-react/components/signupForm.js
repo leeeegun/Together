@@ -5,7 +5,7 @@ const ID_REGEX = /^[a-zA-z][a-zA-Z0-9]{3,20}$/;
 const PW_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$*]).{8,24}$/;
 const EMAIL_REGEX = /^(?=.*[@])(?=.*[.com]).{8,40}$/;
 
-const SignupForm = ({signUpComplete}) => {
+const SignupForm = ({ signUpComplete }) => {
   const userEmailRef = useRef();
   const userStatusRef = useRef();
   const signupRef = useRef();
@@ -189,7 +189,7 @@ const SignupForm = ({signUpComplete}) => {
         title: "<strong>회원가입 완료!</strong>",
         html: "이제부터 모든 기능을 사용할 수 있어요!",
         icon: "success",
-        confirmButtonAriaLabel: "확인"
+        confirmButtonAriaLabel: "확인",
       });
       signUpComplete();
     }
@@ -198,7 +198,7 @@ const SignupForm = ({signUpComplete}) => {
         title: "<strong>회원가입 실패!</strong>",
         html: "오류가 발생했어요 😅",
         icon: "error",
-        confirmButtonAriaLabel: "확인"
+        confirmButtonAriaLabel: "확인",
       });
     }
     setSuccessMessage("");
@@ -211,14 +211,13 @@ const SignupForm = ({signUpComplete}) => {
 
   return (
     <div className="flex flex-col items-center justify-center w-screen h-screen right snap-center">
-      <section className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10 lg:max-w-sm w-4/12 xs:min-w-max"
-       role="form"
-       aria-label="회원가입 창" 
-       tabIndex="0"
+      <section
+        className="flex flex-col px-6 py-8 bg-[#E1E2E1] rounded-[50px] shadow sm:px-10 lg:max-w-sm w-4/12 xs:min-w-max"
+        role="form"
+        aria-label="회원가입 창"
+        tabIndex="0"
       >
-        <h1 className="text-center">
-          회원가입
-        </h1>
+        <h1 className="text-center">회원가입</h1>
 
         <form
           className="mb-0 "
@@ -248,7 +247,10 @@ const SignupForm = ({signUpComplete}) => {
                 className="border border-[#F1EDE3] px-3 py-1 rounded-lg shadow-sm focus:outline-none focus:border-[#BEBBB1] focus:ring-1 focus:ring-[#BEBBB1] w-full"
                 aria-labelledby="idInfo"
               />
-              <span hidden id="idInfo" role="">아이디, 대소문자와 숫자를 혼합하여 3글자에서 20글자 내로 작명해주세요</span>
+              <span hidden id="idInfo" role="">
+                아이디, 대소문자와 숫자를 혼합하여 3글자에서 20글자 내로
+                작명해주세요
+              </span>
             </div>
             <div className="mx-auto">
               <span

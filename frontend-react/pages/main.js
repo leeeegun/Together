@@ -31,7 +31,7 @@ export default function Main() {
         icon: "error",
         title: "로그인 실패..",
         text: "로그인을 다시 해주세요!",
-        confirmButtonAriaLabel: "확인"
+        confirmButtonAriaLabel: "확인",
       });
       Router.push("/");
     }

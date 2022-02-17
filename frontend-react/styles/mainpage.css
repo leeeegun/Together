@@ -100,9 +100,11 @@
 }
 
 #mainpage {
-  background-image: url("/images/svg/background3.svg");
-  background-size: cover;
-  object-fit: cover;
+  /* background-image: url("/images/svg/background3.svg");
+  background-position: bottom;
+  background-repeat: no-repeat;
+  background-size: cover; */
+  /* object-fit: cover; */
 }
 
 /* test */

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Conference from "../../components/meetingroom/Conference";
 import Swal from "sweetalert2";
 import Router from "next/router";
@@ -26,7 +26,7 @@ export default function Meeting({ roomName }) {
   const [isVideo, setIsVideo] = useState(true); // 초기에 비디오를 사용할지 정하는 state입니다.
   const [isHost, setIsHost] = useState(false);
   const [description, setDescription] = useState("");
-  const [uid, setUid] = useState("");
+  const [nickname, setNickname] = useState("");
   const [disability, setDisability] = useState(0);
 
   useEffect(() => {
@@ -36,7 +36,7 @@ export default function Meeting({ roomName }) {
         icon: "error",
         title: "로그인 실패..",
         text: "로그인을 다시 해주세요!",
-        confirmButtonAriaLabel: "확인"
+        confirmButtonAriaLabel: "확인",
       });
       Router.push("/");
     } else {
@@ -44,8 +44,9 @@ export default function Meeting({ roomName }) {
       const base64Payload = token.split(".")[1];
       const payload = Buffer.from(base64Payload, "base64");
       const result = JSON.parse(payload.toString());
+      console.log(result);
       setUserId(result.sub);
-      setUid(result.uid);
+      setNickname(result.nickname);
       switch (result.disability) {
         case "해당 없음":
           setDisability(0);
@@ -57,7 +58,8 @@ export default function Meeting({ roomName }) {
           setDisability(2);
           break;
         default:
-          console.error("잘못된 유형: ", result.disability);}
+          console.error("잘못된 유형: ", result.disability);
+      }
     }
   }, []);
 
@@ -70,6 +72,10 @@ export default function Meeting({ roomName }) {
       setIsHost(false);
     }
   }, [userId]);
+
+  const onChangeNickname = useCallback((e) => {
+    setNickname(e.target.value);
+  });
 
   // 설명 얻어오는 함수.
   const getInformation = () => {
@@ -87,7 +93,7 @@ export default function Meeting({ roomName }) {
       .catch(() => {});
   };
 
-  const joinRoom = async (e) => {
+  const joinRoom = (e) => {
     e.preventDefault();
     // return fetch(
     //   `${process.env.NEXT_PUBLIC_API_URL}/conference/join/${conferenceName}/${uid}`,
@@ -107,8 +113,8 @@ export default function Meeting({ roomName }) {
     //     setIsJoin(false);
     //   })
     //   .catch(() => {});
-    await setMyName(e.target[0].value);
-    await setIsJoin(false);
+    setMyName(e.target[0].value);
+    setIsJoin(false);
   };
 
   // 초기에 비디오를 사용할지 토글하는 함수입니다.
@@ -118,7 +124,7 @@ export default function Meeting({ roomName }) {
     Swal.fire({
       title: message,
       icon: "success",
-      confirmButtonAriaLabel: "확인"
+      confirmButtonAriaLabel: "확인",
     });
     setIsVideo(!isVideo);
   };
@@ -130,7 +136,7 @@ export default function Meeting({ roomName }) {
     Swal.fire({
       title: message,
       icon: "success",
-      confirmButtonAriaLabel: "확인"
+      confirmButtonAriaLabel: "확인",
     });
     setIsMic(!isMic);
   };
@@ -177,7 +183,7 @@ export default function Meeting({ roomName }) {
         Swal.fire({
           icon: "success",
           title: "수정 완료!",
-          confirmButtonAriaLabel: "확인"
+          confirmButtonAriaLabel: "확인",
         });
       }
     });
@@ -204,13 +210,41 @@ export default function Meeting({ roomName }) {
             },
           }}
         >
-          <div className="flex flex-row w-full max-w-4xl bg-white border shadow-xl rounded-2xl h-3/6">
-            <div role="article" tabIndex="0" className="flex flex-col items-start justify-center content-center p-10 w-6/12 bg-[#ece6cc] rounded-l-2xl">
-              <h1 className="mb-10 text-2xl font-semibold text-gray-500 subject">
+          <div className="bg-white rounded-2xl border shadow-xl max-w-4xl flex flex-row w-full h-3/6">
+            <div
+              aria-labelledby="waitRoomInfo"
+              role="article"
+              tabIndex="0"
+              className="flex flex-col items-start justify-center content-center p-10 w-6/12 bg-[#ece6cc] rounded-l-2xl"
+            >
+              <button onClick={() => Router.push("/main")}>
+                <motion.img
+                  whileHover={{ scale: 1.3 }}
+                  src="/mainpage/Home-Logo.png"
+                  alt="홈 로고, 메인페이지로 이동합니다"
+                  style={{
+                    width: "40px",
+                    marginRight: "1rem",
+                    cursor: "pointer",
+                  }}
+                  className=""
+                />
+              </button>
+              <br></br>
+              <h1
+                tabIndex="0"
+                className="font-semibold text-2xl text-gray-500 mb-10 subject"
+              >
                 {conferenceName}님의 회의실
               </h1>
               <br></br>
-              <p>{description ? description : "설명이 없습니다"}</p>
+              <p tabIndex="0" role="note">
+                {description ? description : "설명이 없습니다"}
+              </p>
+              <span hidden id="waitRoomInfo">
+                대기실, 회의실에 입장하기 전 닉네임 마이크 카메라 설정이
+                가능합니다.
+              </span>
             </div>
             <div className="flex flex-col items-center content-center justify-center w-6/12 p-10 space-y-4">
               <strong className="z-10 w-4/6 text-2xl font-bold text-center text-gray-700 waiting">
@@ -226,7 +260,9 @@ export default function Meeting({ roomName }) {
                     type="text"
                     name="name"
                     id="name"
-                    placeholder="Username"
+                    placeholder="닉네임"
+                    value={nickname}
+                    onChange={onChangeNickname}
                     required
                   />
                 </p>
@@ -317,6 +353,8 @@ export default function Meeting({ roomName }) {
           isMic={isMic} // 마이크를 사용할지 prop으로 넘겨줍니다.
           isVideo={isVideo} // 비디오를 사용할지 prop으로 넘겨줍니다.
           disability={disability} // 장애 유형을 prop으로 넘겨줍니다.
+          nickname={nickname}
+          setIsMic={setIsMic}
         ></Conference>
       )}
     </>
