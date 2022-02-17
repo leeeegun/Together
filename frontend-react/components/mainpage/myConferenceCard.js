@@ -43,7 +43,7 @@ export default function myConferenceCard({ text, src, link, username }) {
       html: `<p>바로 이동하기 : <a href=${link} style="text-decoration: underline">회의실로 이동하기</a></p>`,
       timer: 1000000,
       icon: "success",
-      confirmButtonAriaLabel: "확인"
+      confirmButtonAriaLabel: "확인",
     });
   };
   return (
@@ -52,10 +52,12 @@ export default function myConferenceCard({ text, src, link, username }) {
       whileTap={{ scale: 0.8 }}
       onHoverStart={onHover}
       onHoverEnd={onHover}
-      // onClick={handleClickMyConference}
       className="hover:cursor-pointer"
     >
-      <button onClick={handleClickMyConference} className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 sm:w-4/5">
+      <button
+        onClick={handleClickMyConference}
+        className="relative px-6 pt-10 pb-8 bg-[#efedec] shadow-xl sm:max-w-sm sm:mx-auto rounded-xl sm:px-10 sm:w-4/5"
+      >
         <div className="max-w-md mx-auto">
           <div className="divide-y divide-gray-400/50">
             <div className="h-1/3">
@@ -63,10 +65,16 @@ export default function myConferenceCard({ text, src, link, username }) {
             </div>
             <div className="flex justify-center py-8">
               <a className="opacity-75 cursor-pointer">
-                <p aria-labelledby="newConfInfo" className="text-3xl" id={"link" + link}>
+                <p
+                  aria-labelledby="newConfInfo"
+                  className="text-3xl"
+                  id={"link" + link}
+                >
                   {text}
                 </p>
-                <span id="newConfInfo" hidden>내 회의실, 회의를 열어 사람들과 소통해보세요</span>
+                <span id="newConfInfo" hidden>
+                  내 회의실, 회의를 열어 사람들과 소통해보세요
+                </span>
                 <p id={"description" + link} className="hidden">
                   회의를 열어 사람들과 소통해보세요! 😆
                 </p>

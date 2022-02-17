@@ -17,7 +17,7 @@ import Chat from "./Chat";
 
 const PARTICIPANT_MAIN_CLASS = "participant main";
 const PARTICIPANT_CLASS = "participant";
-const isSTTEnabled = [true, false]; // 
+const test = [true, false]; //
 
 export default function Conference({
   myName,
@@ -37,7 +37,7 @@ export default function Conference({
   const [chats, setChats] = useState([]); // 채팅기록을 저장합니다.
   const [isChatEnabled, setIsChatEnabled] = useState(false); // 채팅창을 표시할지 토글합니다.
   const [isNoti, setIsNoti] = useState(false); // 메시지 알람을 활성화할지 토글합니다.
-  const [isTTSEnabled, setIsTTSEnabled] = useState(true) // TTS 활성화 여부를 토글합니다.
+  const [isTTSEnabled, setIsTTSEnabled] = useState(true); // TTS 활성화 여부를 토글합니다.
   const messageInput = useRef();
   const meetingroomMessage = useRef();
 
@@ -53,23 +53,27 @@ export default function Conference({
       room: myRoom,
       nickname: myName, // ㄹㅇ 닉네임
     };
-    test[0] = isMicEnabled
+    test[0] = isMicEnabled;
     sendMessage(message);
     createStt(); // 페이지 렌더 시 바로 STT 기능 활성화
-    window.screen.orientation.lock("portrait").then(
-      (success) => console.log(success),
-      (failure) => console.log(failure),
-    ); // 모바일 환경에서는 화면을 가로로 고정!
+    window.screen.orientation
+      .lock("portrait")
+      .then
+      // (success) => console.log(success),
+      // (failure) => console.log(failure),
+      (); // 모바일 환경에서는 화면을 가로로 고정!
     window.addEventListener("beforeunload", alertUser);
     return () => {
       window.addEventListener("beforeunload", alertUser);
     };
   }, []); // 기본 코드의 register 과정입니다.
 
-
+  useEffect(() => {
+    // console.log(isMicEnabled);
+  }, [isMicEnabled]);
   ws.onmessage = function (message) {
     const parsedMessage = JSON.parse(message.data);
-    console.info("Received message: " + message.data);
+    // console.info("Received message: " + message.data);
 
     switch (parsedMessage.id) {
       case "existingParticipants":
@@ -130,6 +134,7 @@ export default function Conference({
 
         // 이 부분에 kurento서버에 보내는 로직 필요함.
         sendStt(stt);
+
         // setSendSttMsg(stt);
       }
     });
@@ -139,11 +144,10 @@ export default function Conference({
     });
   };
 
-
   // 생성된 STT 백서버로 전달
   const sendStt = (stt) => {
     if (!test[0]) {
-      return
+      return;
     }
     const msg = {
       id: "chatMsg",
@@ -156,7 +160,6 @@ export default function Conference({
     sendMessage(msg);
   };
 
-
   // TTS 함수. 발화자와 텍스트 두 개를 인수로 받습니다.
   const speak = (speaker, text) => {
     if (
@@ -167,29 +170,28 @@ export default function Conference({
         icon: "error",
         title: "브라우저 미지원",
         text: "이 브라우저는 TTS를 지원하지 않습니다. 다른 브라우저를 이용해 주세요...!",
-        confirmButtonAriaLabel: "확인"
+        confirmButtonAriaLabel: "확인",
       });
       return "error";
     }
-  
+
     // window.speechSynthesis.cancel(); // 현재 읽고있다면 초기화
-  
+
     const speechMsg = new SpeechSynthesisUtterance();
     speechMsg.rate = 0.8; // 속도: 0.1 ~ 10
     speechMsg.pitch = 0.8; // 음높이: 0 ~ 2
     speechMsg.lang = "ko-KR";
     speechMsg.text = `${speaker}로부터. ${text}`;
-  
+
     // SpeechSynthesisUtterance에 저장된 내용을 바탕으로 음성합성 실행
     window.speechSynthesis.speak(speechMsg);
-  }
-
+  };
 
   // 미디어서버로부터 메시지를 받은 경우. STT일 수도, 일반 채팅일 수도 있습니다!
   const receiveStt = (parsedMessage) => {
     const participant = participants[parsedMessage.owner];
     if (!participant) {
-      return
+      return;
     }
 
     // STT 메시지를 받은 경우. 채팅창에 따로 기록되지 않습니다!
@@ -199,8 +201,8 @@ export default function Conference({
       setTimeout(function () {
         sttMsg.innerText = "";
       }, 3000);
-    
-    // 채팅 메시지를 받은 경우.
+
+      // 채팅 메시지를 받은 경우.
     } else if (parsedMessage.content[0] === "a") {
       const chatMsg = parsedMessage.content.slice(1);
       const now = new Date();
@@ -213,15 +215,15 @@ export default function Conference({
       !isChatEnabled && setIsNoti(true);
       if (disability === 1 && isTTSEnabled) {
         if (parsedMessage.owner !== userId) {
-          speak(nickname, chatMsg)
+          speak(nickname, chatMsg);
         }
       }
       meetingroomMessage.current.scrollTo(
         0,
         meetingroomMessage.current.scrollHeight,
       );
-    
-    // 청각장애인 채팅의 경우 읽어줍니다. DRY에 어긋나는 코드이지만,,,
+
+      // 청각장애인 채팅의 경우 읽어줍니다. DRY에 어긋나는 코드이지만,,,
     } else if (parsedMessage.content[0] === "c") {
       const chatMsg = parsedMessage.content.slice(1);
       const now = new Date();
@@ -241,7 +243,7 @@ export default function Conference({
       setTimeout(function () {
         sttMsg.innerText = "";
       }, 3000);
-      isTTSEnabled && speak(nickname, chatMsg) // TTS 기능이 활성화되어 있다면 채팅을 읽어줍니다.
+      isTTSEnabled && speak(nickname, chatMsg); // TTS 기능이 활성화되어 있다면 채팅을 읽어줍니다.
     }
   };
 
@@ -256,6 +258,8 @@ export default function Conference({
     setParticipants((participants) => {
       return { ...participants, [sender]: participant };
     }); // 비동기처리를 위한 콜백 setState
+    participants[userId].rtcPeer.videoEnabled = isVideoEnabled;
+    participants[userId].rtcPeer.audioEnabled = isMicEnabled;
 
     const video = participant.getVideoElement();
 
@@ -322,13 +326,13 @@ export default function Conference({
         if (error) return console.error(error);
       },
     );
-    participants[userId].rtcPeer.videoEnabled = isVideo; // 받아온 prop으로부터 시작할 때 비디오 on/off를 결정합니다.
-    participants[userId].rtcPeer.audioEnabled = isMic;
+    participants[userId].rtcPeer.videoEnabled = isVideoEnabled; // 받아온 prop으로부터 시작할 때 비디오 on/off를 결정합니다.
+    participants[userId].rtcPeer.audioEnabled = isMicEnabled;
   }
 
   function callResponse(message) {
     if (message.response != "accepted") {
-      console.info("Call not accepted by peer. Closing call");
+      // console.info("Call not accepted by peer. Closing call");
       stop();
     } else {
       webRtcPeer.processAnswer(message.sdpAnswer, function (error) {
@@ -434,7 +438,7 @@ export default function Conference({
   }
 
   function onParticipantLeft(request) {
-    console.log("Participant " + request.nickname + " left");
+    // console.log("Participant " + request.nickname + " left");
     // 방 제목(즉, userId)과 나간 사람의 userId가 같다면 방을 폭파!
     if (request.name === myRoom) {
       window.alert("호스트가 연결을 종료하여 회의를 종료합니다");
@@ -481,7 +485,8 @@ export default function Conference({
   const toggleAudio = () => {
     participants[userId].rtcPeer.audioEnabled =
       !participants[userId].rtcPeer.audioEnabled;
-    setIsMicEnabled(!isMicEnabled);
+    test[0] = !isMicEnabled;
+    setIsMicEnabled((isMicEnabled) => !isMicEnabled);
   };
 
   // 엉망인 상태입니다,, 손볼 것...!
@@ -515,7 +520,7 @@ export default function Conference({
       .catch(handleError);
 
     function handleError(error) {
-      console.log("getDisplayMedia error: ", error);
+      // console.log("getDisplayMedia error: ", error);
     }
 
     // function handleSuccess(stream) {
@@ -554,7 +559,7 @@ export default function Conference({
     event.preventDefault();
     const content = event.target[0].value;
     if (!content) {
-      return
+      return;
     }
     const msg = {
       id: "chatMsg",
@@ -562,7 +567,8 @@ export default function Conference({
       room: myRoom,
       content: `a${content}`, // STT 메시지일 때는 앞에 "b"를 덧붙입니다!
     };
-    if (disability === 2) { // 청각장애인의 채팅일 경우 앞에 "c"를 붙입니다.
+    if (disability === 2) {
+      // 청각장애인의 채팅일 경우 앞에 "c"를 붙입니다.
       msg.content = `c${content}`;
     }
     sendMessage(msg);
@@ -570,8 +576,8 @@ export default function Conference({
   };
 
   const toggleTTS = () => {
-    setIsTTSEnabled((isTTSEnabled) => !isTTSEnabled)
-  }
+    setIsTTSEnabled((isTTSEnabled) => !isTTSEnabled);
+  };
 
   return (
     <section
@@ -587,8 +593,7 @@ export default function Conference({
         <div
           className="grid grid-cols-2 gap-5 mx-auto text-center"
           id="meetingroom-participants"
-        >
-        </div>
+        ></div>
         <div id="meetingroom-toolbar">
           {isMicEnabled ? (
             <button
@@ -660,7 +665,7 @@ export default function Conference({
           </button>
         </div>
       </div>
-      <div style={{ overflow: "hidden"}}>
+      <div style={{ overflow: "hidden" }}>
         {/* 채팅창 */}
         <motion.div
           id="meetingroom-chats"
@@ -674,13 +679,17 @@ export default function Conference({
         >
           {/* 메시지 칸 */}
           <div className="flex content-start">
-            <label className="meetingroom-switch-button"> 
-              <input id="toggle-tts" onChange={toggleTTS} type="checkbox" checked={isTTSEnabled}/> 
-              <span className="meetingroom-onoff-switch"></span> 
+            <label className="meetingroom-switch-button">
+              <input
+                id="toggle-tts"
+                onChange={toggleTTS}
+                type="checkbox"
+                checked={isTTSEnabled}
+              />
+              <span className="meetingroom-onoff-switch"></span>
             </label>
-            <label className="ml-3" htmlFor="toggle-tts">{isTTSEnabled?
-              "TTS 활성화됨":
-              "TTS 비활성화됨"}
+            <label className="ml-3" htmlFor="toggle-tts">
+              {isTTSEnabled ? "TTS 활성화됨" : "TTS 비활성화됨"}
             </label>
           </div>
           <div id="meetingroom-messages" ref={meetingroomMessage}>
@@ -703,7 +712,10 @@ export default function Conference({
               placeholder="채팅을 입력하세요"
               ref={messageInput}
             ></input>
-            <button aria-label="전송" className="w-2/12 min-w-fit mt-2 bg-[#009e747a] hover:bg-[#009e7494] text-white font-bold py-1 px-2 rounded ml-2">
+            <button
+              aria-label="전송"
+              className="w-2/12 min-w-fit mt-2 bg-[#009e747a] hover:bg-[#009e7494] text-white font-bold py-1 px-2 rounded ml-2"
+            >
               <FontAwesomeIcon icon={faPaperPlane} size="1x" />
             </button>
           </form>

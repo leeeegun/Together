@@ -22,7 +22,7 @@ export default function Navbar() {
         icon: "error",
         title: "로그인 실패..",
         text: "로그인을 다시 해주세요!",
-        confirmButtonAriaLabel: "확인"
+        confirmButtonAriaLabel: "확인",
       });
       Router.push("/");
     }
@@ -61,7 +61,7 @@ export default function Navbar() {
                 icon: "success",
                 title: "로그아웃 성공!",
                 text: "다음에 또 오세요!",
-                confirmButtonAriaLabel: "확인"
+                confirmButtonAriaLabel: "확인",
               });
               Router.push("/");
             }}
