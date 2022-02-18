@@ -4,6 +4,8 @@
 ### 🎉 프로젝트 소개
 ```TOGETHER```는 기존의 화상회의 프로그램에 **STT**(speach to text)와 **TTS**(text to speach) 기능을 추가하여   
 듣고 말하고 보기 어려웠던 장애인 분들에게 편리함을 제공하는 서비스 입니다.  
+* [TOGETHER HOMEPAGE](https://ssafytogether.site/)
+* [TOGETHER NOTION](https://www.notion.so/A406-80da886168ab4ca4885f5a6de1df1792)
 
 ### 💡 기술 스택
 #### FrontEnd
@@ -60,11 +62,11 @@
 
 * **컨퍼런스 기능**
   - `컨퍼런스`에 입장하기 전 닉네임을 설정해 입장할 수 있습니다.
-  - `시각장애`를 가지고 계신 분은 **TTS** 기능을 제공받을 수 있으며  
+  - `시각장애`를 가지고 계신 분은 **TTS** 기능을 제공받을 수 있으며<br>
   ![TTS](/uploads/2c34ffba9aa63baeaafb6f879275d893/TTS.gif)
   <br>
   
-  - `청각장애`를 가지고 계신 분은 **STT** 기능을 제공받을 수 있습니다.
+  - `청각장애`를 가지고 계신 분은 **STT** 기능을 제공받을 수 있습니다.<br>
   ![STT](/uploads/9ebc7cb5e7baa0d5539fd5fba0fdc7e9/STT.gif)
 
 ### 🧑 팀원 소개
