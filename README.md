@@ -9,8 +9,7 @@
 
 ### 💡 기술 스택
 #### FrontEnd
-<img alt="React" src ="https://img.shields.io/badge/React-61DAFB.svg?&style=for-the-badge&logo=react&logoColor=white"/>
-<img alt="Next" src ="https://img.shields.io/badge/Next-000000.svg?&style=for-the-badge&logo=Next.js&logoColor=white"/>
+<img alt="React" src ="https://img.shields.io/badge/React-61DAFB.svg?&style=for-the-badge&logo=react&logoColor=white"/> <img alt="Next" src ="https://img.shields.io/badge/Next-000000.svg?&style=for-the-badge&logo=Next.js&logoColor=white"/>
 <img alt="JavaScript" src ="https://img.shields.io/badge/JavaScript-F7DF1E.svg?&style=for-the-badge&logo=JavaScript&logoColor=white"/>
 <img alt="Tailwind CSS" src ="https://img.shields.io/badge/Tailwind CSS-06B6D4.svg?&style=for-the-badge&logo=Tailwind CSS&logoColor=white"/>
 <img alt="CSS3" src ="https://img.shields.io/badge/CSS3-1572B6.svg?&style=for-the-badge&logo=CSS3&logoColor=white"/>
@@ -18,8 +17,7 @@
 
 
 #### BackEnd
-<img alt="Spring Boot" src ="https://img.shields.io/badge/Spring Boot-6DB33F.svg?&style=for-the-badge&logo=Spring Boot&logoColor=white"/>
-<img alt="Spring Security" src ="https://img.shields.io/badge/Spring Security-6DB33F.svg?&style=for-the-badge&logo=Spring Security&logoColor=white"/>
+<img alt="Spring Boot" src ="https://img.shields.io/badge/Spring Boot-6DB33F.svg?&style=for-the-badge&logo=Spring Boot&logoColor=white"/> <img alt="Spring Security" src ="https://img.shields.io/badge/Spring Security-6DB33F.svg?&style=for-the-badge&logo=Spring Security&logoColor=white"/>
 <img alt="Gradle" src ="https://img.shields.io/badge/Gradle-02303A.svg?&style=for-the-badge&logo=Gradle&logoColor=white"/>
 <img alt="Apache Maven" src ="https://img.shields.io/badge/Apache Maven-C71A36.svg?&style=for-the-badge&logo=Apache Maven&logoColor=white"/>
 <img alt="Kurrento" src ="https://img.shields.io/badge/Kurrento-008080.svg?&style=for-the-badge&logo=Apache Maven&logoColor=008080"/>
@@ -29,45 +27,44 @@
 
 
 ### DevOps
-<img alt="Amazon AWS" src ="https://img.shields.io/badge/Amazon AWS-232F3E.svg?&style=for-the-badge&logo=Amazon AWS&logoColor=white"/>
-<img alt="Netlify" src ="https://img.shields.io/badge/Netlify-00C7B7.svg?&style=for-the-badge&logo=Netlify&logoColor=white"/>
+<img alt="Amazon AWS" src ="https://img.shields.io/badge/Amazon AWS-232F3E.svg?&style=for-the-badge&logo=Amazon AWS&logoColor=white"/> <img alt="Netlify" src ="https://img.shields.io/badge/Netlify-00C7B7.svg?&style=for-the-badge&logo=Netlify&logoColor=white"/>
 <img alt="Docker" src ="https://img.shields.io/badge/Docker-2496ED.svg?&style=for-the-badge&logo=Docker&logoColor=white"/>
 
 ### Co-tool
-<img alt="Jira" src ="https://img.shields.io/badge/Jira-0052CC.svg?&style=for-the-badge&logo=Jira&logoColor=white"/>
-<img alt="GitLab" src ="https://img.shields.io/badge/GitLab-FCA121.svg?&style=for-the-badge&logo=GitLab&logoColor=white"/>
+<img alt="Jira" src ="https://img.shields.io/badge/Jira-0052CC.svg?&style=for-the-badge&logo=Jira&logoColor=white"/><img alt="GitLab" src ="https://img.shields.io/badge/GitLab-FCA121.svg?&style=for-the-badge&logo=GitLab&logoColor=white"/>
 
 ### 시스템 구상도
-![image](/uploads/de87c10ac334d19914d736ad03addd82/image.png)
+![image](https://user-images.githubusercontent.com/45795169/170414615-84d89ff7-c8eb-48b6-9d67-8d4fbc1fb82c.png)
 
 ### 📌 주요 기능
 * **회원 관리**
 - 회원 가입 시 장애 유무를 선택하여 사용자가 필요한 서비스를 제공받을 수 있습니다.<br>
   - ```회원가입```<br>
-  ![회원가입](/uploads/a287bccef0b18cf9666465bc115a14da/회원가입.gif)<br>
+  ![회원가입 (1)](https://user-images.githubusercontent.com/45795169/170414773-06147946-f1ba-4648-95ab-d852c391a006.gif)
+)<br>
   <br>
 
   - ```로그인```<br>
-  ![로그인](/uploads/0448875d6b26175eeeee859a9e22bafb/로그인.gif)<br>
+  ![로그인](https://user-images.githubusercontent.com/45795169/170414847-a7e8e977-efd4-499c-9cca-3795f16dea11.gif)<br>
   <br>
 
 * **메인 화면**
   - 사용자의 고유 방을 확인할 수 있습니다.<br>
-  ![내_회의](/uploads/82237749abec4c97167f5d5c0ce703ea/내_회의.gif)<br>
+  ![내_회의](https://user-images.githubusercontent.com/45795169/170414867-2c3abb9a-9e7b-4fd8-899a-2eab26f97f80.gif)<br>
   <br>
 
   - 초대 코드를 입력하여 방에 입장할 수 있습니다.<br>
-  ![회의_참가](/uploads/30c0b80288158d95727c7009161c629e/회의_참가.gif)
+  ![회의_참가](https://user-images.githubusercontent.com/45795169/170414870-9bb64a5f-e481-4111-a7fb-3ae7952ffda1.gif)
   <br>
 
 * **컨퍼런스 기능**
   - `컨퍼런스`에 입장하기 전 닉네임을 설정해 입장할 수 있습니다.
   - `시각장애`를 가지고 계신 분은 **TTS** 기능을 제공받을 수 있으며<br>
-  ![TTS](/uploads/2c34ffba9aa63baeaafb6f879275d893/TTS.gif)
+  ![TTS](https://user-images.githubusercontent.com/45795169/170414880-1c60515a-b7f3-4861-bb29-dd9de0cc9bb3.gif)
   <br>
   
   - `청각장애`를 가지고 계신 분은 **STT** 기능을 제공받을 수 있습니다.<br>
-  ![STT](/uploads/9ebc7cb5e7baa0d5539fd5fba0fdc7e9/STT.gif)
+  ![STT](https://user-images.githubusercontent.com/45795169/170414886-009c95af-7faf-4f54-b908-bf4aa8c060a0.gif)
 
 ### 🧑 팀원 소개
 <details><summary><strong>유재룡</strong> [ BE ]&nbsp;&nbsp;&nbsp;<em>Click!</em></summary>
@@ -111,13 +108,13 @@
 </details>
 
 ### :penguin: 빌드 및 배포
-* [보러가기✔](https://lab.ssafy.com/s06-webmobile1-sub2/S06P12A406/-/blob/release/exec/%EB%B9%8C%EB%93%9C%20%EB%B0%8F%20%EB%B0%B0%ED%8F%AC.md)
+* [보러가기✔](https://github.com/leeeegun/Together/blob/release/exec/%EB%B9%8C%EB%93%9C%20%EB%B0%8F%20%EB%B0%B0%ED%8F%AC.md)
 
 ### :triangular_flag_on_post: 버전 정보
-* [보러가기✔](https://lab.ssafy.com/s06-webmobile1-sub2/S06P12A406/-/blob/release/exec/%EB%B2%84%EC%A0%84%EC%A0%95%EB%B3%B4.md)
+* [보러가기✔](https://github.com/leeeegun/Together/blob/release/exec/%EB%B2%84%EC%A0%84%EC%A0%95%EB%B3%B4.md)
 
 ### :beginner: DB 정보
-* [보러가기✔](https://lab.ssafy.com/s06-webmobile1-sub2/S06P12A406/-/blob/release/exec/DB_%EC%A0%95%EB%B3%B4.md)
+* [보러가기✔](https://github.com/leeeegun/Together/blob/release/exec/DB_%EC%A0%95%EB%B3%B4.md)
 
 ### :ticket: 외부 서비스
-* [보러가기✔](https://lab.ssafy.com/s06-webmobile1-sub2/S06P12A406/-/blob/release/exec/%EC%99%B8%EB%B6%80%20%EC%84%9C%EB%B9%84%EC%8A%A4.md)
+* [보러가기✔](https://github.com/leeeegun/Together/blob/release/exec/%EC%99%B8%EB%B6%80%20%EC%84%9C%EB%B9%84%EC%8A%A4.md)
